@@ -1,0 +1,181 @@
+@import "tailwindcss";
+
+:root {
+  --bg-canvas: #070609;
+  --bg-surface: #100d13;
+  --bg-elevated: #17131c;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-pink: rgba(255, 77, 141, 0.34);
+  --pink-primary: #ff4d8d;
+  --pink-soft: #ff77a9;
+  --crimson: #d91e36;
+  --text-primary: #ffffff;
+  --text-secondary: #cbc5d0;
+  --text-muted: #8a8293;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+  }
+
+  body {
+    background-color: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-ibm-thai), var(--font-jakarta), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-anuphan), var(--font-jakarta), sans-serif;
+  }
+}
+
+/* Custom sleek scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #070609;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 77, 141, 0.28);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 77, 141, 0.55);
+}
+
+/* Slow Living Ambient Aurora Animations (GPU-only transform) */
+@keyframes auroraDrift1 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(60px, 28px, 0) scale(1.08);
+  }
+}
+
+@keyframes auroraDrift2 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-55px, 40px, 0) scale(1.1);
+  }
+}
+
+@keyframes auroraDrift3 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(45px, -32px, 0) scale(1.06);
+  }
+}
+
+.aurora-orb-1 {
+  animation: auroraDrift1 18s ease-in-out infinite;
+}
+.aurora-orb-2 {
+  animation: auroraDrift2 22s ease-in-out infinite;
+}
+.aurora-orb-3 {
+  animation: auroraDrift3 26s ease-in-out infinite;
+}
+
+/* Sheen sweep on primary CTA buttons */
+@keyframes sheenSweep {
+  0% {
+    transform: translateX(-140%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(260%) skewX(-20deg);
+  }
+}
+
+.btn-pink-primary {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ff4d8d 0%, #d91e36 100%);
+  color: #ffffff;
+  box-shadow: 0 12px 32px -10px rgba(255, 77, 141, 0.55);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.2s ease;
+}
+
+.btn-pink-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 42%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: translateX(-140%) skewX(-20deg);
+  pointer-events: none;
+}
+
+.btn-pink-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px -10px rgba(255, 77, 141, 0.75);
+  filter: brightness(1.06);
+}
+
+.btn-pink-primary:hover::after {
+  animation: sheenSweep 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-pink-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Glass Surface + Interactive Mouse Spotlight */
+.glass-panel {
+  background: rgba(16, 13, 19, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.spot-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s ease,
+    box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.spot-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 77, 141, 0.14),
+    rgba(217, 30, 54, 0.05) 40%,
+    transparent 68%
+  );
+  opacity: 0;
+  transition: opacity 0.32s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spot-card:hover::before {
+  opacity: 1;
+}
+
+.spot-card:hover {
+  border-color: rgba(255, 77, 141, 0.38);
+  box-shadow: 0 24px 60px -24px rgba(255, 77, 141, 0.22);
+}
+
+/* Ambient subtle grid */
+.bg-subtle-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.065) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
