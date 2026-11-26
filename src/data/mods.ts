@@ -172,7 +172,7 @@ export const MODS: ModEntry[] = [
         primaryHost: "GitHub Releases",
         backupUrl:
           process.env.VVP_GDRIVE_MIRROR_URL ||
-          "https://drive.google.com/",
+          "https://drive.google.com/file/d/1cPwqsSi3ZWiqLzAw1sjABQgwx7AoSuxM/view?usp=sharing",
         backupHost: "Google Drive",
         installNote:
           "นำโฟลเดอร์ archive และ fdata_package ไปวางทับในโฟลเดอร์หลักของเกมได้เลย กดแทนที่ไฟล์ทั้งหมด",
