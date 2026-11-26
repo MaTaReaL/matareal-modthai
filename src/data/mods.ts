@@ -168,7 +168,7 @@ export const MODS: ModEntry[] = [
         // แทนที่ URL ด้านล่างด้วยลิงก์ไฟล์จริงจาก GitHub Releases และ Google Drive ของคุณแมทธิว
         primaryUrl:
           process.env.VVP_GITHUB_RELEASE_URL ||
-          "https://github.com/MaTaReaL1/matareal-modthai-releases/releases/download/vvp-v1.0/VenusVacationPRISM_ThaiMod_v1.0.zip",
+          "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/vvp-v1.0/VenusVacationPRISM_ThaiMod_v1.0.zip",
         primaryHost: "GitHub Releases",
         backupUrl:
           process.env.VVP_GDRIVE_MIRROR_URL ||
