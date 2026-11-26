@@ -25,10 +25,25 @@ export async function generateMetadata({
   const description = `${mod.shortDescription} | โดย ${SITE_CONFIG.authorName} — โหลดตรงเต็มสปีดพร้อมคู่มือติดตั้ง`;
   const canonicalUrl = `${SITE_CONFIG.siteUrl}/mods/${mod.slug}`;
 
+  // Auto-generate core Thai/English search intent keywords for EVERY future game
+  const autoKeywords = Array.from(
+    new Set([
+      `${mod.gameTitle} ม็อดไทย`,
+      `${mod.gameTitle} ม็อดภาษาไทย`,
+      `${mod.gameTitle} แปลไทย`,
+      `${mod.gameTitle} Thai Mod`,
+      `ดาวน์โหลดม็อดไทย ${mod.gameTitle}`,
+      `วิธีลงม็อดไทย ${mod.gameTitle}`,
+      SITE_CONFIG.nameTh,
+      SITE_CONFIG.nameEn,
+      ...mod.seoKeywords,
+    ])
+  );
+
   return {
     title,
     description,
-    keywords: mod.seoKeywords,
+    keywords: autoKeywords,
     alternates: {
       canonical: canonicalUrl,
     },

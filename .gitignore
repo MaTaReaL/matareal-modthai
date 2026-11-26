@@ -6,3 +6,6 @@ out
 .local-data.json
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel
+.env*
