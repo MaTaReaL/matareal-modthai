@@ -127,6 +127,9 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
         >
           <NexusModsLogo className="w-4 h-4 shrink-0" />
           <span>Nexus Mods ({SITE_CONFIG.nexusUsername})</span>
+          <span className="hidden sm:inline text-[11px] font-normal text-[#a69eb0]">
+            — ม็อดไทยและม็อดอื่นๆ ของผม
+          </span>
           <ExternalLink className="w-3.5 h-3.5 opacity-70" />
         </a>
       </motion.section>
@@ -403,10 +406,10 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
                 Nexus Mods
               </div>
               <h3 className="font-display text-base font-bold text-white">
-                ม็อดภาษาไทยเกมอื่นของ {SITE_CONFIG.authorName}
+                ม็อดไทย และม็อดอื่นๆ ของผม
               </h3>
               <p className="text-xs text-[#8a8293] leading-relaxed">
-                ดูรายการม็อดทั้งหมดบนโปรไฟล์ Nexus Mods
+                ดูผลงานทั้งหมดบนโปรไฟล์ Nexus Mods ({SITE_CONFIG.nexusUsername})
               </p>
             </div>
             <div className="relative z-10 inline-flex items-center gap-1.5 text-xs font-semibold text-[#ff77a9] group-hover:text-[#ff4d8d]">

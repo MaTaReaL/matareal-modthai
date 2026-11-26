@@ -743,11 +743,14 @@ export function ModDetailClient({
                 href={SITE_CONFIG.nexusProfileUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#F5A64B] hover:underline transition"
+                className="text-right group"
               >
-                <NexusModsLogo className="w-3.5 h-3.5 shrink-0" />
-                <span>Nexus Mods</span>
-                <ExternalLink className="w-3 h-3 opacity-75" />
+                <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#F5A64B] group-hover:underline transition">
+                  <NexusModsLogo className="w-3.5 h-3.5 shrink-0" />
+                  <span>Nexus Mods</span>
+                  <ExternalLink className="w-3 h-3 opacity-75" />
+                </div>
+                <div className="text-[10px] text-[#8a8293]">ม็อดไทยและม็อดอื่นๆ ของผม</div>
               </a>
             </div>
           </div>
