@@ -48,6 +48,22 @@ function SimpleIconSvg({
   );
 }
 
+/** Crisp Official Thai National Flag SVG (1:1:2:1:1 exact proportions — crisp on Windows too!) */
+export function ThaiFlagIcon({ className = "w-5 h-3.5" }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 900 600"
+      className={`${className} rounded-[3px] shadow-sm ring-1 ring-white/20 shrink-0`}
+      role="img"
+      aria-label="ธงชาติไทย"
+    >
+      <rect width="900" height="600" fill="#A51931" />
+      <rect y="100" width="900" height="400" fill="#F4F5F8" />
+      <rect y="200" width="900" height="200" fill="#2D2A4A" />
+    </svg>
+  );
+}
+
 /** Official Steam Brand Mark */
 export function SteamLogo({ className = "w-4 h-4" }: IconProps) {
   return <SimpleIconSvg path={siSteam.path} color="#66C0F4" className={className} title="Steam" />;
@@ -263,6 +279,18 @@ export function AiModelLogos({
   return <span className="inline-flex items-center gap-1 shrink-0">{logos}</span>;
 }
 
+/** ForzaTech Engine Mark */
+export function ForzaTechLogo({ className = "w-4 h-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-label="ForzaTech">
+      <path
+        fill="#F43F5E"
+        d="M4 5h16l-2.2 4H9.4l-1.1 2.2H16l-2 3.8H6.4L4.2 19H1.5L4 5zm13.2 9.5L22 19h-4.4l-2.8-4.5h2.4z"
+      />
+    </svg>
+  );
+}
+
 /** Auto-detects official game engine logo */
 export function EngineLogo({
   engine,
@@ -276,6 +304,7 @@ export function EngineLogo({
   if (lower.includes("unity")) return <UnityLogo className={className} />;
   if (lower.includes("godot")) return <GodotLogo className={className} />;
   if (lower.includes("katana")) return <KatanaEngineLogo className={className} />;
+  if (lower.includes("forzatech") || lower.includes("forza")) return <ForzaTechLogo className={className} />;
   return null;
 }
 

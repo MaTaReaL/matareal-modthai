@@ -414,9 +414,14 @@ export function ModDetailClient({
                   <div key={file.id} className="glass-panel rounded-2xl p-6 space-y-4">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div className="space-y-1">
-                        <h2 className="font-display text-base font-bold text-white">
-                          {file.fileName}
-                        </h2>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h2 className="font-display text-base font-bold text-white">
+                            {file.fileName}
+                          </h2>
+                          <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#ff4d8d]/18 text-[#ff77a9] border border-[#ff4d8d]/30">
+                            {file.label}
+                          </span>
+                        </div>
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#8a8293]">
                           <span>{file.version}</span>
                           <span>•</span>
@@ -658,7 +663,7 @@ export function ModDetailClient({
               </motion.div>
             </div>
 
-            {/* Download Buttons (No version number on button) */}
+            {/* Download Buttons (Clear "ฟรี", no version number on button) */}
             {primaryFile && (
               <div className="relative z-10 space-y-2">
                 <button
@@ -668,7 +673,7 @@ export function ModDetailClient({
                   className="btn-pink-primary w-full py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
                 >
                   <Download className="w-4 h-4" />
-                  <span>{downloading ? "กำลังเตรียมไฟล์..." : "ดาวน์โหลด"}</span>
+                  <span>{downloading ? "กำลังเตรียมไฟล์..." : "ดาวน์โหลดฟรี"}</span>
                 </button>
 
                 {primaryFile.backupUrl && (
@@ -679,6 +684,19 @@ export function ModDetailClient({
                   >
                     <HostLogo host={primaryFile.backupHost || "Google Drive"} className="w-3.5 h-3.5 shrink-0" />
                     <span>ลิงก์สำรอง ({primaryFile.backupHost || "Google Drive"})</span>
+                  </button>
+                )}
+
+                {mod.files.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTab("files");
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    className="w-full py-1.5 text-[11px] font-semibold text-[#ff77a9] hover:text-[#ff4d8d] hover:underline transition cursor-pointer"
+                  >
+                    เลือกดาวน์โหลดไฟล์ทั้งหมด ({mod.files.length} เวอร์ชัน) →
                   </button>
                 )}
               </div>

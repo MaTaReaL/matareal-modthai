@@ -11,21 +11,26 @@ import {
   Clock,
   Download,
   ExternalLink,
+  Eye,
   Flame,
+  Gamepad2,
   Sparkles,
   Tag,
   ThumbsUp,
   Trophy,
+  Users,
 } from "lucide-react";
 import type { ModEntry } from "@/data/types";
 import type { LiveSteamData } from "@/lib/steam";
+import type { SiteStats } from "@/lib/store";
 import { SITE_CONFIG } from "@/data/site";
-import { NexusModsLogo, SteamLogo } from "./BrandIcons";
+import { NexusModsLogo, SteamLogo, StoreLogo, ThaiFlagIcon } from "./BrandIcons";
 
 interface HomeClientProps {
   mods: ModEntry[];
   downloadCounts: Record<string, number>;
   steamMap: Record<string, LiveSteamData | null>;
+  initialStats: SiteStats;
 }
 
 interface HeroSlide {
@@ -42,7 +47,11 @@ function buildHeroSlides(
   const slides: HeroSlide[] = [];
   const seen = new Set<string>();
 
-  const pushUnique = (mod: ModEntry | undefined, badgeLabel: string, badgeType: HeroSlide["badgeType"]) => {
+  const pushUnique = (
+    mod: ModEntry | undefined,
+    badgeLabel: string,
+    badgeType: HeroSlide["badgeType"]
+  ) => {
     if (!mod || seen.has(mod.slug)) return;
     seen.add(mod.slug);
     slides.push({ mod, badgeLabel, badgeType });
@@ -63,7 +72,7 @@ function buildHeroSlides(
     pushUnique(byDownloads[0], "ม็อดยอดนิยม", "popular");
   }
 
-  // 3. Trending / Featured
+  // 3. Trending
   mods.filter((m) => m.trending).forEach((m) => pushUnique(m, "กำลังเป็นกระแส", "trending"));
 
   // 4. Latest Releases
@@ -74,13 +83,58 @@ function buildHeroSlides(
 
 const SLIDE_INTERVAL_MS = 6500;
 
-export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) {
+export function HomeClient({
+  mods,
+  downloadCounts,
+  steamMap,
+  initialStats,
+}: HomeClientProps) {
   const slides = useMemo(
     () => buildHeroSlides(mods, downloadCounts, steamMap),
     [mods, downloadCounts, steamMap]
   );
   const [activeIdx, setActiveIdx] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [stats, setStats] = useState<SiteStats>(initialStats);
+
+  // Real-time visitor presence & site visits heartbeat (every 45s)
+  useEffect(() => {
+    let sid = "";
+    try {
+      sid = sessionStorage.getItem("mr_sid") || "";
+      if (!sid) {
+        sid = `s_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+        sessionStorage.setItem("mr_sid", sid);
+      }
+    } catch {
+      sid = `s_${Math.random().toString(36).slice(2, 10)}`;
+    }
+
+    let cancelled = false;
+    const ping = async () => {
+      try {
+        const res = await fetch("/api/presence", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sessionId: sid }),
+        });
+        if (!res.ok) return;
+        const data = (await res.json()) as SiteStats;
+        if (!cancelled && typeof data.onlineNow === "number") {
+          setStats(data);
+        }
+      } catch {
+        // ignore transient network glitches
+      }
+    };
+
+    ping();
+    const interval = setInterval(ping, 45_000);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
 
   const safeIdx = Math.min(activeIdx, Math.max(0, slides.length - 1));
   const currentSlide = slides[safeIdx];
@@ -102,39 +156,97 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
   const currentDownloads = currentMod ? downloadCounts[currentMod.slug] || 0 : 0;
 
   return (
-    <div className="max-w-[1260px] mx-auto px-4 sm:px-6 pt-7 pb-14 space-y-12">
-      {/* CLEAN FORMAL HEADER */}
+    <div className="max-w-[1260px] mx-auto px-4 sm:px-6 pt-7 pb-14 space-y-10">
+      {/* CLEAN FORMAL HEADER WITH THAI FLAG + CLEAR "ฟรี" SIGNAL */}
       <motion.section
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="flex flex-wrap items-end justify-between gap-4 pb-5 border-b border-white/[0.08]"
+        className="space-y-5 pb-6 border-b border-white/[0.08]"
       >
-        <div className="space-y-1">
-          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">
-            {SITE_CONFIG.nameTh}
-          </h1>
-          <p className="text-xs sm:text-sm text-[#9c94a6]">
-            คลังม็อดภาษาไทยอย่างเป็นทางการ — {SITE_CONFIG.nameEn}
-          </p>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">
+                {SITE_CONFIG.nameTh}
+              </h1>
+              <ThaiFlagIcon className="w-7 h-5" />
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-500/18 text-emerald-300 border border-emerald-400/40">
+                แจกฟรี 100%
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-[#9c94a6]">
+              คลังม็อดภาษาไทยอย่างเป็นทางการ — {SITE_CONFIG.nameEn}
+            </p>
+          </div>
+
+          <a
+            href={SITE_CONFIG.nexusProfileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/[0.04] hover:bg-[#D97B29]/20 border border-white/10 hover:border-[#F5A64B]/55 text-white transition"
+          >
+            <NexusModsLogo className="w-4 h-4 shrink-0" />
+            <span>Nexus Mods ({SITE_CONFIG.nexusUsername})</span>
+            <span className="hidden sm:inline text-[11px] font-normal text-[#a69eb0]">
+              — ม็อดไทยและม็อดอื่นๆ ของผม
+            </span>
+            <ExternalLink className="w-3.5 h-3.5 opacity-70" />
+          </a>
         </div>
 
-        <a
-          href={SITE_CONFIG.nexusProfileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/[0.04] hover:bg-[#D97B29]/20 border border-white/10 hover:border-[#F5A64B]/55 text-white transition"
-        >
-          <NexusModsLogo className="w-4 h-4 shrink-0" />
-          <span>Nexus Mods ({SITE_CONFIG.nexusUsername})</span>
-          <span className="hidden sm:inline text-[11px] font-normal text-[#a69eb0]">
-            — ม็อดไทยและม็อดอื่นๆ ของผม
-          </span>
-          <ExternalLink className="w-3.5 h-3.5 opacity-70" />
-        </a>
+        {/* REAL-TIME SITE STATS STRIP */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="glass-panel spot-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+            <div className="relative z-10">
+              <div className="text-[11px] text-[#8a8293] flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                กำลังออนไลน์
+              </div>
+              <div className="font-display text-xl font-bold text-white tabular-nums mt-0.5">
+                {stats.onlineNow.toLocaleString("en-US")}{" "}
+                <span className="text-xs font-normal text-[#8a8293]">คน</span>
+              </div>
+            </div>
+            <Users className="relative z-10 w-5 h-5 text-emerald-400/80 shrink-0" />
+          </div>
+
+          <div className="glass-panel spot-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+            <div className="relative z-10">
+              <div className="text-[11px] text-[#8a8293]">ผู้เข้าชมทั้งหมด</div>
+              <div className="font-display text-xl font-bold text-white tabular-nums mt-0.5">
+                {stats.totalVisits.toLocaleString("en-US")}{" "}
+                <span className="text-xs font-normal text-[#8a8293]">ครั้ง</span>
+              </div>
+            </div>
+            <Eye className="relative z-10 w-5 h-5 text-[#ff77a9]/85 shrink-0" />
+          </div>
+
+          <div className="glass-panel spot-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+            <div className="relative z-10">
+              <div className="text-[11px] text-[#8a8293]">ยอดดาวน์โหลดรวม</div>
+              <div className="font-display text-xl font-bold text-white tabular-nums mt-0.5">
+                {stats.totalDownloads.toLocaleString("en-US")}{" "}
+                <span className="text-xs font-normal text-[#8a8293]">ครั้ง</span>
+              </div>
+            </div>
+            <Download className="relative z-10 w-5 h-5 text-[#ff4d8d] shrink-0" />
+          </div>
+
+          <div className="glass-panel spot-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+            <div className="relative z-10">
+              <div className="text-[11px] text-[#8a8293]">ม็อดภาษาไทยทั้งหมด</div>
+              <div className="font-display text-xl font-bold text-white tabular-nums mt-0.5">
+                {stats.totalMods.toLocaleString("en-US")}{" "}
+                <span className="text-xs font-normal text-[#8a8293]">เกม</span>
+              </div>
+            </div>
+            <Gamepad2 className="relative z-10 w-5 h-5 text-[#ff77a9]/85 shrink-0" />
+          </div>
+        </div>
       </motion.section>
 
-      {/* STEAM-STYLE AUTO-SLIDING HERO CAROUSEL (Zero letterboxing bars, 100% Full 16:9 Cover) */}
+      {/* STEAM-STYLE AUTO-SLIDING HERO CAROUSEL */}
       {currentSlide && currentMod && (
         <motion.section
           initial={{ opacity: 0, y: 14 }}
@@ -145,7 +257,7 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
           className="space-y-3"
         >
           <div className="grid lg:grid-cols-12 gap-4 items-stretch">
-            {/* LEFT: Pure Edge-to-Edge 16:9 Cover Card (Zero top/bottom bars) */}
+            {/* LEFT: Pure Edge-to-Edge 16:9 Cover Card */}
             <div className="lg:col-span-8 relative aspect-video w-full rounded-2xl overflow-hidden border border-white/12 bg-black shadow-[0_24px_64px_-22px_rgba(255,77,141,0.32)] group">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -169,8 +281,8 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
                 </motion.div>
               </AnimatePresence>
 
-              {/* Category Badge positioned at top-right so it never overlaps left-side game logos */}
-              <div className="pointer-events-none absolute top-3.5 right-3.5 z-10 flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-black/70 backdrop-blur-md border border-white/15 text-white shadow">
+              {/* Category Badge positioned at top-right */}
+              <div className="pointer-events-none absolute top-3.5 right-3.5 z-10 flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 backdrop-blur-md border border-white/15 text-white shadow">
                 {currentSlide.badgeType === "sale" && <Tag className="w-3 h-3 text-emerald-400" />}
                 {currentSlide.badgeType === "popular" && <Trophy className="w-3 h-3 text-amber-300" />}
                 {currentSlide.badgeType === "trending" && <Flame className="w-3 h-3 text-[#ff4d8d]" />}
@@ -178,7 +290,6 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
                 <span>{currentSlide.badgeLabel}</span>
               </div>
 
-              {/* Prev / Next Arrows (active when multiple slides exist) */}
               {slides.length > 1 && (
                 <>
                   <button
@@ -200,7 +311,6 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
                 </>
               )}
 
-              {/* Smooth Auto-Advance Progress Line */}
               {slides.length > 1 && !paused && (
                 <motion.div
                   key={`progress-${safeIdx}`}
@@ -225,11 +335,13 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
                   className="relative z-10 space-y-4"
                 >
                   <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
-                    <span className="px-2.5 py-0.5 rounded-md bg-[#ff4d8d]/18 text-[#ff77a9] border border-[#ff4d8d]/35">
-                      {currentSlide.badgeLabel}
+                    <span className="px-2 py-0.5 rounded-md bg-emerald-500/18 text-emerald-300 border border-emerald-400/35">
+                      ฟรี
                     </span>
                     <span className="inline-flex items-center gap-1.5 text-[#9c94a6]">
-                      <SteamLogo className="w-3.5 h-3.5 shrink-0" />
+                      {currentMod.stores.slice(0, 2).map((s) => (
+                        <StoreLogo key={s.platform} platform={s.platform} className="w-3.5 h-3.5" />
+                      ))}
                       {currentMod.specs.supportedGamePlatform}
                     </span>
                   </div>
@@ -295,8 +407,8 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
                       <dd className="font-bold text-white mt-0.5">{currentMod.specs.version}</dd>
                     </div>
                     <div className="rounded-xl py-2 px-2 bg-white/[0.03] border border-white/[0.06]">
-                      <dt className="text-[10px] text-[#8a8293]">ขนาด</dt>
-                      <dd className="font-bold text-white mt-0.5">{currentMod.specs.fileSize}</dd>
+                      <dt className="text-[10px] text-[#8a8293]">ไฟล์</dt>
+                      <dd className="font-bold text-white mt-0.5">{currentMod.files.length} แบบ</dd>
                     </div>
                     <div className="rounded-xl py-2 px-2 bg-white/[0.03] border border-white/[0.06]">
                       <dt className="text-[10px] text-[#8a8293]">ดาวน์โหลด</dt>
@@ -312,13 +424,12 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
                 href={`/mods/${currentMod.slug}`}
                 className="relative z-10 btn-pink-primary w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2"
               >
-                ดูรายละเอียด
+                ดูรายละเอียด & ดาวน์โหลดฟรี
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
 
-          {/* Steam-Style Slide Switcher Pills (visible when > 1 slide) */}
           {slides.length > 1 && (
             <div className="flex items-center justify-center gap-2 pt-1">
               {slides.map((s, idx) => {
@@ -344,9 +455,12 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
 
       {/* MOD LIBRARY GRID */}
       <section className="space-y-4">
-        <h2 className="font-display text-lg font-bold text-white">
-          รายการม็อด ({mods.length})
-        </h2>
+        <div className="flex items-center gap-2.5">
+          <ThaiFlagIcon className="w-5 h-3.5" />
+          <h2 className="font-display text-lg font-bold text-white">
+            รายการม็อดภาษาไทย ({mods.length})
+          </h2>
+        </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {mods.map((mod) => {
@@ -367,11 +481,16 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
                     sizes="(max-width: 768px) 100vw, 400px"
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />
-                  {st?.price && st.price.discountPercent > 0 && (
-                    <span className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-500 text-black shadow">
-                      -{st.price.discountPercent}%
+                  <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-black/75 text-emerald-300 border border-emerald-400/40 backdrop-blur">
+                      ฟรี
                     </span>
-                  )}
+                    {st?.price && st.price.discountPercent > 0 && (
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-500 text-black shadow">
+                        -{st.price.discountPercent}%
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="relative z-10 p-4 flex-1 flex flex-col justify-between gap-3">
@@ -380,8 +499,11 @@ export function HomeClient({ mods, downloadCounts, steamMap }: HomeClientProps) 
                   </h3>
 
                   <div className="pt-2.5 border-t border-white/[0.07] flex items-center justify-between text-xs text-[#8a8293]">
-                    <span>
-                      {mod.specs.version} • {mod.specs.fileSize}
+                    <span className="inline-flex items-center gap-1.5">
+                      {mod.stores.slice(0, 2).map((s) => (
+                        <StoreLogo key={s.platform} platform={s.platform} className="w-3.5 h-3.5" />
+                      ))}
+                      <span>{mod.specs.version}</span>
                     </span>
                     <span className="inline-flex items-center gap-1 font-semibold text-white tabular-nums">
                       <Download className="w-3.5 h-3.5 text-[#ff4d8d]" />

@@ -1,14 +1,17 @@
 import { MODS } from "@/data/mods";
 import { SITE_CONFIG } from "@/data/site";
 import { fetchLiveSteamData, type LiveSteamData } from "@/lib/steam";
-import { getAllDownloadCounts } from "@/lib/store";
+import { getAllDownloadCounts, getSiteStats } from "@/lib/store";
 import { HomeClient } from "@/components/HomeClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [counts, steamList] = await Promise.all([
-    getAllDownloadCounts(MODS.map((m) => m.slug)),
+  const slugs = MODS.map((m) => m.slug);
+
+  const [counts, initialStats, steamList] = await Promise.all([
+    getAllDownloadCounts(slugs),
+    getSiteStats(slugs),
     Promise.all(
       MODS.map(async (m) => {
         const steamStore = m.stores.find((s) => s.platform === "steam" && s.steamAppId);
@@ -62,7 +65,12 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <HomeClient mods={MODS} downloadCounts={counts} steamMap={steamMap} />
+      <HomeClient
+        mods={MODS}
+        downloadCounts={counts}
+        steamMap={steamMap}
+        initialStats={initialStats}
+      />
     </>
   );
 }

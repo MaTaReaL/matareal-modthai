@@ -206,6 +206,212 @@ export const MODS: ModEntry[] = [
       ],
     },
   },
+  {
+    slug: "forza-horizon-6",
+    gameTitle: "Forza Horizon 6",
+    thaiTitle: "Forza Horizon 6 ม็อดภาษาไทย (ซิ่งทะยาน สุดขอบฟ้า 6)",
+    shortDescription:
+      "ม็อดแปลภาษาไทย Forza Horizon 6 ครบทั้งเมนู บทพูด ฟอนต์ไทย IBM Plex Sans Thai และโลโก้ภาษาไทยในเกม รองรับทั้ง Steam และ Xbox Game Pass (PC)",
+    overview:
+      "ม็อดแปลภาษาไทยฉบับสมบูรณ์สำหรับ Forza Horizon 6 แปลครอบคลุมทั้งหน้าเมนูหลัก การตั้งค่า บทสนทนา ซับไตเติล ภารกิจ และรายละเอียดรถ/การแต่งรถ คงชื่อรุ่นรถและคำศัพท์สากลบางส่วนตามบริบทเพื่อความเข้าใจง่าย พร้อมฟอนต์ Vector Font (IBM Plex Sans Thai) ครบ 4 น้ำหนัก และโลโก้ภาษาไทยในเกม (ซิ่งทะยาน สุดขอบฟ้า 6) รองรับทั้งเวอร์ชันตัวติดตั้งอัตโนมัติและแบบลากวาง",
+    features: [
+      "แปลข้อความภายในเกม 47,072 รายการ ครบทั้ง 287 ไฟล์ (คงคำศัพท์เฉพาะ/ชื่อรุ่นรถภาษาอังกฤษตามบริบท 13,392 รายการ)",
+      "ฟอนต์ไทย IBM Plex Sans Thai โครงสร้าง Vector Font สำหรับ ForzaTech ครบ 4 น้ำหนัก (Horizon_A–D) แก้สระลอยและวรรณยุกต์ซ้อน 100%",
+      "โลโก้ชื่อเกมภาษาไทย “ซิ่งทะยาน สุดขอบฟ้า 6” ครบทั้งความละเอียดปกติและ Hi-Res",
+      "เลือกโหลดได้ 2 แบบ: ตัวติดตั้งอัตโนมัติ (สำรองไฟล์และถอนติดตั้งคืนค่าเดิมด้วย SHA-256) หรือไฟล์แบบลากวางด้วยตนเอง",
+      "รองรับทั้ง Steam และ Xbox Game Pass / Microsoft Store (PC) ไม่มีผลกระทบต่อเซฟเกม",
+    ],
+    installSteps: [
+      "ปิดเกม Forza Horizon 6 ให้เรียบร้อยก่อนดำเนินการ",
+      "แบบตัวติดตั้ง (แนะนำ): แตกไฟล์ FH6_ThaiMod_v1.0_Setup.zip แล้วเปิด FH6_ThaiMod_Setup.exe เลือกโฟลเดอร์เกมและกดติดตั้ง (หรือเลือกโหลดไฟล์ FH6_ThaiMod.zip เพื่อวางทับโฟลเดอร์ media ด้วยตนเอง)",
+      "เปิดเกมและตั้งค่าภาษาข้อความในเกมเป็น English เพื่อแสดงผลภาษาไทย",
+    ],
+    installPathExample:
+      "Steam\\steamapps\\common\\Forza Horizon 6\\  หรือ  XboxGames\\Forza Horizon 6\\Content\\",
+    uninstallNote:
+      "หากใช้ตัวติดตั้งให้เปิด FH6_ThaiMod_Setup.exe แล้วกด “ถอนติดตั้ง” เพื่อคืนไฟล์เดิมครบ 6 ไฟล์ด้วย SHA-256 หรือกด Verify ใน Steam / Xbox App",
+    credits: [
+      { role: "Thai Localization & Modding", name: "MaTaReaL" },
+      { role: "Thai Font", name: "IBM Plex Sans Thai (SIL Open Font License 1.1)" },
+    ],
+    tags: ["แปลภาษาไทย", "Steam & Xbox", "ตัวติดตั้ง / ลากวาง", "ForzaTech", "IBM Plex Sans Thai"],
+    seoKeywords: [
+      "Forza Horizon 6 ม็อดไทย",
+      "Forza Horizon 6 ม็อดภาษาไทย",
+      "Forza Horizon 6 แปลไทย",
+      "Forza Horizon 6 Thai Mod",
+      "ม็อดไทย Forza Horizon 6 Steam Xbox Game Pass",
+      "ซิ่งทะยาน สุดขอบฟ้า 6 ม็อดไทย",
+      "MaTaReaL ม็อดไทย",
+    ],
+    featured: true,
+    trending: true,
+    media: {
+      header: "/mods/forza-horizon-6/header.webp",
+      cover: "/mods/forza-horizon-6/cover.webp",
+      ogImage: "/mods/forza-horizon-6/og-share.jpg",
+      gallery: [
+        {
+          src: "/mods/forza-horizon-6/gallery-01.webp",
+          alt: "ปกม็อดภาษาไทย Forza Horizon 6 ซากุระ",
+          caption: "ภาพปกม็อดภาษาไทย",
+          tag: "Cover",
+        },
+        {
+          src: "/mods/forza-horizon-6/gallery-02.webp",
+          alt: "ภาพโปรโมตจุดเด่นม็อดภาษาไทย Forza Horizon 6",
+          caption: "สรุปจุดเด่นม็อดภาษาไทย",
+          tag: "Showcase",
+        },
+        {
+          src: "/mods/forza-horizon-6/gallery-03.webp",
+          alt: "หน้าหลักเกม Forza Horizon 6 โลโก้ภาษาไทย",
+          caption: "โลโก้ภาษาไทยในเกม (ซิ่งทะยาน สุดขอบฟ้า 6)",
+          tag: "Title",
+        },
+        {
+          src: "/mods/forza-horizon-6/gallery-04.webp",
+          alt: "เมนูหลักและแผนที่โลกภาษาไทย Forza Horizon 6",
+          caption: "เมนูหลักและแผนที่โลกภาษาไทย",
+          tag: "Main Menu",
+        },
+        {
+          src: "/mods/forza-horizon-6/gallery-05.webp",
+          alt: "หน้าอัปเดตซีรีส์และกิจกรรมภาษาไทย",
+          caption: "หน้าอัปเดตซีรีส์และไฮไลต์",
+          tag: "Festival",
+        },
+        {
+          src: "/mods/forza-horizon-6/gallery-06.webp",
+          alt: "เมนูโหมดการแข่งขันภาษาไทย",
+          caption: "โหมดแข่งขัน Street Race / Drift Attack / Drag Meet",
+          tag: "Events",
+        },
+        {
+          src: "/mods/forza-horizon-6/gallery-07.webp",
+          alt: "เมนูตั้งค่ากราฟิกภาษาไทย Forza Horizon 6",
+          caption: "เมนูตั้งค่ากราฟิกและระบบ",
+          tag: "Settings",
+        },
+        {
+          src: "/mods/forza-horizon-6/gallery-08.webp",
+          alt: "หน้ารายละเอียดรถและค่าสเปกภาษาไทย",
+          caption: "ข้อมูลรถและสเปกสมรรถนะภาษาไทย",
+          tag: "Garage",
+        },
+        {
+          src: "/mods/forza-horizon-6/gallery-09.webp",
+          alt: "หน้าร้านค้าและแพ็กเสริมภาษาไทย",
+          caption: "ร้านค้าและรายละเอียดแพ็กเสริม",
+          tag: "Store UI",
+        },
+        {
+          src: "/mods/forza-horizon-6/gallery-10.webp",
+          alt: "ภาพการขับขี่และชื่อภูมิภาคภาษาไทย",
+          caption: "การขับขี่และชื่อภูมิภาคในเกม",
+          tag: "Gameplay",
+        },
+        {
+          src: "/mods/forza-horizon-6/gallery-11.webp",
+          alt: "ภาพการขับขี่บนถนนภูเขาและป้ายกิจกรรมภาษาไทย",
+          caption: "ป้ายกิจกรรมและ HUD ภาษาไทย",
+          tag: "HUD",
+        },
+        {
+          src: "/mods/forza-horizon-6/gallery-12.webp",
+          alt: "หน้าแต่งตัวละครภาษาไทย",
+          caption: "เมนูแต่งตัวละครภาษาไทย",
+          tag: "Customize",
+        },
+      ],
+    },
+    specs: {
+      version: "v1.0",
+      aiModel: "Gemini 4 Neon / Hydrogen",
+      fontUsed: "IBM Plex Sans Thai (Vector Font 4 น้ำหนัก)",
+      translatedLines: "47,072 รายการ (คงคำอังกฤษ 13,392 รายการ)",
+      coveragePercent: 100,
+      engine: "ForzaTech Engine",
+      fileSize: "143.3 MB / 160.8 MB",
+      releasedAt: "16 พ.ย. 2026",
+      updatedAt: "24 พ.ย. 2026",
+      supportedGamePlatform: "Steam / Xbox (PC)",
+    },
+    stores: [
+      {
+        platform: "steam",
+        label: "Steam (PC)",
+        url: "https://store.steampowered.com/app/2483190/Forza_Horizon_6/",
+        steamAppId: 2483190,
+      },
+      {
+        platform: "xbox",
+        label: "Xbox / Game Pass (PC)",
+        url: "https://www.xbox.com/th-th/games/store/forza-horizon-6/9NR1R1XWLCNB",
+      },
+    ],
+    files: [
+      {
+        id: "fh6-setup-v1-0",
+        fileName: "FH6_ThaiMod_v1.0_Setup.zip",
+        label: "เวอร์ชันตัวติดตั้งอัตโนมัติ (แนะนำ — Steam & Xbox Game Pass)",
+        version: "v1.0",
+        size: "143.3 MB",
+        uploadedAt: "24 พ.ย. 2026",
+        sha256: "c1f992c2e668b0a492ffb748837c8986660ab2a3d6c65123cc85113da02b5127",
+        primaryUrl:
+          "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/fh6-v1.0/FH6_ThaiMod_v1.0_Setup.zip",
+        primaryHost: "GitHub Releases",
+        backupUrl:
+          "https://drive.google.com/file/d/1Ux3eGjAVnziVOq3vn5yA25-py_6td1OB/view?usp=sharing",
+        backupHost: "Google Drive",
+        installNote:
+          "แตกไฟล์ลงโฟลเดอร์ชั่วคราวแล้วเปิด FH6_ThaiMod_Setup.exe กดติดตั้งหรือถอนติดตั้งได้ในคลิกเดียว พร้อมสำรองไฟล์เดิมอัตโนมัติ (แนบซอร์สโค้ด C# ในโฟลเดอร์ Source\\)",
+      },
+      {
+        id: "fh6-manual-v1-0",
+        fileName: "FH6_ThaiMod.zip",
+        label: "เวอร์ชันลากวางด้วยตนเอง (Manual Drag & Drop)",
+        version: "v1.0",
+        size: "160.8 MB",
+        uploadedAt: "16 พ.ย. 2026",
+        sha256: "c227d3d7fa6aa8fa5879692dccfa1c59be8a800902f97cb8a7dd29bc449acabf",
+        primaryUrl:
+          "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/fh6-v1.0/FH6_ThaiMod.zip",
+        primaryHost: "GitHub Releases",
+        backupUrl:
+          "https://drive.google.com/file/d/1BFpNUIhNQm1GwXhdNVGdynUu6CEr3-JD/view?usp=sharing",
+        backupHost: "Google Drive",
+        installNote:
+          "สำหรับผู้ที่ต้องการลงเองโดยไม่ผ่านตัวติดตั้ง: สำรองไฟล์เดิมก่อนแล้วนำโฟลเดอร์ media ในไฟล์ ZIP ไปวางทับในโฟลเดอร์หลักของเกม (Steam หรือ XboxGames\\Forza Horizon 6\\Content)",
+        knownNotice:
+          "เวอร์ชันนี้ลง Nexus Mods ไม่ได้เนื่องจากโครงสร้างไฟล์ของเกมเป็น .zip ซ้อน .zip จึงเปิดให้โหลดโดยตรงผ่านเว็บนี้",
+      },
+    ],
+    fallbackSteam: {
+      name: "Forza Horizon 6",
+      releaseDate: "18 พ.ค. 2026",
+      developers: ["Playground Games"],
+      publishers: ["Xbox Game Studios"],
+      genres: ["แข่งรถ", "จำลองสถานการณ์", "กีฬา"],
+      shortDescription:
+        "ออกสำรวจภูมิทัศน์อันงดงามของประเทศญี่ปุ่นในเทศกาล Horizon พร้อมรถให้สะสมและปรับแต่งกว่าหลายร้อยคัน",
+      minimumSpecs: [
+        { label: "ระบบปฏิบัติการ", value: "Windows 10 / 11 64-bit" },
+        { label: "โปรเซสเซอร์", value: "Intel i5-8400 / AMD Ryzen 5 1500X ขึ้นไป" },
+        { label: "หน่วยความจำ", value: "RAM 16 GB" },
+        { label: "กราฟิกส์", value: "NVIDIA GTX 1060 / AMD RX 590 ขึ้นไป" },
+        { label: "DirectX", value: "เวอร์ชัน 12" },
+      ],
+      recommendedSpecs: [
+        { label: "ระบบปฏิบัติการ", value: "Windows 10 / 11 64-bit" },
+        { label: "โปรเซสเซอร์", value: "Intel i7-10700K / AMD Ryzen 7 3800XT ขึ้นไป" },
+        { label: "หน่วยความจำ", value: "RAM 16 GB" },
+        { label: "กราฟิกส์", value: "NVIDIA RTX 3070 / AMD RX 6800 XT ขึ้นไป" },
+        { label: "DirectX", value: "เวอร์ชัน 12" },
+      ],
+    },
+  },
 ];
 
 export function getModBySlug(slug: string): ModEntry | undefined {

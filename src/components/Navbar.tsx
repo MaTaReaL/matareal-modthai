@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Search, ExternalLink } from "lucide-react";
 import { SITE_CONFIG } from "@/data/site";
-import { NexusModsLogo } from "./BrandIcons";
+import { NexusModsLogo, ThaiFlagIcon } from "./BrandIcons";
 import { SearchModal } from "./SearchModal";
 
 export function Navbar() {
@@ -38,9 +38,15 @@ export function Navbar() {
                 priority
               />
             </div>
-            <span className="font-display font-bold text-base tracking-tight text-white">
-              {SITE_CONFIG.nameTh}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="font-display font-bold text-base tracking-tight text-white">
+                {SITE_CONFIG.nameTh}
+              </span>
+              <ThaiFlagIcon className="w-5 h-3.5" />
+              <span className="hidden xs:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-400/35">
+                ฟรี
+              </span>
+            </div>
           </Link>
 
           {/* Compact Search Trigger */}
