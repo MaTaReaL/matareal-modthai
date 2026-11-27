@@ -740,6 +740,29 @@ export function ModDetailClient({
                   </button>
                 )}
 
+                {mod.nexusModUrl ? (
+                  <a
+                    href={mod.nexusModUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-[#F5A64B]/12 hover:bg-[#F5A64B]/22 border border-[#F5A64B]/35 text-[#F5A64B] hover:text-[#ffc278] inline-flex items-center justify-center gap-2 transition"
+                  >
+                    <NexusModsLogo className="w-3.5 h-3.5 shrink-0" />
+                    <span>ไปหน้าม็อดบน Nexus Mods</span>
+                    <ExternalLink className="w-3 h-3 opacity-80 shrink-0" />
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    disabled
+                    title="ม็อดเกมนี้ไม่สามารถเผยแพร่บน Nexus Mods ได้"
+                    className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-white/[0.03] border border-white/[0.08] text-[#7c7486] inline-flex items-center justify-center gap-2 opacity-65 cursor-not-allowed select-none"
+                  >
+                    <NexusModsLogo className="w-3.5 h-3.5 shrink-0 grayscale opacity-60" />
+                    <span>ไม่สามารถลง Nexus ได้</span>
+                  </button>
+                )}
+
                 {mod.files.length > 1 && (
                   <button
                     type="button"

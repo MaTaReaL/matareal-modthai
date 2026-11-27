@@ -155,7 +155,7 @@ export default async function ModDetailPage({
           name: `ม็อดไทย ${mod.gameTitle} ปลอดภัยและถอนการติดตั้งได้ไหม?`,
           acceptedAnswer: {
             "@type": "Answer",
-            text: `ปลอดภัย 100% ไม่มีไฟล์ .exe หรือ .bat และไม่กระทบเซฟเกม ${mod.uninstallNote}`,
+            text: `ปลอดภัย 100% ไม่กระทบเซฟเกม และสามารถถอนการติดตั้งคืนไฟล์เดิมได้ทุกเมื่อ ${mod.uninstallNote}`,
           },
         },
       ],

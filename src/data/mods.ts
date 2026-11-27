@@ -9,6 +9,173 @@ import type { ModEntry } from "./types";
  */
 export const MODS: ModEntry[] = [
   {
+    slug: "farm-and-feast",
+    gameTitle: "Farm & Feast",
+    thaiTitle: "Farm & Feast ม็อดภาษาไทย (ฟาร์ม & ฟีสต์)",
+    shortDescription:
+      "ม็อดแปลภาษาไทยสมบูรณ์ 100% (1,833 รายการ) สำหรับเกม Farm & Feast (Patch 0.2.2) สกุลเงินบาท (฿) ฟอนต์ Mitr และโลโก้ภาษาไทย | Steam",
+    overview:
+      "ม็อดแปลภาษาไทยฉบับสมบูรณ์สำหรับ Farm & Feast (รองรับ Patch 0.2.2) แปลและเกลาสำนวนภาษาไทยครบ 100% ครอบคลุมวัตถุดิบ เครื่องเทศ เมนูอาหาร เมล็ดพันธุ์ อุปกรณ์ร้าน ภารกิจ และรีวิวลูกค้า พร้อมเปลี่ยนสกุลเงินเป็นบาท (฿) ทั้งเกม โลโก้เกมภาษาไทย “ฟาร์ม & ฟีสต์” รองรับการพิมพ์ตั้งชื่อร้านภาษาไทย ฟอนต์ Mitr อ่านสบายตา และทำงานผ่าน BepInEx 6 แบบไม่ทับไฟล์เดิมของเกมแม้แต่ไฟล์เดียว",
+    features: [
+      "แปลและเกลาสำนวนภาษาไทยครบ 100% (1,833 รายการ) รองรับตัวเกม Patch 0.2.2 ครบถ้วน",
+      "แปลภาพป้าย ปุ่ม วัตถุ 3D ฉลากวัตถุดิบ และซองเมล็ดพันธุ์เป็นภาษาไทยรวม 36 ภาพ",
+      "เปลี่ยนสกุลเงินจาก $ เป็นเงินบาท (฿) ทั้งเกม ครอบคลุมราคา ภารกิจ ป้ายจ้างพนักงาน ไอคอน HUD และแอนิเมชันเหรียญ 3 มิติ",
+      "โลโก้เกมภาษาไทย “ฟาร์ม & ฟีสต์” พร้อมรองรับการพิมพ์ตั้งชื่อร้านอาหารภาษาไทยทั้งในเมนูและป้ายหน้าร้านจริง",
+      "ฟอนต์ไทย Mitr แก้สระและวรรณยุกต์ทับซ้อนสมบูรณ์ พร้อมจัดระเบียบปุ่มจอย (PS / Xbox) ให้อยู่มุมขวาบนไม่บังตัวอักษร",
+      "ไม่ทับไฟล์เดิมของเกมแม้แต่ไฟล์เดียว (100% Non-Overwriting) ผ่าน BepInEx 6 IL2CPP ถอนการติดตั้งได้ทันทีไม่กระทบเซฟเกม",
+    ],
+    installSteps: [
+      "เปิดโฟลเดอร์ไฟล์เกม (ใน Steam: คลิกขวาที่เกม Farm & Feast → Manage → Browse local files)",
+      "แตกไฟล์ FarmAndFeast_TH_v1.2.zip แล้วเข้าไปในโฟลเดอร์ Mod_Files จากนั้นคัดลอกไฟล์และโฟลเดอร์ทั้งหมดข้างในไปวางในโฟลเดอร์หลักของเกม (ที่มีไฟล์ Farm & Feast.exe)",
+      "เข้าเกมและตั้งค่าภาษาในเกมเป็น English (เข้าเกมครั้งแรกอาจรอ ~20–30 วินาทีเพื่อโหลดปลั๊กอิน)",
+    ],
+    installPathExample: "Steam\\steamapps\\common\\Farm & Feast\\",
+    uninstallNote:
+      "ลบไฟล์ winhttp.dll, doorstop_config.ini, .doorstop_version และโฟลเดอร์ BepInEx, dotnet ออกจากโฟลเดอร์เกมได้ทันที ตัวเกมจะกลับเป็นต้นฉบับ 100%",
+    credits: [
+      { role: "Thai Localization & Modding", name: "MaTaReaL" },
+      { role: "Mod Loader", name: "BepInEx 6 IL2CPP" },
+      { role: "Thai Font", name: "Mitr (SIL Open Font License 1.1)" },
+    ],
+    tags: ["แปลภาษาไทย 100%", "สกุลเงินบาท ฿", "ป้ายไทย 36 ภาพ", "Unity 6", "Steam PC"],
+    seoKeywords: [
+      "Farm & Feast ม็อดไทย",
+      "Farm & Feast ม็อดภาษาไทย",
+      "Farm & Feast แปลไทย",
+      "Farm And Feast Thai Mod",
+      "ฟาร์ม & ฟีสต์ ม็อดไทย",
+      "ดาวน์โหลดม็อดไทย Farm & Feast",
+      "MaTaReaL ม็อดไทย",
+    ],
+    nexusModUrl: "https://www.nexusmods.com/farmandfeast/mods/17",
+    featured: true,
+    media: {
+      header: "/mods/farm-and-feast/header.webp",
+      cover: "/mods/farm-and-feast/cover.webp",
+      ogImage: "/mods/farm-and-feast/og-share.jpg",
+      gallery: [
+        {
+          src: "/mods/farm-and-feast/gallery-01.webp",
+          alt: "ปกม็อดภาษาไทย Farm & Feast",
+          caption: "ภาพปกม็อดภาษาไทย Farm & Feast",
+          tag: "Cover",
+        },
+        {
+          src: "/mods/farm-and-feast/gallery-02.webp",
+          alt: "หน้าหลักเกมและโลโก้ภาษาไทย ฟาร์ม & ฟีสต์",
+          caption: "หน้าหลักเกมและโลโก้ภาษาไทย “ฟาร์ม & ฟีสต์”",
+          tag: "Title",
+        },
+        {
+          src: "/mods/farm-and-feast/gallery-03.webp",
+          alt: "ภาพการเล่นทำฟาร์มและ HUD เงินบาท",
+          caption: "หน้าจอทำฟาร์มและสกุลเงินบาท (฿)",
+          tag: "Gameplay",
+        },
+        {
+          src: "/mods/farm-and-feast/gallery-04.webp",
+          alt: "หน้าต่างพิมพ์ตั้งชื่อร้านอาหารภาษาไทย",
+          caption: "รองรับการพิมพ์ตั้งชื่อร้านอาหารภาษาไทย",
+          tag: "Restaurant",
+        },
+        {
+          src: "/mods/farm-and-feast/gallery-05.webp",
+          alt: "ป้ายชื่อร้านอาหารภาษาไทยหน้าร้านจริง",
+          caption: "แสดงชื่อร้านภาษาไทยบนป้ายหน้าร้านจริง",
+          tag: "Store Sign",
+        },
+        {
+          src: "/mods/farm-and-feast/gallery-06.webp",
+          alt: "หน้าจัดการเมนูอาหารและราคาเงินบาท",
+          caption: "เมนูอาหารและราคาสกุลเงินบาท (฿)",
+          tag: "Menu",
+        },
+        {
+          src: "/mods/farm-and-feast/gallery-07.webp",
+          alt: "หน้าจัดการทีมพนักงานและอัปเกรด",
+          caption: "หน้าจัดการทีมพนักงานและอัปเกรดร้าน",
+          tag: "Team",
+        },
+        {
+          src: "/mods/farm-and-feast/gallery-08.webp",
+          alt: "รายการภารกิจและรางวัลเงินบาท",
+          caption: "รายการภารกิจภาษาไทยพร้อมรางวัลเงินบาท (฿)",
+          tag: "Quests",
+        },
+        {
+          src: "/mods/farm-and-feast/gallery-09.webp",
+          alt: "เมนูตั้งค่าระบบภาษาไทย",
+          caption: "เมนูตั้งค่ากราฟิกและระบบภาษาไทย",
+          tag: "Settings",
+        },
+      ],
+    },
+    specs: {
+      version: "v1.2",
+      aiModel: "Gemini 4 Hydrogen",
+      fontUsed: "Mitr (แก้สระ/วรรณยุกต์ PUA)",
+      translatedLines: "1,833 รายการ (100%)",
+      coveragePercent: 100,
+      engine: "Unity 6 (IL2CPP)",
+      fileSize: "35.6 MB",
+      releasedAt: "19 พ.ย. 2026",
+      updatedAt: "22 พ.ย. 2026",
+      supportedGamePlatform: "Steam (PC)",
+    },
+    stores: [
+      {
+        platform: "steam",
+        label: "Steam (PC)",
+        url: "https://store.steampowered.com/app/4521650/Farm__Feast/",
+        steamAppId: 4521650,
+      },
+    ],
+    files: [
+      {
+        id: "farm-and-feast-v1-2",
+        fileName: "FarmAndFeast_TH_v1.2.zip",
+        label: "Farm & Feast ThaiMod v1.2 (Patch 0.2.2)",
+        version: "v1.2",
+        size: "35.6 MB",
+        uploadedAt: "22 พ.ย. 2026",
+        sha256: "6617767003b370c3ac07541067d548190434f3b1393bcc163e69ef97ed2225ea",
+        primaryUrl:
+          "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/farm-and-feast-v1.2/FarmAndFeast_TH_v1.2.zip",
+        primaryHost: "GitHub Releases",
+        backupUrl:
+          "https://drive.google.com/file/d/1b8AvVHZ3nbTkF__JYVHFo-nqFDMkV0SQ/view?usp=sharing",
+        backupHost: "Google Drive",
+        installNote:
+          "นำไฟล์ทั้งหมดในโฟลเดอร์ Mod_Files ไปวางในโฟลเดอร์หลักของเกมที่มีไฟล์ Farm & Feast.exe (รองรับ Patch 0.2.2)",
+      },
+    ],
+    fallbackSteam: {
+      name: "Farm & Feast",
+      releaseDate: "11 พ.ย. 2026",
+      developers: ["dummy dino"],
+      publishers: ["dummy dino", "Gamersky Games"],
+      genres: ["แคชชวล", "อินดี้", "จำลองสถานการณ์", "เล่นระหว่างการพัฒนา"],
+      shortDescription:
+        "ปลูกวัตถุดิบสด ๆ และบริหารร้านอาหารเล็ก ๆ ของคุณเอง ดื่มด่ำกับวันอันสงบสุขที่ทอดยาวจากท้องทุ่งสู่โต๊ะอาหาร วางแผนเมนูสด ๆ และทำให้ลูกค้ามีความสุข",
+      minimumSpecs: [
+        { label: "ระบบปฏิบัติการ", value: "Windows 10 ขึ้นไป" },
+        { label: "โปรเซสเซอร์", value: "Intel Core i5-7360U ขึ้นไป" },
+        { label: "หน่วยความจำ", value: "RAM 4 GB" },
+        { label: "กราฟิกส์", value: "Intel UHD 630 ขึ้นไป" },
+        { label: "DirectX", value: "เวอร์ชัน 11" },
+        { label: "พื้นที่เก็บข้อมูล", value: "พื้นที่ว่าง 5 GB" },
+      ],
+      recommendedSpecs: [
+        { label: "ระบบปฏิบัติการ", value: "Windows 10 ขึ้นไป" },
+        { label: "โปรเซสเซอร์", value: "AMD Ryzen 5600G" },
+        { label: "หน่วยความจำ", value: "RAM 8 GB" },
+        { label: "กราฟิกส์", value: "NVIDIA GTX 1060 ขึ้นไป" },
+        { label: "DirectX", value: "เวอร์ชัน 11" },
+        { label: "พื้นที่เก็บข้อมูล", value: "พื้นที่ว่าง 5 GB" },
+      ],
+    },
+  },
+  {
     slug: "venus-vacation-prism-dead-or-alive-xtreme",
     gameTitle: "Venus Vacation PRISM - DEAD OR ALIVE Xtreme",
     thaiTitle: "Venus Vacation PRISM - DEAD OR ALIVE Xtreme ม็อดภาษาไทย",
@@ -244,6 +411,7 @@ export const MODS: ModEntry[] = [
       "ซิ่งทะยาน สุดขอบฟ้า 6 ม็อดไทย",
       "MaTaReaL ม็อดไทย",
     ],
+    nexusModUrl: "https://www.nexusmods.com/forzahorizon6/mods/2102",
     featured: true,
     trending: true,
     media: {
@@ -366,7 +534,9 @@ export const MODS: ModEntry[] = [
           "https://drive.google.com/file/d/1Ux3eGjAVnziVOq3vn5yA25-py_6td1OB/view?usp=sharing",
         backupHost: "Google Drive",
         installNote:
-          "แตกไฟล์ลงโฟลเดอร์ชั่วคราวแล้วเปิด FH6_ThaiMod_Setup.exe กดติดตั้งหรือถอนติดตั้งได้ในคลิกเดียว พร้อมสำรองไฟล์เดิมอัตโนมัติ (แนบซอร์สโค้ด C# ในโฟลเดอร์ Source\\)",
+          "แตกไฟล์แล้วเปิด FH6_ThaiMod_Setup.exe เลือกโฟลเดอร์เกมแล้วกดติดตั้ง (หรือถอนติดตั้ง) ได้ทันที",
+        knownNotice:
+          "เวอร์ชันนี้ลง Nexus Mods ไม่ได้เนื่องจากเป็นไฟล์ EXE จึงเปิดให้โหลดโดยตรงผ่านเว็บนี้",
       },
       {
         id: "fh6-manual-v1-0",
@@ -383,7 +553,7 @@ export const MODS: ModEntry[] = [
           "https://drive.google.com/file/d/1BFpNUIhNQm1GwXhdNVGdynUu6CEr3-JD/view?usp=sharing",
         backupHost: "Google Drive",
         installNote:
-          "สำหรับผู้ที่ต้องการลงเองโดยไม่ผ่านตัวติดตั้ง: สำรองไฟล์เดิมก่อนแล้วนำโฟลเดอร์ media ในไฟล์ ZIP ไปวางทับในโฟลเดอร์หลักของเกม (Steam หรือ XboxGames\\Forza Horizon 6\\Content)",
+          "แตกไฟล์แล้วนำโฟลเดอร์ media ไปวางทับในโฟลเดอร์หลักของเกม (Steam หรือ XboxGames\\Forza Horizon 6\\Content)",
         knownNotice:
           "เวอร์ชันนี้ลง Nexus Mods ไม่ได้เนื่องจากโครงสร้างไฟล์ของเกมเป็น .zip ซ้อน .zip จึงเปิดให้โหลดโดยตรงผ่านเว็บนี้",
       },
