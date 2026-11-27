@@ -72,7 +72,7 @@ export const MODS: ModEntry[] = [
       translatedLines: "1,434 ข้อความ (100%)",
       coveragePercent: 100,
       engine: "Unity 2018.4 (IL2CPP)",
-      fileSize: "2.92 MB",
+      fileSize: "6.59 MB",
       releasedAt: "27 พ.ย. 2026",
       updatedAt: "27 พ.ย. 2026",
       supportedGamePlatform: "Steam / EA App (PC)",
@@ -101,10 +101,10 @@ export const MODS: ModEntry[] = [
         fileName: "SOS_ThaiMod_v1.0.zip",
         label: "ม็อดแปลภาษาไทย 100% (Steam / EA App)",
         version: "v1.0",
-        size: "2.92 MB",
+        size: "6.59 MB",
         uploadedAt: "27 พ.ย. 2026",
         sha256:
-          "6a9af467b7bc5723527389ed086a6e533197c8bc3240f86a5bb7e4a827cde4d2",
+          "bcf524a87f9b5a92ffa603e4f4a3e224ddc1f5dd1a6ed2371dfebe988b5c972a",
         primaryUrl:
           "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/sos-v1.0/SOS_ThaiMod_v1.0.zip",
         primaryHost: "GitHub Releases",
