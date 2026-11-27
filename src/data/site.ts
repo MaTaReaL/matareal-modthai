@@ -10,6 +10,7 @@ export const SITE_CONFIG = {
   nexusUsername: "MaTaReaL1",
   facebookName: "Thanapol Kitbumrung",
   facebookUrl: "https://www.facebook.com/MaTaReaL11/",
+  discordUrl: "https://discord.com/users/456114401418805268",
   authorName: "MaTaReaL",
   logoPath: "/brand/logo.webp",
 };

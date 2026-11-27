@@ -41,12 +41,6 @@ const PLATFORM_STYLE: Record<StorePlatform, string> = {
     "bg-[#e60012]/14 hover:bg-[#e60012]/28 border-[#e60012]/35 hover:border-[#ff4d5a]/65 text-white/90",
 };
 
-function getReviewTone(percent: number): string {
-  if (percent >= 70) return "text-[#66c0f4] bg-[#66c0f4]/10 border-[#66c0f4]/30";
-  if (percent >= 40) return "text-amber-300 bg-amber-500/10 border-amber-400/30";
-  return "text-rose-300 bg-rose-500/10 border-rose-400/30";
-}
-
 function getMetacriticTone(score: number): string {
   if (score >= 75) return "bg-emerald-500 text-black";
   if (score >= 50) return "bg-amber-400 text-black";
@@ -138,6 +132,7 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
         {/* Live Steam Price + Sale End Date */}
         {steamData?.price && (
           <div className="flex flex-col items-start md:items-end gap-1 shrink-0">
+            <span className="text-[10px] font-semibold text-[#8a8293]">ราคาเกมปัจจุบัน</span>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10">
               {steamData.price.discountPercent > 0 && (
                 <span className="px-1.5 py-0.5 rounded text-[11px] font-bold bg-emerald-500 text-black">
@@ -165,8 +160,11 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
         )}
       </div>
 
-      {/* Store Buttons (PC stores + Console info-only stores like PS / Nintendo) */}
-      <div className="relative z-10 space-y-3">
+      {/* SECTION 1: Official Platforms & Stores */}
+      <div className="relative z-10 space-y-2.5">
+        <div className="text-[11px] font-bold uppercase tracking-wide text-[#8a8293]">
+          แพลตฟอร์มวางจำหน่าย
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           {sortedStores.map((store) => {
             const isConsoleOnly =
@@ -179,7 +177,7 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
                 rel="noopener noreferrer"
                 title={
                   isConsoleOnly
-                    ? `${store.label} (วางจำหน่ายบนคอนโซลด้วย — ม็อดไทยใช้ได้เฉพาะ PC)`
+                    ? `${store.label} (วางจำหน่ายบนคอนโซล — ม็อดไทยรองรับเฉพาะ PC)`
                     : store.label
                 }
                 className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-semibold transition ${
@@ -198,101 +196,142 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
             );
           })}
         </div>
+      </div>
 
-        {/* Real-Time Steam Reviews (Clearly labeled All-Time vs Recent 30d) + Metacritic + OpenCritic */}
-        <div className="flex flex-wrap items-center gap-2 pt-1">
-          {steamData?.steamReview && (
-            <div
-              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold ${getReviewTone(
-                steamData.steamReview.percentPositive
-              )}`}
-            >
-              <SteamLogo className="w-3.5 h-3.5 shrink-0" />
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/30 text-white/85 font-bold">
-                ทั้งหมด
-              </span>
-              <span>
-                {steamData.steamReview.percentPositive}% ({steamData.steamReview.label})
-              </span>
-              <span className="text-[11px] opacity-75 font-normal">
-                · {steamData.steamReview.reviewCount.toLocaleString("en-US")} รีวิว
-              </span>
+      {/* SECTION 2: Separated Review Scores (Steam All+Recent Unified Card & Metacritic+OpenCritic Unified Card) */}
+      <div className="relative z-10 pt-4 border-t border-white/[0.08] space-y-2.5">
+        <div className="text-[11px] font-bold uppercase tracking-wide text-[#8a8293]">
+          คะแนนรีวิว
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {/* Block 1: Unified Steam Reviews (ALWAYS pairs All-Time + Recent 30d together) */}
+          <div className="rounded-xl p-3.5 bg-white/[0.03] border border-white/[0.09] space-y-2.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-white">
+              <SteamLogo className="w-4 h-4 shrink-0" />
+              <span>รีวิวผู้เล่นบน Steam</span>
             </div>
-          )}
 
-          {steamData?.steamRecentReview && (
-            <div
-              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold ${getReviewTone(
-                steamData.steamRecentReview.percentPositive
-              )}`}
-            >
-              <SteamLogo className="w-3.5 h-3.5 shrink-0" />
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/30 text-white/85 font-bold">
-                30 วันล่าสุด
-              </span>
-              <span>
-                {steamData.steamRecentReview.percentPositive}% ({steamData.steamRecentReview.label})
-              </span>
-              <span className="text-[11px] opacity-75 font-normal">
-                · {steamData.steamRecentReview.reviewCount.toLocaleString("en-US")} รีวิว
-              </span>
-            </div>
-          )}
-
-          {steamData?.metacritic && (
-            <a
-              href={steamData.metacritic.url || "https://www.metacritic.com/"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.09] border border-white/12 text-xs font-semibold text-white transition"
-            >
-              <MetacriticLogo className="w-3.5 h-3.5 shrink-0" />
-              <span
-                className={`px-1.5 py-0.5 rounded font-mono text-[11px] font-extrabold ${getMetacriticTone(
-                  steamData.metacritic.score
-                )}`}
-              >
-                {steamData.metacritic.score}
-              </span>
-              <span>Metacritic</span>
-              <ExternalLink className="w-3 h-3 opacity-55" />
-            </a>
-          )}
-
-          {steamData?.openCritic && (
-            <a
-              href={steamData.openCritic.url || "https://opencritic.com/"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.09] border border-white/12 text-xs font-semibold text-white transition"
-            >
-              <OpenCriticLogo className="w-3.5 h-3.5 shrink-0" />
-              <span
-                className={`px-1.5 py-0.5 rounded font-mono text-[11px] font-extrabold ${getOpenCriticTone(
-                  steamData.openCritic.score,
-                  steamData.openCritic.tier
-                )}`}
-              >
-                {steamData.openCritic.score}
-              </span>
-              <span>
-                OpenCritic
-                {steamData.openCritic.tier ? (
-                  <span className="ml-1 text-[10px] font-normal text-[#a69eb0]">
-                    ({steamData.openCritic.tier})
+            <div className="space-y-1.5 text-xs">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[#9c94a6] whitespace-nowrap">บทวิจารณ์ทั้งหมด</span>
+                {steamData?.steamReview ? (
+                  <span
+                    className={`inline-flex items-center gap-1.5 font-semibold text-right ${
+                      steamData.steamReview.percentPositive >= 70
+                        ? "text-[#66c0f4]"
+                        : steamData.steamReview.percentPositive >= 40
+                        ? "text-amber-300"
+                        : "text-rose-300"
+                    }`}
+                  >
+                    <span>
+                      {steamData.steamReview.percentPositive}% {steamData.steamReview.label}
+                    </span>
+                    <span className="text-[11px] text-[#8a8293] font-normal tabular-nums">
+                      ({steamData.steamReview.reviewCount.toLocaleString("en-US")})
+                    </span>
                   </span>
-                ) : null}
-              </span>
-              <ExternalLink className="w-3 h-3 opacity-55" />
-            </a>
-          )}
+                ) : (
+                  <span className="text-[#7c7486]">ยังไม่มีคะแนน</span>
+                )}
+              </div>
 
-          {!steamData?.metacritic && !steamData?.openCritic && (
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-[11px] text-[#8a8293]">
-              <MetacriticLogo className="w-3.5 h-3.5 opacity-55 shrink-0" />
-              <span>ยังไม่มีคะแนนสื่อวิจารณ์ (Metacritic / OpenCritic)</span>
+              <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-white/[0.06]">
+                <span className="text-[#9c94a6] whitespace-nowrap">บทวิจารณ์ล่าสุด (30 วัน)</span>
+                {steamData?.steamRecentReview ? (
+                  <span
+                    className={`inline-flex items-center gap-1.5 font-semibold text-right ${
+                      steamData.steamRecentReview.percentPositive >= 70
+                        ? "text-[#66c0f4]"
+                        : steamData.steamRecentReview.percentPositive >= 40
+                        ? "text-amber-300"
+                        : "text-rose-300"
+                    }`}
+                  >
+                    <span>
+                      {steamData.steamRecentReview.percentPositive}% {steamData.steamRecentReview.label}
+                    </span>
+                    <span className="text-[11px] text-[#8a8293] font-normal tabular-nums">
+                      ({steamData.steamRecentReview.reviewCount.toLocaleString("en-US")})
+                    </span>
+                  </span>
+                ) : (
+                  <span className="text-[#7c7486]">ยังไม่มีคะแนน</span>
+                )}
+              </div>
             </div>
-          )}
+          </div>
+
+          {/* Block 2: Unified Critic Scores (ALWAYS pairs Metacritic + OpenCritic together) */}
+          <div className="rounded-xl p-3.5 bg-white/[0.03] border border-white/[0.09] space-y-2.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-white">
+              <MetacriticLogo className="w-4 h-4 shrink-0" />
+              <span>คะแนนสื่อวิจารณ์</span>
+            </div>
+
+            <div className="space-y-1.5 text-xs">
+              {/* Metacritic Row */}
+              <div className="flex items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-1.5 text-[#cbc5d0] font-medium">
+                  <MetacriticLogo className="w-3.5 h-3.5 shrink-0" />
+                  <span>Metacritic</span>
+                </span>
+                {steamData?.metacritic ? (
+                  <a
+                    href={steamData.metacritic.url || "https://www.metacritic.com/"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 hover:opacity-85 transition"
+                  >
+                    <span
+                      className={`px-2 py-0.5 rounded font-mono text-[11px] font-extrabold ${getMetacriticTone(
+                        steamData.metacritic.score
+                      )}`}
+                    >
+                      {steamData.metacritic.score}
+                    </span>
+                    <ExternalLink className="w-3 h-3 text-[#8a8293]" />
+                  </a>
+                ) : (
+                  <span className="text-[#7c7486]">ยังไม่มีคะแนน</span>
+                )}
+              </div>
+
+              {/* OpenCritic Row */}
+              <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-white/[0.06]">
+                <span className="inline-flex items-center gap-1.5 text-[#cbc5d0] font-medium">
+                  <OpenCriticLogo className="w-3.5 h-3.5 shrink-0" />
+                  <span>OpenCritic</span>
+                </span>
+                {steamData?.openCritic ? (
+                  <a
+                    href={steamData.openCritic.url || "https://opencritic.com/"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 hover:opacity-85 transition"
+                  >
+                    {steamData.openCritic.tier && (
+                      <span className="text-[11px] text-[#a69eb0]">
+                        {steamData.openCritic.tier}
+                      </span>
+                    )}
+                    <span
+                      className={`px-2 py-0.5 rounded font-mono text-[11px] font-extrabold ${getOpenCriticTone(
+                        steamData.openCritic.score,
+                        steamData.openCritic.tier
+                      )}`}
+                    >
+                      {steamData.openCritic.score}
+                    </span>
+                    <ExternalLink className="w-3 h-3 text-[#8a8293]" />
+                  </a>
+                ) : (
+                  <span className="text-[#7c7486]">ยังไม่มีคะแนน</span>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

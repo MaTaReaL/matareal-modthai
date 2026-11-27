@@ -506,17 +506,14 @@ export function HomeClient({
             </div>
           )}
 
-          {/* Top-Right Free + Discount Badge */}
-          <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
-            <span className="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-black/80 text-emerald-300 border border-emerald-400/40">
-              ฟรี
-            </span>
-            {price && price.discountPercent > 0 && (
+          {/* Top-Right Discount Badge Only (No redundant "ฟรี" pill on cards) */}
+          {price && price.discountPercent > 0 && (
+            <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
               <span className="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-500 text-black shadow">
                 -{price.discountPercent}%
               </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         <div className={`relative z-10 ${compact ? "p-3" : "p-4"} flex-1 flex flex-col justify-between gap-2.5`}>
@@ -561,7 +558,7 @@ export function HomeClient({
           </div>
 
           <div className="pt-2.5 border-t border-white/[0.07] flex items-center justify-between gap-2 text-xs">
-            {/* PC Store Logos + Current Official Store Price */}
+            {/* PC Store Logos + Official Game Price (clearly labeled ราคาเกม) */}
             <div className="flex items-center gap-1.5 min-w-0">
               <span className="inline-flex items-center gap-1 shrink-0">
                 {pcPlatforms.map((p) => (
@@ -569,17 +566,18 @@ export function HomeClient({
                 ))}
               </span>
               {price ? (
-                <span className="inline-flex items-center gap-1 truncate">
+                <span className="inline-flex items-center gap-1 min-w-0 truncate">
+                  {!compact && (
+                    <span className="text-[10px] text-[#8a8293] shrink-0">ราคาเกม</span>
+                  )}
                   {price.discountPercent > 0 && (
-                    <span className="text-[10px] line-through text-[#7c7486] hidden sm:inline">
+                    <span className="text-[10px] line-through text-[#7c7486] hidden sm:inline shrink-0">
                       {price.initialFormatted}
                     </span>
                   )}
                   <span
-                    className={`font-semibold tabular-nums ${
-                      price.isFree
-                        ? "text-emerald-300"
-                        : price.discountPercent > 0
+                    className={`font-semibold tabular-nums whitespace-nowrap ${
+                      price.isFree || price.discountPercent > 0
                         ? "text-emerald-300"
                         : "text-[#d5cedc]"
                     }`}
@@ -625,16 +623,13 @@ export function HomeClient({
             sizes="(max-width: 640px) 100vw, 240px"
             className="object-cover transition-transform duration-500 lg:group-hover:scale-[1.03]"
           />
-          <div className="absolute top-2 right-2 flex items-center gap-1">
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-black/80 text-emerald-300 border border-emerald-400/40">
-              ฟรี
-            </span>
-            {price && price.discountPercent > 0 && (
+          {price && price.discountPercent > 0 && (
+            <div className="absolute top-2 right-2">
               <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-emerald-500 text-black">
                 -{price.discountPercent}%
               </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Center Info */}
@@ -701,9 +696,10 @@ export function HomeClient({
         </div>
 
         {/* Right Price & Downloads */}
-        <div className="relative z-10 flex sm:flex-col items-center sm:items-end justify-between gap-2 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-white/[0.07] shrink-0 sm:min-w-[120px]">
+        <div className="relative z-10 flex sm:flex-col items-center sm:items-end justify-between gap-2 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-white/[0.07] shrink-0 sm:min-w-[130px]">
           {price && (
             <div className="text-left sm:text-right">
+              <div className="text-[10px] text-[#8a8293]">ราคาเกมปัจจุบัน</div>
               {price.discountPercent > 0 && (
                 <div className="text-[10px] line-through text-[#8a8293]">
                   {price.initialFormatted}
@@ -923,9 +919,9 @@ export function HomeClient({
                   <div className="rounded-xl p-3 bg-white/[0.035] border border-white/[0.08] space-y-2">
                     {currentSteam.price && (
                       <div className="flex items-center justify-between gap-2 text-xs">
-                        <span className="text-[#8a8293] inline-flex items-center gap-1.5">
+                        <span className="text-[#8a8293] inline-flex items-center gap-1.5 whitespace-nowrap">
                           <SteamLogo className="w-3.5 h-3.5 shrink-0" />
-                          Steam
+                          ราคาเกม
                         </span>
                         <div className="flex items-center gap-2">
                           {currentSteam.price.discountPercent > 0 && (
@@ -1024,28 +1020,30 @@ export function HomeClient({
       )}
 
       {/* MOD LIBRARY WITH SERIES SETS, FILTERS, SORTING & VIEW MODES */}
-      <section className="space-y-4 sm:space-y-5">
-        {/* Title Row + View Mode Switcher + Sort Dropdown */}
+      <section className="space-y-4">
+        {/* Clean Single-Line Title + Controls Bar (Never wraps title or count badge!) */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <ThaiFlagIcon className="w-5 h-3.5" />
-            <h2 className="font-display text-base sm:text-lg font-bold text-white">
+          <div className="flex items-center gap-2.5 shrink-0">
+            <ThaiFlagIcon className="w-5 h-3.5 shrink-0" />
+            <h2 className="font-display text-base sm:text-lg font-bold text-white whitespace-nowrap">
               รายการม็อดภาษาไทย
             </h2>
-            <span className="px-2 py-0.5 rounded-full text-xs font-mono font-semibold bg-white/[0.07] text-[#ff9ec2] border border-white/10 tabular-nums">
-              {filteredMods.length} / {mods.length}
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-white/[0.07] text-[#ff9ec2] border border-white/10 tabular-nums whitespace-nowrap shrink-0">
+              {filteredMods.length === mods.length
+                ? `${mods.length} เกม`
+                : `${filteredMods.length} / ${mods.length}`}
             </span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             {/* Inline Search */}
-            <div className="relative flex-1 sm:flex-initial sm:w-52">
+            <div className="relative flex-1 sm:flex-initial sm:w-44 md:w-48">
               <Search className="w-3.5 h-3.5 text-[#8a8293] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="กรองชื่อเกม / ซีรีส์..."
+                placeholder="ค้นหาเกม..."
                 className="w-full pl-8 pr-7 py-2 rounded-xl text-xs bg-[#141019] border border-white/12 text-white placeholder:text-[#7c7486] outline-none focus:border-[#ff4d8d]"
               />
               {searchQuery && (
@@ -1061,35 +1059,35 @@ export function HomeClient({
             </div>
 
             {/* Sort Selector (Dark-mode safe) */}
-            <div className="relative inline-flex items-center">
+            <div className="relative inline-flex items-center shrink-0">
               <ArrowDownWideNarrow className="w-3.5 h-3.5 text-[#ff77a9] absolute left-3 pointer-events-none" />
               <select
-                aria-label="เรียงลำดับม็อด"
+                aria-label="เรียงลำดับ"
                 value={sortMode}
                 onChange={(e) => setSortMode(e.target.value as SortMode)}
-                className="pl-8 pr-7 py-2 rounded-xl text-xs font-semibold bg-[#141019] border border-white/12 text-white outline-none focus:border-[#ff4d8d] cursor-pointer"
+                className="pl-8 pr-7 py-2 rounded-xl text-xs font-semibold bg-[#141019] border border-white/12 text-white outline-none focus:border-[#ff4d8d] cursor-pointer whitespace-nowrap"
               >
-                <option value="latest">เรียงตาม: ล่าสุด</option>
-                <option value="popular">เรียงตาม: ความนิยมสูงสุด</option>
-                <option value="price-asc">ราคาเกมตอนนี้: น้อย → มาก</option>
-                <option value="price-desc">ราคาเกมตอนนี้: มาก → น้อย</option>
-                <option value="rating">เรียงตาม: คะแนนรีวิวสูงสุด</option>
-                <option value="name">เรียงตาม: ชื่อเกม A → Z</option>
+                <option value="latest">ล่าสุด</option>
+                <option value="popular">ยอดนิยม</option>
+                <option value="price-asc">ราคาเกม: น้อย → มาก</option>
+                <option value="price-desc">ราคาเกม: มาก → น้อย</option>
+                <option value="rating">คะแนนรีวิว</option>
+                <option value="name">ชื่อ A–Z</option>
               </select>
             </div>
 
-            {/* View Mode Switcher */}
+            {/* View Mode Switcher (Concise Formal Labels) */}
             <div
               role="group"
               aria-label="รูปแบบการแสดงผล"
-              className="inline-flex items-center p-1 rounded-xl bg-white/[0.04] border border-white/10"
+              className="inline-flex items-center p-1 rounded-xl bg-white/[0.04] border border-white/10 shrink-0"
             >
               {(
                 [
-                  { id: "grid3", label: "3 ช่อง (หลัก)", icon: <LayoutGrid className="w-3.5 h-3.5" /> },
-                  { id: "grid4", label: "4 ช่องกระชับ", icon: <Grid2x2 className="w-3.5 h-3.5" /> },
+                  { id: "grid3", label: "ตาราง", icon: <LayoutGrid className="w-3.5 h-3.5" /> },
+                  { id: "grid4", label: "กระชับ", icon: <Grid2x2 className="w-3.5 h-3.5" /> },
                   { id: "list", label: "รายการ", icon: <List className="w-3.5 h-3.5" /> },
-                  { id: "series", label: "แยกเซ็ต/ซีรีส์", icon: <Layers className="w-3.5 h-3.5" /> },
+                  { id: "series", label: "ซีรีส์", icon: <Layers className="w-3.5 h-3.5" /> },
                 ] as const
               ).map((v) => {
                 const active = viewMode === v.id;
@@ -1099,14 +1097,14 @@ export function HomeClient({
                     type="button"
                     title={v.label}
                     onClick={() => setViewMode(v.id)}
-                    className={`px-2.5 py-1.5 rounded-lg text-[11px] font-semibold inline-flex items-center gap-1.5 transition cursor-pointer ${
+                    className={`px-2.5 py-1.5 rounded-lg text-[11px] font-semibold inline-flex items-center gap-1.5 whitespace-nowrap transition cursor-pointer ${
                       active
                         ? "bg-[#ff4d8d]/25 text-white border border-[#ff4d8d]/45"
                         : "text-[#9c94a6] hover:text-white border border-transparent"
                     }`}
                   >
                     {v.icon}
-                    <span className="hidden xl:inline">{v.label}</span>
+                    <span className="hidden sm:inline">{v.label}</span>
                   </button>
                 );
               })}
@@ -1114,36 +1112,43 @@ export function HomeClient({
           </div>
         </div>
 
-        {/* COLLAPSIBLE FILTER PANEL (Collapsed by default, expands smoothly on click) */}
+        {/* FULL-BAR CLICKABLE COLLAPSIBLE FILTER PANEL (Collapsed by default) */}
         <div className="glass-panel rounded-2xl overflow-hidden">
-          <div className="px-3.5 sm:px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
-            <button
-              type="button"
-              onClick={() => setFiltersOpen((v) => !v)}
-              aria-expanded={filtersOpen}
-              className="flex items-center gap-2 text-xs font-semibold text-white hover:text-[#ff77a9] transition cursor-pointer py-0.5"
-            >
+          <div
+            role="button"
+            tabIndex={0}
+            aria-expanded={filtersOpen}
+            onClick={() => setFiltersOpen((v) => !v)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setFiltersOpen((v) => !v);
+              }
+            }}
+            className="w-full px-4 py-3 flex flex-wrap items-center justify-between gap-2 hover:bg-white/[0.03] transition cursor-pointer select-none"
+          >
+            <div className="flex items-center gap-2 min-w-0">
               <SlidersHorizontal className="w-3.5 h-3.5 text-[#ff77a9] shrink-0" />
-              <span>ตัวกรอง (ซีรีส์ / แพลตฟอร์ม / แนวเกม)</span>
+              <span className="text-xs font-bold text-white whitespace-nowrap">ตัวกรอง</span>
+              <span className="text-[11px] text-[#8a8293] hidden sm:inline whitespace-nowrap">
+                ซีรีส์ · แพลตฟอร์ม · แนวเกม
+              </span>
               {activeFilterCount > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#ff4d8d]/25 text-[#ff9ec2] border border-[#ff4d8d]/45">
-                  เลือกอยู่ {activeFilterCount}
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#ff4d8d]/25 text-[#ff9ec2] border border-[#ff4d8d]/45 whitespace-nowrap">
+                  {activeFilterCount}
                 </span>
               )}
-              <ChevronDown
-                className={`w-4 h-4 text-[#9c94a6] transition-transform duration-200 ${
-                  filtersOpen ? "rotate-180 text-[#ff77a9]" : ""
-                }`}
-              />
-            </button>
+            </div>
 
-            {/* Quick active-filter summary pills when collapsed + Reset button */}
             <div className="flex flex-wrap items-center gap-1.5">
               {!filtersOpen && selectedSeries !== "all" && (
                 <button
                   type="button"
-                  onClick={() => setSelectedSeries("all")}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#ff4d8d]/20 border border-[#ff4d8d]/45 text-white cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedSeries("all");
+                  }}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#ff4d8d]/20 border border-[#ff4d8d]/45 text-white cursor-pointer whitespace-nowrap"
                 >
                   <span>
                     {selectedSeries === "standalone"
@@ -1156,8 +1161,11 @@ export function HomeClient({
               {!filtersOpen && selectedPlatform !== "all" && (
                 <button
                   type="button"
-                  onClick={() => setSelectedPlatform("all")}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#ff4d8d]/20 border border-[#ff4d8d]/45 text-white cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedPlatform("all");
+                  }}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#ff4d8d]/20 border border-[#ff4d8d]/45 text-white cursor-pointer whitespace-nowrap"
                 >
                   <span>{PC_PLATFORM_FILTERS.find((p) => p.id === selectedPlatform)?.label}</span>
                   <X className="w-2.5 h-2.5" />
@@ -1166,8 +1174,11 @@ export function HomeClient({
               {!filtersOpen && selectedGenre !== "all" && (
                 <button
                   type="button"
-                  onClick={() => setSelectedGenre("all")}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#ff4d8d]/20 border border-[#ff4d8d]/45 text-white cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedGenre("all");
+                  }}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#ff4d8d]/20 border border-[#ff4d8d]/45 text-white cursor-pointer whitespace-nowrap"
                 >
                   <span>{selectedGenre}</span>
                   <X className="w-2.5 h-2.5" />
@@ -1176,8 +1187,11 @@ export function HomeClient({
               {!filtersOpen && onlyOnSale && (
                 <button
                   type="button"
-                  onClick={() => setOnlyOnSale(false)}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-emerald-500/20 border border-emerald-400/45 text-emerald-200 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOnlyOnSale(false);
+                  }}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-emerald-500/20 border border-emerald-400/45 text-emerald-200 cursor-pointer whitespace-nowrap"
                 >
                   <span>กำลังลดราคา</span>
                   <X className="w-2.5 h-2.5" />
@@ -1186,20 +1200,21 @@ export function HomeClient({
               {hasActiveFilter && (
                 <button
                   type="button"
-                  onClick={resetFilters}
-                  className="px-2 py-1 rounded-lg text-[11px] font-semibold bg-white/[0.05] hover:bg-white/12 text-[#ff9ec2] inline-flex items-center gap-1 transition cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    resetFilters();
+                  }}
+                  className="px-2 py-1 rounded-lg text-[11px] font-semibold bg-white/[0.06] hover:bg-white/12 text-[#ff9ec2] inline-flex items-center gap-1 transition cursor-pointer whitespace-nowrap"
                 >
                   <RotateCcw className="w-3 h-3" />
-                  <span>ล้างตัวกรอง</span>
+                  <span>รีเซ็ต</span>
                 </button>
               )}
-              <button
-                type="button"
-                onClick={() => setFiltersOpen((v) => !v)}
-                className="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white/[0.05] hover:bg-white/10 border border-white/10 text-[#cbc5d0] hover:text-white transition cursor-pointer"
-              >
-                {filtersOpen ? "ย่อ" : "ขยาย"}
-              </button>
+              <ChevronDown
+                className={`w-4 h-4 text-[#9c94a6] transition-transform duration-200 shrink-0 ${
+                  filtersOpen ? "rotate-180 text-[#ff77a9]" : ""
+                }`}
+              />
             </div>
           </div>
 

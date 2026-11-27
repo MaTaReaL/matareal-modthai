@@ -335,18 +335,6 @@ export function ArchivePreviewModal({
                 tree.map((node) => renderNode(node, 0))
               )}
             </div>
-
-            {/* Footer */}
-            <div className="px-4 sm:px-5 py-2.5 border-t border-white/[0.08] bg-black/30 flex items-center justify-between text-[11px] text-[#8a8293]">
-              <span>ตรวจสอบโครงสร้างไฟล์ล่วงหน้าก่อนดาวน์โหลดได้ 100%</span>
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-3 py-1 rounded-lg bg-white/[0.07] hover:bg-white/15 text-white font-semibold transition cursor-pointer"
-              >
-                ปิดหน้าต่าง
-              </button>
-            </div>
           </motion.div>
         </motion.div>
       )}
