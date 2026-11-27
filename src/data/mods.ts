@@ -375,7 +375,8 @@ export const MODS: ModEntry[] = [
       {
         "id": "ftf-sc-qol-v1-0",
         "fileName": "FTF_ScratchCreek_DisplayQoL_v1.0.zip",
-        "label": "ไฟล์เสริม Display Settings & Ultrawide 21:9 QoL (F10)",
+        "label": "ม็อดเสริม (ไม่บังคับ) — Display & Ultrawide 21:9 QoL (F10)",
+        "optional": true,
         "version": "v1.0",
         "size": "859.7 KB",
         "uploadedAt": "26 พ.ย. 2026",
@@ -605,7 +606,8 @@ export const MODS: ModEntry[] = [
       {
         "id": "ftf-ep5-qol-v1-0",
         "fileName": "FTF_WoodburyGetaway_DisplayQoL_v1.0.zip",
-        "label": "ไฟล์เสริม Display Settings & Ultrawide 21:9 QoL (F10)",
+        "label": "ม็อดเสริม (ไม่บังคับ) — Display & Ultrawide 21:9 QoL (F10)",
+        "optional": true,
         "version": "v1.0",
         "size": "859.6 KB",
         "uploadedAt": "26 พ.ย. 2026",
@@ -833,7 +835,8 @@ export const MODS: ModEntry[] = [
       {
         "id": "ftf-ep4-qol-v1-0",
         "fileName": "FTF_IronbarkLookout_DisplayQoL_v1.0.zip",
-        "label": "ไฟล์เสริม Display Settings & Ultrawide 21:9 QoL (F10)",
+        "label": "ม็อดเสริม (ไม่บังคับ) — Display & Ultrawide 21:9 QoL (F10)",
+        "optional": true,
         "version": "v1.0",
         "size": "859.6 KB",
         "uploadedAt": "26 พ.ย. 2026",
@@ -1056,7 +1059,8 @@ export const MODS: ModEntry[] = [
       {
         "id": "ftf-ep3-qol-v1-0",
         "fileName": "FTF_CarsonHouse_DisplayQoL_v1.0.zip",
-        "label": "ไฟล์เสริม Display Settings & Ultrawide 21:9 QoL (F10)",
+        "label": "ม็อดเสริม (ไม่บังคับ) — Display & Ultrawide 21:9 QoL (F10)",
+        "optional": true,
         "version": "v1.0",
         "size": "859.6 KB",
         "uploadedAt": "26 พ.ย. 2026",
@@ -1273,7 +1277,8 @@ export const MODS: ModEntry[] = [
       {
         "id": "ftf-ep2-qol-v1-0",
         "fileName": "FTF_NorwoodHitchhike_DisplayQoL_v1.0.zip",
-        "label": "ไฟล์เสริม Display Settings & Ultrawide 21:9 QoL (F10)",
+        "label": "ม็อดเสริม (ไม่บังคับ) — Display & Ultrawide 21:9 QoL (F10)",
+        "optional": true,
         "version": "v1.0",
         "size": "859.6 KB",
         "uploadedAt": "26 พ.ย. 2026",
@@ -1400,7 +1405,7 @@ export const MODS: ModEntry[] = [
       "thaiName": "กลัวที่จะหยั่งรู้ (ซีรีส์สยองขวัญครบทุกตอน)",
       "description": "ซีรีส์สยองขวัญจิตวิทยาแบบตอนสั้นอิงจากเรื่องเล่าจริงของ Rayll ครบทั้ง 5 ตอนและ Season 2",
       "order": 1,
-      "badgeLabel": "EP1 (ฟรี)"
+      "badgeLabel": "EP1"
     },
     "releasedOrder": "2026-11-26",
     "nexusDownloads": 5,
@@ -1428,8 +1433,8 @@ export const MODS: ModEntry[] = [
       "gallery": [
         {
           "src": "/mods/fears-to-fathom-home-alone/cover.webp",
-          "alt": "ภาพปกม็อดภาษาไทย Fears to Fathom - Home Alone (กลัวที่จะหยั่งรู้ EP1 (ฟรี))",
-          "caption": "ภาพปกม็อดภาษาไทย Fears to Fathom - Home Alone (กลัวที่จะหยั่งรู้ EP1 (ฟรี))",
+          "alt": "ภาพปกม็อดภาษาไทย Fears to Fathom - Home Alone (กลัวที่จะหยั่งรู้ EP1)",
+          "caption": "ภาพปกม็อดภาษาไทย Fears to Fathom - Home Alone (กลัวที่จะหยั่งรู้ EP1)",
           "tag": "Cover"
         },
         {
@@ -1476,7 +1481,7 @@ export const MODS: ModEntry[] = [
       {
         "id": "ftf-ep1-thai-v1-0",
         "fileName": "FTF_HomeAlone_ThaiMod_v1.0.zip",
-        "label": "ม็อดแปลภาษาไทย 100% (EP1 (ฟรี))",
+        "label": "ม็อดแปลภาษาไทย 100% (EP1)",
         "version": "v1.0",
         "size": "1.34 MB",
         "uploadedAt": "26 พ.ย. 2026",
@@ -1490,7 +1495,8 @@ export const MODS: ModEntry[] = [
       {
         "id": "ftf-ep1-qol-v1-0",
         "fileName": "FTF_HomeAlone_DisplayQoL_v1.0.zip",
-        "label": "ไฟล์เสริม Display Settings & Ultrawide 21:9 QoL (F10)",
+        "label": "ม็อดเสริม (ไม่บังคับ) — Display & Ultrawide 21:9 QoL (F10)",
+        "optional": true,
         "version": "v1.0",
         "size": "859.6 KB",
         "uploadedAt": "26 พ.ย. 2026",
@@ -1516,7 +1522,7 @@ export const MODS: ModEntry[] = [
         "ผจญภัย",
         "อินดี้"
       ],
-      "shortDescription": "ตอน EP1 (ฟรี) ในซีรีส์สยองขวัญจิตวิทยา Fears to Fathom สัมผัสเรื่องราวชวนขนลุกมุมมองบุคคลที่หนึ่งสไตล์เทป VHS",
+      "shortDescription": "ตอน EP1 ในซีรีส์สยองขวัญจิตวิทยา Fears to Fathom สัมผัสเรื่องราวชวนขนลุกมุมมองบุคคลที่หนึ่งสไตล์เทป VHS",
       "minimumSpecs": [
         {
           "label": "ระบบปฏิบัติการ *",
@@ -2369,7 +2375,7 @@ export const MODS: ModEntry[] = [
     "stores": [
       {
         "platform": "steam",
-        "label": "Steam (PC — เล่นฟรี)",
+        "label": "Steam (PC)",
         "url": "https://store.steampowered.com/app/4515660/Control_Im_Not_Coming_Back/",
         "steamAppId": 4515660
       }

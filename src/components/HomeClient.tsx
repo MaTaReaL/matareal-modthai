@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowDownWideNarrow,
   ArrowRight,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -22,6 +23,7 @@ import {
   MessageSquarePlus,
   RotateCcw,
   Search,
+  SlidersHorizontal,
   Sparkles,
   Tag,
   ThumbsUp,
@@ -174,7 +176,8 @@ export function HomeClient({
   const [stats, setStats] = useState<SiteStats>(initialStats);
   const touchStartX = useRef<number | null>(null);
 
-  // Catalog filter, sort & view state
+  // Catalog filter, sort & view state (filter drawer starts collapsed by default)
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("grid3");
   const [sortMode, setSortMode] = useState<SortMode>("latest");
   const [selectedSeries, setSelectedSeries] = useState<string>("all");
@@ -440,11 +443,14 @@ export function HomeClient({
     return groups;
   }, [filteredMods, sortMode]);
 
+  const activeFilterCount =
+    (selectedSeries !== "all" ? 1 : 0) +
+    (selectedGenre !== "all" ? 1 : 0) +
+    (selectedPlatform !== "all" ? 1 : 0) +
+    (onlyOnSale ? 1 : 0);
+
   const hasActiveFilter =
-    selectedSeries !== "all" ||
-    selectedGenre !== "all" ||
-    selectedPlatform !== "all" ||
-    onlyOnSale ||
+    activeFilterCount > 0 ||
     searchQuery.trim().length > 0 ||
     sortMode !== "latest";
 
@@ -971,7 +977,9 @@ export function HomeClient({
                   </div>
                   <div className="rounded-xl py-2 px-1.5 bg-white/[0.03] border border-white/[0.06]">
                     <dt className="text-[10px] text-[#8a8293]">ไฟล์</dt>
-                    <dd className="font-bold text-white mt-0.5">{currentMod.files.length} แบบ</dd>
+                    <dd className="font-bold text-white mt-0.5">
+                      {currentMod.files.filter((f) => !f.optional).length} แบบ
+                    </dd>
                   </div>
                   <div className="rounded-xl py-2 px-1.5 bg-white/[0.03] border border-white/[0.06]">
                     <dt className="text-[10px] text-[#8a8293]">ดาวน์โหลด</dt>
@@ -1106,145 +1114,236 @@ export function HomeClient({
           </div>
         </div>
 
-        {/* FILTER BAR PANEL: Series / Sets + PC Platforms (Steam/Xbox/Epic ONLY) + Genres */}
-        <div className="glass-panel rounded-2xl p-3.5 sm:p-4 space-y-3">
-          {/* Row 1: Series / Game Sets (Easy discovery for FTF, Forza, DOOM, etc.) */}
-          {seriesOptions.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <span className="text-[11px] font-bold text-[#9c94a6] inline-flex items-center gap-1 mr-1">
-                <Layers className="w-3.5 h-3.5 text-[#ff77a9]" />
-                เซ็ต / ซีรีส์:
-              </span>
-              <button
-                type="button"
-                onClick={() => setSelectedSeries("all")}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition cursor-pointer ${
-                  selectedSeries === "all"
-                    ? "bg-[#ff4d8d]/22 border-[#ff4d8d]/50 text-white"
-                    : "bg-white/[0.03] border-white/[0.08] text-[#b4acc0] hover:text-white hover:border-white/20"
-                }`}
-              >
-                ทั้งหมด ({mods.length})
-              </button>
-              {seriesOptions.map((s) => {
-                const active = selectedSeries === s.id;
-                return (
-                  <button
-                    key={s.id}
-                    type="button"
-                    onClick={() => setSelectedSeries(active ? "all" : s.id)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition cursor-pointer inline-flex items-center gap-1.5 ${
-                      active
-                        ? "bg-[#ff4d8d]/25 border-[#ff4d8d]/55 text-white shadow-sm"
-                        : "bg-white/[0.04] border-white/10 text-[#e2dce8] hover:border-[#ff4d8d]/40 hover:text-white"
-                    }`}
-                  >
-                    <span>{s.name}</span>
-                    <span className="px-1.5 py-0.2 rounded bg-black/40 text-[10px] font-mono text-[#ff9ec2]">
-                      {s.count}
-                    </span>
-                  </button>
-                );
-              })}
-              <button
-                type="button"
-                onClick={() =>
-                  setSelectedSeries(selectedSeries === "standalone" ? "all" : "standalone")
-                }
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition cursor-pointer ${
-                  selectedSeries === "standalone"
-                    ? "bg-[#ff4d8d]/22 border-[#ff4d8d]/50 text-white"
-                    : "bg-white/[0.03] border-white/[0.08] text-[#9c94a6] hover:text-white"
-                }`}
-              >
-                เกมเดี่ยว ({mods.filter((m) => !m.series).length})
-              </button>
-            </div>
-          )}
-
-          {/* Row 2: PC Platforms (Steam, Xbox, Epic ONLY — NO PS / Nintendo filter!) + Sale Toggle */}
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-2 border-t border-white/[0.06]">
-            <span className="text-[11px] font-bold text-[#9c94a6] mr-1">แพลตฟอร์ม PC:</span>
-            {PC_PLATFORM_FILTERS.map((pf) => {
-              const active = selectedPlatform === pf.id;
-              const count = pf.id === "all" ? mods.length : platformCounts[pf.id];
-              return (
-                <button
-                  key={pf.id}
-                  type="button"
-                  onClick={() => setSelectedPlatform(pf.id)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition cursor-pointer inline-flex items-center gap-1.5 ${
-                    active
-                      ? "bg-[#ff4d8d]/22 border-[#ff4d8d]/50 text-white"
-                      : "bg-white/[0.03] border-white/[0.08] text-[#b4acc0] hover:text-white hover:border-white/20"
-                  }`}
-                >
-                  {pf.id !== "all" && <StoreLogo platform={pf.id} className="w-3.5 h-3.5" />}
-                  <span>{pf.label}</span>
-                  <span className="text-[10px] opacity-70 font-mono">({count})</span>
-                </button>
-              );
-            })}
-
-            {onSaleCount > 0 && (
-              <button
-                type="button"
-                onClick={() => setOnlyOnSale((v) => !v)}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition cursor-pointer inline-flex items-center gap-1.5 ${
-                  onlyOnSale
-                    ? "bg-emerald-500/25 border-emerald-400/60 text-emerald-200"
-                    : "bg-emerald-500/8 border-emerald-400/25 text-emerald-300/90 hover:bg-emerald-500/18"
-                }`}
-              >
-                <Tag className="w-3 h-3" />
-                <span>กำลังลดราคา ({onSaleCount})</span>
-              </button>
-            )}
-
-            {hasActiveFilter && (
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="ml-auto px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white/[0.05] hover:bg-white/12 text-[#ff9ec2] inline-flex items-center gap-1 transition cursor-pointer"
-              >
-                <RotateCcw className="w-3 h-3" />
-                ล้างตัวกรอง
-              </button>
-            )}
-          </div>
-
-          {/* Row 3: Genres (แนวเกม) */}
-          <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-white/[0.06]">
-            <span className="text-[11px] font-bold text-[#9c94a6] mr-1">แนวเกม:</span>
+        {/* COLLAPSIBLE FILTER PANEL (Collapsed by default, expands smoothly on click) */}
+        <div className="glass-panel rounded-2xl overflow-hidden">
+          <div className="px-3.5 sm:px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
             <button
               type="button"
-              onClick={() => setSelectedGenre("all")}
-              className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition cursor-pointer ${
-                selectedGenre === "all"
-                  ? "bg-white/15 border-white/30 text-white"
-                  : "bg-white/[0.02] border-white/[0.07] text-[#9c94a6] hover:text-white"
-              }`}
+              onClick={() => setFiltersOpen((v) => !v)}
+              aria-expanded={filtersOpen}
+              className="flex items-center gap-2 text-xs font-semibold text-white hover:text-[#ff77a9] transition cursor-pointer py-0.5"
             >
-              ทุกแนว
+              <SlidersHorizontal className="w-3.5 h-3.5 text-[#ff77a9] shrink-0" />
+              <span>ตัวกรอง (ซีรีส์ / แพลตฟอร์ม / แนวเกม)</span>
+              {activeFilterCount > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#ff4d8d]/25 text-[#ff9ec2] border border-[#ff4d8d]/45">
+                  เลือกอยู่ {activeFilterCount}
+                </span>
+              )}
+              <ChevronDown
+                className={`w-4 h-4 text-[#9c94a6] transition-transform duration-200 ${
+                  filtersOpen ? "rotate-180 text-[#ff77a9]" : ""
+                }`}
+              />
             </button>
-            {genreOptions.map((g) => {
-              const active = selectedGenre === g.name;
-              return (
+
+            {/* Quick active-filter summary pills when collapsed + Reset button */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              {!filtersOpen && selectedSeries !== "all" && (
                 <button
-                  key={g.name}
                   type="button"
-                  onClick={() => setSelectedGenre(active ? "all" : g.name)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition cursor-pointer ${
-                    active
-                      ? "bg-[#ff4d8d]/22 border-[#ff4d8d]/50 text-white font-semibold"
-                      : "bg-white/[0.02] border-white/[0.07] text-[#b4acc0] hover:text-white hover:border-white/20"
-                  }`}
+                  onClick={() => setSelectedSeries("all")}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#ff4d8d]/20 border border-[#ff4d8d]/45 text-white cursor-pointer"
                 >
-                  {g.name} <span className="text-[10px] opacity-65">({g.count})</span>
+                  <span>
+                    {selectedSeries === "standalone"
+                      ? "เกมเดี่ยว"
+                      : seriesOptions.find((s) => s.id === selectedSeries)?.name || selectedSeries}
+                  </span>
+                  <X className="w-2.5 h-2.5" />
                 </button>
-              );
-            })}
+              )}
+              {!filtersOpen && selectedPlatform !== "all" && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedPlatform("all")}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#ff4d8d]/20 border border-[#ff4d8d]/45 text-white cursor-pointer"
+                >
+                  <span>{PC_PLATFORM_FILTERS.find((p) => p.id === selectedPlatform)?.label}</span>
+                  <X className="w-2.5 h-2.5" />
+                </button>
+              )}
+              {!filtersOpen && selectedGenre !== "all" && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedGenre("all")}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#ff4d8d]/20 border border-[#ff4d8d]/45 text-white cursor-pointer"
+                >
+                  <span>{selectedGenre}</span>
+                  <X className="w-2.5 h-2.5" />
+                </button>
+              )}
+              {!filtersOpen && onlyOnSale && (
+                <button
+                  type="button"
+                  onClick={() => setOnlyOnSale(false)}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-emerald-500/20 border border-emerald-400/45 text-emerald-200 cursor-pointer"
+                >
+                  <span>กำลังลดราคา</span>
+                  <X className="w-2.5 h-2.5" />
+                </button>
+              )}
+              {hasActiveFilter && (
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="px-2 py-1 rounded-lg text-[11px] font-semibold bg-white/[0.05] hover:bg-white/12 text-[#ff9ec2] inline-flex items-center gap-1 transition cursor-pointer"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>ล้างตัวกรอง</span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setFiltersOpen((v) => !v)}
+                className="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white/[0.05] hover:bg-white/10 border border-white/10 text-[#cbc5d0] hover:text-white transition cursor-pointer"
+              >
+                {filtersOpen ? "ย่อ" : "ขยาย"}
+              </button>
+            </div>
           </div>
+
+          <AnimatePresence initial={false}>
+            {filtersOpen && (
+              <motion.div
+                key="catalog-filters-body"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="overflow-hidden border-t border-white/[0.07]"
+              >
+                <div className="p-3.5 sm:p-4 space-y-3">
+                  {/* Row 1: Series / Game Sets */}
+                  {seriesOptions.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      <span className="text-[11px] font-bold text-[#9c94a6] inline-flex items-center gap-1 mr-1">
+                        <Layers className="w-3.5 h-3.5 text-[#ff77a9]" />
+                        เซ็ต / ซีรีส์:
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedSeries("all")}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition cursor-pointer ${
+                          selectedSeries === "all"
+                            ? "bg-[#ff4d8d]/22 border-[#ff4d8d]/50 text-white"
+                            : "bg-white/[0.03] border-white/[0.08] text-[#b4acc0] hover:text-white hover:border-white/20"
+                        }`}
+                      >
+                        ทั้งหมด ({mods.length})
+                      </button>
+                      {seriesOptions.map((s) => {
+                        const active = selectedSeries === s.id;
+                        return (
+                          <button
+                            key={s.id}
+                            type="button"
+                            onClick={() => setSelectedSeries(active ? "all" : s.id)}
+                            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition cursor-pointer inline-flex items-center gap-1.5 ${
+                              active
+                                ? "bg-[#ff4d8d]/25 border-[#ff4d8d]/55 text-white shadow-sm"
+                                : "bg-white/[0.04] border-white/10 text-[#e2dce8] hover:border-[#ff4d8d]/40 hover:text-white"
+                            }`}
+                          >
+                            <span>{s.name}</span>
+                            <span className="px-1.5 py-0.2 rounded bg-black/40 text-[10px] font-mono text-[#ff9ec2]">
+                              {s.count}
+                            </span>
+                          </button>
+                        );
+                      })}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSelectedSeries(selectedSeries === "standalone" ? "all" : "standalone")
+                        }
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition cursor-pointer ${
+                          selectedSeries === "standalone"
+                            ? "bg-[#ff4d8d]/22 border-[#ff4d8d]/50 text-white"
+                            : "bg-white/[0.03] border-white/[0.08] text-[#9c94a6] hover:text-white"
+                        }`}
+                      >
+                        เกมเดี่ยว ({mods.filter((m) => !m.series).length})
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Row 2: PC Platforms (Steam, Xbox, Epic ONLY) + Sale Toggle */}
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-2 border-t border-white/[0.06]">
+                    <span className="text-[11px] font-bold text-[#9c94a6] mr-1">แพลตฟอร์ม PC:</span>
+                    {PC_PLATFORM_FILTERS.map((pf) => {
+                      const active = selectedPlatform === pf.id;
+                      const count = pf.id === "all" ? mods.length : platformCounts[pf.id];
+                      return (
+                        <button
+                          key={pf.id}
+                          type="button"
+                          onClick={() => setSelectedPlatform(pf.id)}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition cursor-pointer inline-flex items-center gap-1.5 ${
+                            active
+                              ? "bg-[#ff4d8d]/22 border-[#ff4d8d]/50 text-white"
+                              : "bg-white/[0.03] border-white/[0.08] text-[#b4acc0] hover:text-white hover:border-white/20"
+                          }`}
+                        >
+                          {pf.id !== "all" && <StoreLogo platform={pf.id} className="w-3.5 h-3.5" />}
+                          <span>{pf.label}</span>
+                          <span className="text-[10px] opacity-70 font-mono">({count})</span>
+                        </button>
+                      );
+                    })}
+
+                    {onSaleCount > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setOnlyOnSale((v) => !v)}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition cursor-pointer inline-flex items-center gap-1.5 ${
+                          onlyOnSale
+                            ? "bg-emerald-500/25 border-emerald-400/60 text-emerald-200"
+                            : "bg-emerald-500/8 border-emerald-400/25 text-emerald-300/90 hover:bg-emerald-500/18"
+                        }`}
+                      >
+                        <Tag className="w-3 h-3" />
+                        <span>กำลังลดราคา ({onSaleCount})</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Row 3: Genres (แนวเกม) */}
+                  <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-white/[0.06]">
+                    <span className="text-[11px] font-bold text-[#9c94a6] mr-1">แนวเกม:</span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedGenre("all")}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition cursor-pointer ${
+                        selectedGenre === "all"
+                          ? "bg-white/15 border-white/30 text-white"
+                          : "bg-white/[0.02] border-white/[0.07] text-[#9c94a6] hover:text-white"
+                      }`}
+                    >
+                      ทุกแนว
+                    </button>
+                    {genreOptions.map((g) => {
+                      const active = selectedGenre === g.name;
+                      return (
+                        <button
+                          key={g.name}
+                          type="button"
+                          onClick={() => setSelectedGenre(active ? "all" : g.name)}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-medium border transition cursor-pointer ${
+                            active
+                              ? "bg-[#ff4d8d]/22 border-[#ff4d8d]/50 text-white font-semibold"
+                              : "bg-white/[0.02] border-white/[0.07] text-[#b4acc0] hover:text-white hover:border-white/20"
+                          }`}
+                        >
+                          {g.name} <span className="text-[10px] opacity-65">({g.count})</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* CATALOG RESULTS */}

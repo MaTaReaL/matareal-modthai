@@ -9,6 +9,7 @@ import {
   ArrowLeft,
   Bug,
   Check,
+  ChevronDown,
   Copy,
   Download,
   ExternalLink,
@@ -18,6 +19,7 @@ import {
   ImagePlus,
   Images,
   Layers,
+  Puzzle,
   Send,
   Trash2,
   X,
@@ -108,6 +110,7 @@ export function ModDetailClient({
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [previewFile, setPreviewFile] = useState<ModFileEntry | null>(null);
+  const [optionalFilesOpen, setOptionalFilesOpen] = useState(false);
 
   // Ultra-simple Bug Report state (Image + Optional Text)
   const [bugs, setBugs] = useState<BugReportItem[]>(initialBugs);
@@ -221,14 +224,16 @@ export function ModDetailClient({
     }
   };
 
+  const mainFiles = mod.files.filter((f) => !f.optional);
+  const optionalFiles = mod.files.filter((f) => f.optional);
+  const primaryFile = mainFiles[0] || mod.files[0];
+
   const tabs: { id: TabId; label: string; count?: number; icon: React.ReactNode }[] = [
     { id: "description", label: "คำอธิบาย", icon: <FileText className="w-3.5 h-3.5" /> },
-    { id: "files", label: "ไฟล์", count: mod.files.length, icon: <FileArchive className="w-3.5 h-3.5" /> },
+    { id: "files", label: "ไฟล์", count: mainFiles.length, icon: <FileArchive className="w-3.5 h-3.5" /> },
     { id: "images", label: "รูปภาพ", count: mod.media.gallery.length, icon: <Images className="w-3.5 h-3.5" /> },
     { id: "bugs", label: "แจ้งบัค", count: bugs.length, icon: <Bug className="w-3.5 h-3.5" /> },
   ];
-
-  const primaryFile = mod.files[0];
 
   return (
     <div className="max-w-[1260px] mx-auto px-3.5 sm:px-6 pt-3.5 sm:pt-5 pb-12 space-y-4 sm:space-y-6">
@@ -325,8 +330,8 @@ export function ModDetailClient({
         </div>
       </section>
 
-      {/* MOBILE / IPAD QUICK DOWNLOAD BAR (Immediate above-the-fold CTA on < lg screens) */}
-      {primaryFile && (
+      {/* MOBILE / IPAD QUICK DOWNLOAD BAR (Shown ONLY on Description tab so it doesn't clutter Files/Images/Bugs!) */}
+      {primaryFile && activeTab === "description" && (
         <div className="lg:hidden glass-panel rounded-2xl p-4 space-y-3">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-xs text-[#9c94a6]">
@@ -369,13 +374,15 @@ export function ModDetailClient({
             ) : null}
           </div>
 
-          {mod.files.length > 1 && (
+          {(mainFiles.length > 1 || optionalFiles.length > 0) && (
             <button
               type="button"
               onClick={() => setActiveTab("files")}
               className="w-full py-1 text-[11px] font-semibold text-[#ff77a9] hover:text-[#ff4d8d] text-center cursor-pointer"
             >
-              เลือกดาวน์โหลดไฟล์ทั้งหมด ({mod.files.length} เวอร์ชัน) →
+              {mainFiles.length > 1
+                ? `เลือกดาวน์โหลดไฟล์ทั้งหมด (${mainFiles.length} แบบ) →`
+                : `ดูไฟล์ทั้งหมด / เช็คไฟล์ข้างใน (+${optionalFiles.length} ม็อดเสริมไม่บังคับ) →`}
             </button>
           )}
         </div>
@@ -552,7 +559,7 @@ export function ModDetailClient({
                 transition={{ duration: 0.22 }}
                 className="space-y-4"
               >
-                {mod.files.map((file) => {
+                {mainFiles.map((file) => {
                   const archiveEntries = ARCHIVE_TREES[file.id] || [];
                   return (
                   <div key={file.id} className="glass-panel rounded-2xl p-5 sm:p-6 space-y-4">
@@ -640,6 +647,143 @@ export function ModDetailClient({
                   </div>
                   );
                 })}
+
+                {/* OPTIONAL ADD-ON MODS (Collapsed by default with clear "ม็อดเสริม — ไม่ต้องลงก็ได้" notice) */}
+                {optionalFiles.length > 0 && (
+                  <div className="glass-panel rounded-2xl border border-dashed border-amber-400/30 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setOptionalFilesOpen((v) => !v)}
+                      aria-expanded={optionalFilesOpen}
+                      className="w-full px-4 sm:px-5 py-3.5 flex items-center justify-between gap-3 text-left hover:bg-white/[0.03] transition cursor-pointer"
+                    >
+                      <div className="space-y-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-400/35">
+                            <Puzzle className="w-3 h-3" />
+                            ม็อดเสริม • ไม่ต้องลงก็ได้
+                          </span>
+                          <span className="font-display text-sm font-bold text-white">
+                            ม็อดเสริมเพิ่มเติม ({optionalFiles.length} ไฟล์)
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#9c94a6]">
+                          แยกจากม็อดภาษาไทยหลัก — หากต้องการเล่นแค่ภาษาไทย ไม่จำเป็นต้องดาวน์โหลดส่วนนี้
+                        </p>
+                      </div>
+
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.05] border border-white/10 text-[11px] font-semibold text-[#cbc5d0] shrink-0">
+                        <span>{optionalFilesOpen ? "ย่อ" : "ขยายดู"}</span>
+                        <ChevronDown
+                          className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                            optionalFilesOpen ? "rotate-180 text-amber-300" : ""
+                          }`}
+                        />
+                      </div>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {optionalFilesOpen && (
+                        <motion.div
+                          key="optional-files-body"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2, ease: "easeOut" }}
+                          className="overflow-hidden border-t border-white/[0.07]"
+                        >
+                          <div className="p-4 sm:p-5 space-y-4 bg-black/20">
+                            {optionalFiles.map((file) => {
+                              const archiveEntries = ARCHIVE_TREES[file.id] || [];
+                              return (
+                                <div
+                                  key={file.id}
+                                  className="rounded-xl p-4 sm:p-5 bg-white/[0.025] border border-white/[0.09] space-y-3.5"
+                                >
+                                  <div className="flex flex-wrap items-start justify-between gap-3">
+                                    <div className="space-y-1">
+                                      <div className="flex flex-wrap items-center gap-2">
+                                        <h3 className="font-display text-sm sm:text-base font-bold text-white">
+                                          {file.fileName}
+                                        </h3>
+                                        <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-400/30">
+                                          {file.label}
+                                        </span>
+                                      </div>
+                                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[#8a8293]">
+                                        <span>{file.version}</span>
+                                        <span>•</span>
+                                        <span>{file.size}</span>
+                                        <span>•</span>
+                                        <span>{file.uploadedAt}</span>
+                                        {archiveEntries.length > 0 && (
+                                          <>
+                                            <span>•</span>
+                                            <span>{archiveEntries.length} ไฟล์ข้างใน</span>
+                                          </>
+                                        )}
+                                      </div>
+                                    </div>
+
+                                    <div className="flex flex-wrap items-center gap-2">
+                                      <button
+                                        type="button"
+                                        disabled={downloading}
+                                        onClick={() => handleDownload(file.id, "primary")}
+                                        className="px-4 py-2 rounded-xl text-xs font-bold bg-white/[0.1] hover:bg-white/[0.18] border border-white/18 text-white inline-flex items-center gap-2 transition cursor-pointer disabled:opacity-60"
+                                      >
+                                        <HostLogo host={file.primaryHost} className="w-4 h-4 shrink-0" />
+                                        <span>{file.primaryHost}</span>
+                                      </button>
+                                      {file.backupUrl && (
+                                        <button
+                                          type="button"
+                                          disabled={downloading}
+                                          onClick={() => handleDownload(file.id, "backup")}
+                                          className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/[0.04] hover:bg-white/[0.1] border border-white/12 text-[#d8d2de] hover:text-white inline-flex items-center gap-2 transition cursor-pointer"
+                                        >
+                                          <HostLogo host={file.backupHost || "Google Drive"} className="w-4 h-4 shrink-0" />
+                                          <span>{file.backupHost || "Google Drive"}</span>
+                                        </button>
+                                      )}
+                                      {archiveEntries.length > 0 && (
+                                        <button
+                                          type="button"
+                                          onClick={() => setPreviewFile(file)}
+                                          className="px-3 py-2 rounded-xl text-xs font-semibold bg-white/[0.04] hover:bg-white/[0.1] border border-white/12 text-[#d8d2de] hover:text-white inline-flex items-center gap-1.5 transition cursor-pointer"
+                                        >
+                                          <FolderTree className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                                          <span>ดูไฟล์ข้างใน</span>
+                                        </button>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div className="rounded-xl p-3.5 bg-black/30 border border-white/[0.06] text-xs leading-relaxed text-[#cbc5d0]">
+                                    {file.installNote}
+                                  </div>
+
+                                  <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#8a8293] font-mono">
+                                    <span className="truncate">SHA-256: {file.sha256}</span>
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        handleCopy(file.sha256, `sha-${file.id}`, "คัดลอก SHA-256 แล้ว")
+                                      }
+                                      className="font-sans font-semibold text-amber-300 hover:text-amber-200 cursor-pointer"
+                                    >
+                                      {copiedKey === `sha-${file.id}` ? "คัดลอกแล้ว" : "คัดลอก"}
+                                    </button>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )}
               </motion.div>
             )}
 
@@ -857,87 +1001,122 @@ export function ModDetailClient({
           </AnimatePresence>
         </div>
 
-        {/* RIGHT STICKY SIDEBAR (4 cols): Formal Structured Metadata */}
-        <aside className="lg:col-span-4 lg:sticky lg:top-20">
+        {/* RIGHT STICKY SIDEBAR (4 cols): On Mobile (< lg), show ONLY on Description tab and hide duplicate download buttons */}
+        <aside
+          className={`lg:col-span-4 lg:sticky lg:top-20 ${
+            activeTab === "description" ? "" : "hidden lg:block"
+          }`}
+        >
           <div className="glass-panel spot-card rounded-2xl p-5 space-y-5">
-            {/* Real Download Counter */}
-            <div className="flex items-baseline justify-between">
-              <span className="text-xs text-[#8a8293]">ยอดดาวน์โหลด</span>
-              <motion.div
-                key={downloads}
-                initial={{ scale: 1.08, color: "#ff77a9" }}
-                animate={{ scale: 1, color: "#ffffff" }}
-                className="font-display text-2xl font-bold tabular-nums"
-              >
-                {downloads.toLocaleString("en-US")}{" "}
-                <span className="text-xs font-normal text-[#8a8293]">ครั้ง</span>
-              </motion.div>
+            {/* Desktop-only Download Counter + Primary Download Buttons (avoids repeating download CTA on Mobile!) */}
+            <div className="hidden lg:block space-y-5">
+              {/* Real Download Counter */}
+              <div className="flex items-baseline justify-between">
+                <span className="text-xs text-[#8a8293]">ยอดดาวน์โหลด</span>
+                <motion.div
+                  key={downloads}
+                  initial={{ scale: 1.08, color: "#ff77a9" }}
+                  animate={{ scale: 1, color: "#ffffff" }}
+                  className="font-display text-2xl font-bold tabular-nums"
+                >
+                  {downloads.toLocaleString("en-US")}{" "}
+                  <span className="text-xs font-normal text-[#8a8293]">ครั้ง</span>
+                </motion.div>
+              </div>
+
+              {/* Download Buttons (Clear "ฟรี", no version number on button) */}
+              {primaryFile && (
+                <div className="relative z-10 space-y-2">
+                  <button
+                    type="button"
+                    disabled={downloading}
+                    onClick={() => handleDownload(primaryFile.id, "primary")}
+                    className="btn-pink-primary w-full py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>{downloading ? "กำลังเตรียมไฟล์..." : "ดาวน์โหลดฟรี"}</span>
+                  </button>
+
+                  {primaryFile.backupUrl && (
+                    <button
+                      type="button"
+                      onClick={() => handleDownload(primaryFile.id, "backup")}
+                      className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-[#cbc5d0] hover:text-white inline-flex items-center justify-center gap-2 transition cursor-pointer"
+                    >
+                      <HostLogo host={primaryFile.backupHost || "Google Drive"} className="w-3.5 h-3.5 shrink-0" />
+                      <span>ลิงก์สำรอง ({primaryFile.backupHost || "Google Drive"})</span>
+                    </button>
+                  )}
+
+                  {mod.nexusModUrl ? (
+                    <a
+                      href={mod.nexusModUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-[#F5A64B]/12 hover:bg-[#F5A64B]/22 border border-[#F5A64B]/35 text-[#F5A64B] hover:text-[#ffc278] inline-flex items-center justify-center gap-2 transition"
+                    >
+                      <NexusModsLogo className="w-3.5 h-3.5 shrink-0" />
+                      <span>ไปหน้าม็อดบน Nexus Mods</span>
+                      <ExternalLink className="w-3 h-3 opacity-80 shrink-0" />
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      title="ม็อดเกมนี้ไม่สามารถเผยแพร่บน Nexus Mods ได้"
+                      className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-white/[0.03] border border-white/[0.08] text-[#7c7486] inline-flex items-center justify-center gap-2 opacity-65 cursor-not-allowed select-none"
+                    >
+                      <NexusModsLogo className="w-3.5 h-3.5 shrink-0 grayscale opacity-60" />
+                      <span>ไม่สามารถลง Nexus ได้</span>
+                    </button>
+                  )}
+
+                  {(mainFiles.length > 1 || optionalFiles.length > 0) && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveTab("files");
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="w-full py-1.5 text-[11px] font-semibold text-[#ff77a9] hover:text-[#ff4d8d] hover:underline transition cursor-pointer"
+                    >
+                      {mainFiles.length > 1
+                        ? `เลือกดาวน์โหลดไฟล์ทั้งหมด (${mainFiles.length} แบบ) →`
+                        : `ดูไฟล์ทั้งหมด / เช็คไฟล์ข้างใน (+${optionalFiles.length} ม็อดเสริม) →`}
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* Download Buttons (Clear "ฟรี", no version number on button) */}
-            {primaryFile && (
-              <div className="relative z-10 space-y-2">
+            {/* Mobile-only compact Nexus link above specs (no duplicate download buttons!) */}
+            <div className="lg:hidden relative z-10">
+              {mod.nexusModUrl ? (
+                <a
+                  href={mod.nexusModUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-[#F5A64B]/12 hover:bg-[#F5A64B]/22 border border-[#F5A64B]/35 text-[#F5A64B] inline-flex items-center justify-center gap-2 transition"
+                >
+                  <NexusModsLogo className="w-3.5 h-3.5 shrink-0" />
+                  <span>ไปหน้าม็อดบน Nexus Mods</span>
+                  <ExternalLink className="w-3 h-3 opacity-80 shrink-0" />
+                </a>
+              ) : (
                 <button
                   type="button"
-                  disabled={downloading}
-                  onClick={() => handleDownload(primaryFile.id, "primary")}
-                  className="btn-pink-primary w-full py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                  disabled
+                  title="ม็อดเกมนี้ไม่สามารถเผยแพร่บน Nexus Mods ได้"
+                  className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-white/[0.03] border border-white/[0.08] text-[#7c7486] inline-flex items-center justify-center gap-2 opacity-65 cursor-not-allowed select-none"
                 >
-                  <Download className="w-4 h-4" />
-                  <span>{downloading ? "กำลังเตรียมไฟล์..." : "ดาวน์โหลดฟรี"}</span>
+                  <NexusModsLogo className="w-3.5 h-3.5 shrink-0 grayscale opacity-60" />
+                  <span>ไม่สามารถลง Nexus ได้</span>
                 </button>
-
-                {primaryFile.backupUrl && (
-                  <button
-                    type="button"
-                    onClick={() => handleDownload(primaryFile.id, "backup")}
-                    className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-[#cbc5d0] hover:text-white inline-flex items-center justify-center gap-2 transition cursor-pointer"
-                  >
-                    <HostLogo host={primaryFile.backupHost || "Google Drive"} className="w-3.5 h-3.5 shrink-0" />
-                    <span>ลิงก์สำรอง ({primaryFile.backupHost || "Google Drive"})</span>
-                  </button>
-                )}
-
-                {mod.nexusModUrl ? (
-                  <a
-                    href={mod.nexusModUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-[#F5A64B]/12 hover:bg-[#F5A64B]/22 border border-[#F5A64B]/35 text-[#F5A64B] hover:text-[#ffc278] inline-flex items-center justify-center gap-2 transition"
-                  >
-                    <NexusModsLogo className="w-3.5 h-3.5 shrink-0" />
-                    <span>ไปหน้าม็อดบน Nexus Mods</span>
-                    <ExternalLink className="w-3 h-3 opacity-80 shrink-0" />
-                  </a>
-                ) : (
-                  <button
-                    type="button"
-                    disabled
-                    title="ม็อดเกมนี้ไม่สามารถเผยแพร่บน Nexus Mods ได้"
-                    className="w-full py-2 px-3 rounded-xl text-xs font-semibold bg-white/[0.03] border border-white/[0.08] text-[#7c7486] inline-flex items-center justify-center gap-2 opacity-65 cursor-not-allowed select-none"
-                  >
-                    <NexusModsLogo className="w-3.5 h-3.5 shrink-0 grayscale opacity-60" />
-                    <span>ไม่สามารถลง Nexus ได้</span>
-                  </button>
-                )}
-
-                {mod.files.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActiveTab("files");
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                    }}
-                    className="w-full py-1.5 text-[11px] font-semibold text-[#ff77a9] hover:text-[#ff4d8d] hover:underline transition cursor-pointer"
-                  >
-                    เลือกดาวน์โหลดไฟล์ทั้งหมด ({mod.files.length} เวอร์ชัน) →
-                  </button>
-                )}
-              </div>
-            )}
+              )}
+            </div>
 
             {/* Formal Specs Table (Required fields with Real Brand Logos) */}
-            <dl className="relative z-10 pt-4 border-t border-white/[0.08] divide-y divide-white/[0.06] text-xs">
+            <dl className="relative z-10 pt-3 lg:pt-4 border-t border-white/[0.08] divide-y divide-white/[0.06] text-xs">
               <div className="py-2.5 flex items-start justify-between gap-3">
                 <dt className="text-[#8a8293] shrink-0">เวอร์ชัน</dt>
                 <dd className="text-right font-semibold text-white">{mod.specs.version}</dd>

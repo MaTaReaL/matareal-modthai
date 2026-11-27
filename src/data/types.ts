@@ -68,6 +68,8 @@ export interface ModFileEntry {
   backupHost?: string;
   installNote: string;
   knownNotice?: string;
+  /** True for optional add-on mods (collapsed by default with clear "ไม่บังคับ" notice) */
+  optional?: boolean;
 }
 
 export interface PcSpecRow {
