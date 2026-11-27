@@ -9,6 +9,137 @@ import type { ModEntry } from "./types";
  */
 export const MODS: ModEntry[] = [
   {
+    slug: "sea-of-solitude",
+    gameTitle: "Sea of Solitude",
+    thaiTitle: "Sea of Solitude ม็อดภาษาไทย",
+    shortDescription:
+      "Sea of Solitude - ม็อดภาษาไทย 100% แปลครบ 1,434 ข้อความ ทั้งเมนู UI ซับไตเติล และจดหมายในขวด พร้อมฟอนต์ Prompt 2048x2048 SDF แก้สระลอยสมบูรณ์ | AI Model : Gemini 4 Neon | รองรับ : Steam / EA App (PC)",
+    overview:
+      "ม็อดแปลภาษาไทยฉบับสมบูรณ์สำหรับ Sea of Solitude แปลครบ 100% ทั้ง 1,434 ข้อความ ครอบคลุมเมนูหลัก การตั้งค่า ปุ่มควบคุม ชื่อบททั้ง 13 บท ชื่อจุดเช็กพอยต์ จดหมายในขวด และคำบรรยายบทสนทนาทั้งหมด ถ่ายทอดอารมณ์เนื้อเรื่องด้วยสำนวนภาษาไทยลื่นไหลเป็นธรรมชาติ ใช้ฟอนต์ Prompt 2 น้ำหนัก (Medium & Bold) ความละเอียดสูง 2048×2048 SDF พร้อมแก้สระลอยและปรับสมดุลช่องไฟตัวอักษรสมบูรณ์ ไม่มีการฉีด DLL ปลอดภัยและเสถียร 100%",
+    features: [
+      "แปลข้อความในเกมครบ 100% (1,434 ข้อความ) ครอบคลุมเมนู UI การตั้งค่า ชื่อบท จุดเช็กพอยต์ จดหมายในขวด และซับไตเติลทั้ง 13 บท",
+      "ฟอนต์ไทย Prompt 2 น้ำหนัก (Medium & Bold) ความละเอียดสูง 2048×2048 SDF อ่านคมชัดสบายตาทุกขนาดจอ",
+      "ปรับตำแหน่งสระและวรรณยุกต์ไทยด้วยระบบ PUA ครบชุด พร้อมปรับสมดุลระยะห่างตัวอักษร ไม่มีสระลอยหรือช่องว่างแหว่ง",
+      "ม็อดแก้ไฟล์ Asset โดยตรง ไม่มีการฉีด DLL ใดๆ ปลอดภัย เสถียร และรองรับทั้ง Steam และ EA App (PC)",
+    ],
+    installSteps: [
+      "ดาวน์โหลดและแตกไฟล์ SOS_ThaiMod_v1.0.zip จะพบโฟลเดอร์ชื่อ SOS_ThaiMod",
+      "เปิดเข้าไปในโฟลเดอร์ SOS_ThaiMod แล้วคัดลอกโฟลเดอร์ SeaOfSolitude_Data ไปวางทับในโฟลเดอร์หลักของตัวเกม",
+      "กดยืนยันการวางทับไฟล์ทั้งหมด จากนั้นเข้าเกมได้เลย (ใช้สล็อตภาษาอังกฤษเดิมซึ่งจะแสดงเป็น ภาษาไทย ในเมนูการตั้งค่า)",
+    ],
+    installPathExample:
+      "EA Games\\SeaOfSolitude\\ หรือ Steam\\steamapps\\common\\Sea of Solitude\\",
+    uninstallNote:
+      "ใช้คำสั่งตรวจสอบความสมบูรณ์ของไฟล์เกมบน Steam หรือ ซ่อมแซม (Repair) บน EA App เพื่อคืนค่าต้นฉบับ 100%",
+    credits: [
+      { role: "Thai Localization & Modding", name: "MaTaReaL" },
+      { role: "AI Translation Model", name: "Gemini 4 Neon" },
+      { role: "Thai Font", name: "Prompt โดย Cadson Demak (SIL OFL 1.1)" },
+    ],
+    tags: ["แปลภาษาไทย 100%", "ฟอนต์ Prompt HD", "แก้สระลอย PUA", "Unity", "Steam / EA App"],
+    seoKeywords: [
+      "Sea of Solitude ม็อดไทย",
+      "Sea of Solitude ม็อดภาษาไทย",
+      "Sea of Solitude แปลไทย",
+      "Sea of Solitude Thai Mod",
+      "ดาวน์โหลดม็อดไทย Sea of Solitude",
+      "MaTaReaL ม็อดไทย",
+    ],
+    featured: true,
+    media: {
+      header: "/mods/sea-of-solitude/header.webp",
+      cover: "/mods/sea-of-solitude/cover.webp",
+      ogImage: "/mods/sea-of-solitude/og-share.jpg",
+      gallery: [
+        {
+          src: "/mods/sea-of-solitude/cover.webp",
+          alt: "ปกม็อดภาษาไทย Sea of Solitude",
+          caption: "ภาพปกม็อดภาษาไทย Sea of Solitude",
+          tag: "Cover",
+        },
+        {
+          src: "/mods/sea-of-solitude/gallery-01.webp",
+          alt: "หน้าเมนูหลักภาษาไทย Sea of Solitude",
+          caption: "หน้าเมนูหลักภาษาไทยพร้อมฟอนต์ Prompt คมชัด",
+          tag: "Main Menu",
+        },
+      ],
+    },
+    specs: {
+      version: "v1.0",
+      aiModel: "Gemini 4 Neon",
+      fontUsed: "Prompt (Medium & Bold — SDF 2048×2048 + PUA)",
+      translatedLines: "1,434 ข้อความ (100%)",
+      coveragePercent: 100,
+      engine: "Unity 2018.4 (IL2CPP)",
+      fileSize: "2.92 MB",
+      releasedAt: "27 พ.ย. 2026",
+      updatedAt: "27 พ.ย. 2026",
+      supportedGamePlatform: "Steam / EA App (PC)",
+    },
+    stores: [
+      {
+        platform: "steam",
+        label: "Steam (PC)",
+        url: "https://store.steampowered.com/app/1225590/Sea_of_Solitude/",
+        steamAppId: 1225590,
+      },
+      {
+        platform: "xbox",
+        label: "Xbox Store",
+        url: "https://www.xbox.com/th-th/games/store/sea-of-solitude/c4043400338g",
+      },
+      {
+        platform: "playstation",
+        label: "PlayStation Store",
+        url: "https://store.playstation.com/th-th/product/EP0006-CUSA14122_00-SEAOFSLTD0000000",
+      },
+    ],
+    files: [
+      {
+        id: "sos-thaimod-v1-0",
+        fileName: "SOS_ThaiMod_v1.0.zip",
+        label: "ม็อดแปลภาษาไทย 100% (Steam / EA App)",
+        version: "v1.0",
+        size: "2.92 MB",
+        uploadedAt: "27 พ.ย. 2026",
+        sha256:
+          "6a9af467b7bc5723527389ed086a6e533197c8bc3240f86a5bb7e4a827cde4d2",
+        primaryUrl:
+          "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/sos-v1.0/SOS_ThaiMod_v1.0.zip",
+        primaryHost: "GitHub Releases",
+        backupUrl:
+          "https://drive.google.com/file/d/11O73m6tttetD9TV9s6nl_-paOPQDVTlU/view?usp=sharing",
+        backupHost: "Google Drive",
+        installNote:
+          "แตกไฟล์แล้วเปิดเข้าโฟลเดอร์ SOS_ThaiMod นำโฟลเดอร์ SeaOfSolitude_Data ไปวางทับในโฟลเดอร์หลักของตัวเกม",
+      },
+    ],
+    fallbackSteam: {
+      name: "Sea of Solitude",
+      releaseDate: "5 ก.ค. 2019",
+      developers: ["Jo-Mei Games"],
+      publishers: ["Electronic Arts"],
+      genres: ["ผจญภัย", "อินดี้", "เนื้อเรื่อง"],
+      shortDescription:
+        "เมื่อมนุษย์อ้างว้างจนเกินจะรับไหว พวกเขาจะแปรเปลี่ยนเป็นอสุรกาย ออกล่องเรือฝ่ามหานครจมน้ำไปพร้อมกับเคย์เพื่อค้นหาความหมายของความเป็นมนุษย์",
+      minimumSpecs: [
+        { label: "ระบบปฏิบัติการ", value: "Windows 10 64-bit" },
+        { label: "โปรเซสเซอร์", value: "Intel i3-2120 / AMD Phenom II X4 965" },
+        { label: "หน่วยความจำ", value: "RAM 4 GB" },
+        { label: "กราฟิกส์", value: "NVIDIA GTX 660 / AMD Radeon HD 7850" },
+        { label: "DirectX", value: "เวอร์ชัน 11" },
+      ],
+      recommendedSpecs: [
+        { label: "ระบบปฏิบัติการ", value: "Windows 10 64-bit" },
+        { label: "โปรเซสเซอร์", value: "Intel i5-4690K / AMD Ryzen 3 1300X" },
+        { label: "หน่วยความจำ", value: "RAM 8 GB" },
+        { label: "กราฟิกส์", value: "NVIDIA GTX 960 / AMD R9 280" },
+        { label: "DirectX", value: "เวอร์ชัน 11" },
+      ],
+    },
+  },
+  {
     slug: "farm-and-feast",
     gameTitle: "Farm & Feast",
     thaiTitle: "Farm & Feast ม็อดภาษาไทย (ฟาร์ม & ฟีสต์)",
