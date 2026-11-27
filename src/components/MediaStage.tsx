@@ -115,9 +115,11 @@ export function MediaStage({ images, initialIndex = 0 }: MediaStageProps) {
             <Maximize2 className="w-3.5 h-3.5" />
           </button>
 
-          <div className="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between gap-3 pointer-events-none">
-            <span className="text-xs text-white/95 truncate">{current.caption}</span>
-            <span className="shrink-0 font-mono text-[11px] px-2 py-0.5 rounded bg-black/65 text-white/90">
+          <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-3 sm:left-3.5 sm:right-3.5 flex items-center justify-between gap-2 pointer-events-none">
+            <span className="text-[11px] sm:text-xs text-white/95 truncate px-2.5 py-0.5 rounded-md bg-black/70 border border-white/10">
+              {current.caption}
+            </span>
+            <span className="shrink-0 font-mono text-[11px] px-2 py-0.5 rounded-md bg-black/75 border border-white/10 text-white/95">
               {safeIndex + 1}/{images.length}
             </span>
           </div>

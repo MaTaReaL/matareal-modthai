@@ -224,10 +224,21 @@ export function ModDetailClient({
   const primaryFile = mod.files[0];
 
   return (
-    <div className="max-w-[1260px] mx-auto px-3.5 sm:px-6 pt-4 sm:pt-6 pb-12 space-y-5 sm:space-y-6">
-      {/* HEADER BANNER (Proportional on Mobile, Exact 1300x372 on iPad/Desktop) */}
+    <div className="max-w-[1260px] mx-auto px-3.5 sm:px-6 pt-3.5 sm:pt-5 pb-12 space-y-4 sm:space-y-6">
+      {/* Clean Top Breadcrumb Back Link (Never covers top-left of 1300x372 banner art) */}
+      <div className="flex items-center justify-between gap-3">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-[#a69eb0] hover:text-white transition"
+        >
+          <ArrowLeft className="w-3.5 h-3.5 text-[#ff77a9]" />
+          <span>กลับหน้าแรก</span>
+        </Link>
+      </div>
+
+      {/* HEADER BANNER (Exact 1300x372 Uncropped Proportions Across Phone, iPad & Desktop) */}
       <section className="glass-panel rounded-2xl overflow-hidden">
-        <div className="relative w-full aspect-[16/7] sm:aspect-[1300/372] bg-black overflow-hidden">
+        <div className="relative w-full aspect-[1300/372] bg-black overflow-hidden">
           <Image
             src={mod.media.header}
             alt={mod.thaiTitle}
@@ -236,15 +247,6 @@ export function ModDetailClient({
             sizes="(max-width: 1260px) 100vw, 1260px"
             className="object-cover object-center"
           />
-          <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-medium bg-black/75 hover:bg-black/90 text-white border border-white/15 transition"
-            >
-              <ArrowLeft className="w-3.5 h-3.5 text-[#ff77a9]" />
-              หน้าแรก
-            </Link>
-          </div>
         </div>
 
         {/* Clean Formal Title + Tab Bar */}
