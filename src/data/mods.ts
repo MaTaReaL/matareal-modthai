@@ -11,15 +11,16 @@ export const MODS: ModEntry[] = [
   {
     slug: "sea-of-solitude",
     gameTitle: "Sea of Solitude",
-    thaiTitle: "Sea of Solitude ม็อดภาษาไทย",
+    thaiTitle: "Sea of Solitude ม็อดภาษาไทย (ทะเลแห่งความโดดเดี่ยว)",
     shortDescription:
-      "Sea of Solitude - ม็อดภาษาไทย 100% แปลครบ 1,434 ข้อความ ทั้งเมนู UI ซับไตเติล และจดหมายในขวด พร้อมฟอนต์ Prompt 2048x2048 SDF แก้สระลอยสมบูรณ์ | AI Model : Gemini 4 Neon | รองรับ : Steam / EA App (PC)",
+      "Sea of Solitude (ทะเลแห่งความโดดเดี่ยว) - ม็อดภาษาไทย 100% แปลครบ 1,434 ข้อความ พร้อมโลโก้เกมภาษาไทยและฟอนต์ Prompt 2048x2048 SDF แก้สระลอยสมบูรณ์ | AI Model : Gemini 4 Neon | รองรับ : Steam / EA App (PC)",
     overview:
-      "ม็อดแปลภาษาไทยฉบับสมบูรณ์สำหรับ Sea of Solitude แปลครบ 100% ทั้ง 1,434 ข้อความ ครอบคลุมเมนูหลัก การตั้งค่า ปุ่มควบคุม ชื่อบททั้ง 13 บท ชื่อจุดเช็กพอยต์ จดหมายในขวด และคำบรรยายบทสนทนาทั้งหมด ถ่ายทอดอารมณ์เนื้อเรื่องด้วยสำนวนภาษาไทยลื่นไหลเป็นธรรมชาติ ใช้ฟอนต์ Prompt 2 น้ำหนัก (Medium & Bold) ความละเอียดสูง 2048×2048 SDF พร้อมแก้สระลอยและปรับสมดุลช่องไฟตัวอักษรสมบูรณ์ ไม่มีการฉีด DLL ปลอดภัยและเสถียร 100%",
+      "ม็อดแปลภาษาไทยฉบับสมบูรณ์สำหรับ Sea of Solitude (ทะเลแห่งความโดดเดี่ยว) แปลครบ 100% ทั้ง 1,434 ข้อความ ครอบคลุมเมนูหลัก การตั้งค่า ปุ่มควบคุม ชื่อบททั้ง 13 บท ชื่อจุดเช็กพอยต์ จดหมายในขวด และคำบรรยายบทสนทนาทั้งหมด พร้อมโลโก้เกมภาษาไทย “ทะเลแห่งความโดดเดี่ยว” สไตล์คลื่นน้ำในเกม ฟอนต์ Prompt 2 น้ำหนัก (Medium & Bold) ความละเอียดสูง 2048×2048 SDF แก้สระลอยและปรับสมดุลช่องไฟทั้งเมนู ซับไตเติล และชื่อผู้พูดสมบูรณ์ ไม่มีการฉีด DLL ปลอดภัย 100%",
     features: [
       "แปลข้อความในเกมครบ 100% (1,434 ข้อความ) ครอบคลุมเมนู UI การตั้งค่า ชื่อบท จุดเช็กพอยต์ จดหมายในขวด และซับไตเติลทั้ง 13 บท",
+      "โลโก้เกมภาษาไทย “ทะเลแห่งความโดดเดี่ยว” ดีไซน์คลื่นผิวน้ำกลมกลืนต้นฉบับ แสดงผลจริงบนหน้าเมนูหลักในเกม",
       "ฟอนต์ไทย Prompt 2 น้ำหนัก (Medium & Bold) ความละเอียดสูง 2048×2048 SDF อ่านคมชัดสบายตาทุกขนาดจอ",
-      "ปรับตำแหน่งสระและวรรณยุกต์ไทยด้วยระบบ PUA ครบชุด พร้อมปรับสมดุลระยะห่างตัวอักษร ไม่มีสระลอยหรือช่องว่างแหว่ง",
+      "ปรับตำแหน่งสระและวรรณยุกต์ไทยด้วยระบบ PUA ครบชุด พร้อมปรับสมดุลระยะห่างตัวอักษรทั้งเมนู ซับไตเติล และชื่อตัวละครผู้พูด",
       "ม็อดแก้ไฟล์ Asset โดยตรง ไม่มีการฉีด DLL ใดๆ ปลอดภัย เสถียร และรองรับทั้ง Steam และ EA App (PC)",
     ],
     installSteps: [
@@ -36,10 +37,11 @@ export const MODS: ModEntry[] = [
       { role: "AI Translation Model", name: "Gemini 4 Neon" },
       { role: "Thai Font", name: "Prompt โดย Cadson Demak (SIL OFL 1.1)" },
     ],
-    tags: ["แปลภาษาไทย 100%", "ฟอนต์ Prompt HD", "แก้สระลอย PUA", "Unity", "Steam / EA App"],
+    tags: ["แปลภาษาไทย 100%", "โลโก้ไทยในเกม", "ฟอนต์ Prompt HD", "แก้สระลอย PUA", "Steam / EA App"],
     seoKeywords: [
       "Sea of Solitude ม็อดไทย",
       "Sea of Solitude ม็อดภาษาไทย",
+      "ทะเลแห่งความโดดเดี่ยว ม็อดไทย",
       "Sea of Solitude แปลไทย",
       "Sea of Solitude Thai Mod",
       "ดาวน์โหลดม็อดไทย Sea of Solitude",
@@ -72,7 +74,7 @@ export const MODS: ModEntry[] = [
       translatedLines: "1,434 ข้อความ (100%)",
       coveragePercent: 100,
       engine: "Unity 2018.4 (IL2CPP)",
-      fileSize: "6.59 MB",
+      fileSize: "6.65 MB",
       releasedAt: "27 พ.ย. 2026",
       updatedAt: "27 พ.ย. 2026",
       supportedGamePlatform: "Steam / EA App (PC)",
@@ -101,10 +103,10 @@ export const MODS: ModEntry[] = [
         fileName: "SOS_ThaiMod_v1.0.zip",
         label: "ม็อดแปลภาษาไทย 100% (Steam / EA App)",
         version: "v1.0",
-        size: "6.59 MB",
+        size: "6.65 MB",
         uploadedAt: "27 พ.ย. 2026",
         sha256:
-          "bcf524a87f9b5a92ffa603e4f4a3e224ddc1f5dd1a6ed2371dfebe988b5c972a",
+          "eb441f7ef0124a8d36e3a05b79ec1b59949f56f152fed61c9589eb5b7a9e9409",
         primaryUrl:
           "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/sos-v1.0/SOS_ThaiMod_v1.0.zip",
         primaryHost: "GitHub Releases",
