@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  File,
   FileCheck2,
   Folder,
   FolderOpen,
@@ -45,86 +44,58 @@ export function InstallGuideModal({
 
   const activePlatform = guide.platforms[Math.min(platIdx, guide.platforms.length - 1)];
 
-  const renderNode = (node: InstallTreeNode, depth: number) => {
+  const renderNode = (node: InstallTreeNode) => {
     const isMod = node.role === "mod";
-    const isOverwrite = node.role === "overwrite";
-    const isAnchor = node.role === "anchor";
 
-    // Intuitive color semantics:
-    // Sky = existing game landmark | Emerald Green = drop/add mod here | Amber Gold = merge/replace safely (never red!)
+    // Strict 2-Color Clarity System:
+    // Sky = existing game landmark | Emerald Green = mod file/folder to drag & drop here!
     const rowBg = isMod
-      ? "bg-emerald-500/12 border-emerald-400/30"
-      : isOverwrite
-      ? "bg-amber-400/10 border-amber-400/35"
-      : "bg-white/[0.02] border-transparent";
+      ? "bg-emerald-500/12 border-emerald-400/35"
+      : "bg-white/[0.025] border-white/[0.06]";
 
     const badgeClass = isMod
       ? "bg-emerald-500/20 text-emerald-300 border-emerald-400/45"
-      : isOverwrite
-      ? "bg-amber-400/20 text-amber-200 border-amber-400/45"
       : "bg-sky-500/15 text-sky-300 border-sky-400/35";
 
     return (
-      <div key={`${depth}-${node.name}`} className="space-y-1">
-        <div
-          style={{ paddingLeft: `${depth * 18 + 10}px` }}
-          className={`flex flex-wrap items-center justify-between gap-2 py-2 pr-3 rounded-lg border ${rowBg}`}
-        >
-          <span className="flex items-center gap-2 min-w-0">
-            {node.type === "dir" ? (
-              isMod || isOverwrite ? (
-                <FolderOpen
-                  className={`w-4 h-4 shrink-0 ${
-                    isMod ? "text-emerald-300" : "text-amber-300"
-                  }`}
-                />
-              ) : (
-                <Folder className="w-4 h-4 text-sky-300/80 shrink-0" />
-              )
-            ) : isAnchor ? (
-              <Gamepad2 className="w-3.5 h-3.5 text-sky-300 shrink-0" />
-            ) : isMod || isOverwrite ? (
-              <FileCheck2
-                className={`w-3.5 h-3.5 shrink-0 ${
-                  isMod ? "text-emerald-300" : "text-amber-300"
-                }`}
-              />
+      <div
+        key={node.name}
+        className={`flex flex-wrap items-center justify-between gap-2 px-3 py-2 rounded-lg border ${rowBg}`}
+      >
+        <span className="flex items-center gap-2 min-w-0">
+          {node.type === "dir" ? (
+            isMod ? (
+              <FolderOpen className="w-4 h-4 text-emerald-300 shrink-0" />
             ) : (
-              <File className="w-3.5 h-3.5 text-[#8a8293] shrink-0" />
-            )}
+              <Folder className="w-4 h-4 text-sky-300/85 shrink-0" />
+            )
+          ) : isMod ? (
+            <FileCheck2 className="w-3.5 h-3.5 text-emerald-300 shrink-0" />
+          ) : (
+            <Gamepad2 className="w-3.5 h-3.5 text-sky-300 shrink-0" />
+          )}
 
-            <span
-              className={`text-xs font-mono truncate ${
-                isMod || isOverwrite
-                  ? "font-bold text-white"
-                  : isAnchor
-                  ? "font-semibold text-sky-200"
-                  : "text-[#cbc5d0]"
-              }`}
-            >
-              {node.name}
-            </span>
-
-            {node.note && (
-              <span className="text-[10px] text-[#9c94a6] hidden sm:inline">
-                ({node.note})
-              </span>
-            )}
+          <span
+            className={`text-xs font-mono truncate ${
+              isMod ? "font-bold text-white" : "font-semibold text-sky-200"
+            }`}
+          >
+            {node.name}
           </span>
 
-          {node.badge && (
-            <span
-              className={`px-2 py-0.5 rounded-md text-[10px] font-bold border whitespace-nowrap shrink-0 ${badgeClass}`}
-            >
-              {node.badge}
+          {node.note && (
+            <span className="text-[10px] text-[#a69eb0] hidden sm:inline">
+              — {node.note}
             </span>
           )}
-        </div>
+        </span>
 
-        {node.children && node.children.length > 0 && (
-          <div className="border-l border-white/[0.08] ml-4 space-y-1">
-            {node.children.map((child) => renderNode(child, depth + 1))}
-          </div>
+        {node.badge && (
+          <span
+            className={`px-2 py-0.5 rounded-md text-[10px] font-bold border whitespace-nowrap shrink-0 ${badgeClass}`}
+          >
+            {node.badge}
+          </span>
         )}
       </div>
     );
@@ -196,14 +167,14 @@ export function InstallGuideModal({
 
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
-              {/* Step 1: Exact items to drag */}
-              <div className="rounded-xl p-3.5 bg-emerald-500/[0.06] border border-emerald-400/25 space-y-2">
+              {/* Step 1: Exact items to drag (Always Emerald Green!) */}
+              <div className="rounded-xl p-3.5 bg-emerald-500/[0.07] border border-emerald-400/30 space-y-2">
                 <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                   <span className="inline-flex items-center gap-1.5 font-bold text-white">
                     <PackageCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>ไฟล์ที่ต้องลากไปวาง</span>
+                    <span>สิ่งที่ต้องลากไปวาง (จัดโครงสร้างไว้ครบแล้ว)</span>
                   </span>
-                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/35 whitespace-nowrap">
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 whitespace-nowrap">
                     {activePlatform.dragSummary}
                   </span>
                 </div>
@@ -211,11 +182,7 @@ export function InstallGuideModal({
                   {activePlatform.dragItems.map((it) => (
                     <span
                       key={it.name}
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-mono text-xs font-semibold border whitespace-nowrap ${
-                        it.action === "overwrite"
-                          ? "bg-amber-400/15 text-amber-200 border-amber-400/40"
-                          : "bg-emerald-500/15 text-emerald-200 border-emerald-400/40"
-                      }`}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-mono text-xs font-semibold bg-emerald-500/18 text-emerald-200 border border-emerald-400/40 whitespace-nowrap"
                     >
                       {it.type === "dir" ? (
                         <FolderOpen className="w-3.5 h-3.5 shrink-0" />
@@ -237,7 +204,7 @@ export function InstallGuideModal({
                 <p className="text-[#cbc5d0] leading-relaxed">{activePlatform.howToOpen}</p>
               </div>
 
-              {/* Step 3: Visual Destination Folder Tree */}
+              {/* Step 3: Visual Destination Folder */}
               <div className="rounded-xl p-3.5 sm:p-4 bg-black/45 border border-white/10 space-y-2">
                 <div className="flex items-center gap-2 pb-2 border-b border-white/[0.07] text-xs font-semibold text-white">
                   <FolderOpen className="w-4 h-4 text-sky-400 shrink-0" />
@@ -245,23 +212,19 @@ export function InstallGuideModal({
                 </div>
 
                 <div className="space-y-1.5">
-                  {activePlatform.tree.map((node) => renderNode(node, 0))}
+                  {activePlatform.tree.map((node) => renderNode(node))}
                 </div>
               </div>
 
-              {/* Intuitive Color Legend (Sky = Game Landmark, Green = Add Mod, Amber = Merge/Replace Safely) */}
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11px] text-[#9c94a6]">
+              {/* Simple 2-Color Legend */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[11px] text-[#9c94a6]">
                 <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-sky-400/75" />
-                  จุดสังเกตในโฟลเดอร์เกม
+                  <span className="w-2.5 h-2.5 rounded-sm bg-sky-400/80" />
+                  ไฟล์/โฟลเดอร์เดิมของเกม (จุดสังเกต)
                 </span>
                 <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
                   <span className="w-2.5 h-2.5 rounded-sm bg-emerald-400" />
-                  วางไฟล์/โฟลเดอร์ม็อดเพิ่มตรงนี้
-                </span>
-                <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-amber-400" />
-                  วางทับ / รวมเข้ากับโฟลเดอร์เดิม
+                  ไฟล์/โฟลเดอร์ม็อดที่ต้องลากมาวางตรงนี้
                 </span>
               </div>
             </div>

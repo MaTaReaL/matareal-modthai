@@ -2870,9 +2870,9 @@ export const MODS: ModEntry[] = [
       "แยกไฟล์ให้เลือกโหลดตรงแพลตฟอร์มครบทั้ง Steam (388 KB) และ Xbox / PC Game Pass WinGDK (87.6 MB)"
     ],
     "installSteps": [
-      "สำหรับ Steam: แตกไฟล์ PAW_Patrol_Dino_World_Thai_Steam_v1.0.zip แล้วนำ PDW_Thai_P.pak ไปวางที่ PDW\\Content\\Paks\\~mods\\",
-      "สำหรับ Xbox Game Pass (WinGDK): สำรองไฟล์ PDW-WinGDK.pak เดิมไว้ก่อน แล้วแตกไฟล์เวอร์ชัน Xbox นำ PDW-WinGDK.pak ไปวางทับที่ PDW\\Content\\Paks\\",
-      "เข้าเกมเล่นเป็นภาษาไทยได้ทันที"
+      "เลือกดาวน์โหลดไฟล์ให้ตรงแพลตฟอร์ม (Steam หรือ Xbox Game Pass) แล้วแตกไฟล์ ZIP จะได้โฟลเดอร์ PDW",
+      "ลากโฟลเดอร์ PDW ไปวางรวม/ทับในโฟลเดอร์หลักของตัวเกม (Steam หรือ XboxGames\\PAW Patrol- Dino World\\Content) ได้ทันทีโดยไม่ต้องสร้างโฟลเดอร์เอง",
+      "เข้าเกมเล่นเป็นภาษาไทยได้ทันที (เวอร์ชัน Xbox แนะนำสำรองไฟล์ PDW-WinGDK.pak เดิมไว้ก่อน)"
     ],
     "installPathExample": "Steam: ...\\PAW Patrol Dino World\\PDW\\Content\\Paks\\~mods\\  |  Xbox: C:\\XboxGames\\PAW Patrol- Dino World\\Content\\PDW\\Content\\Paks\\",
     "uninstallNote": "Steam: ลบไฟล์ PDW_Thai_P.pak ออก | Xbox: นำไฟล์ PDW-WinGDK.pak ต้นฉบับที่สำรองไว้กลับมาวางทับ หรือกด Repair ในแอป Xbox",
@@ -3000,7 +3000,7 @@ export const MODS: ModEntry[] = [
         "sha256": "f56612ceef57d7f75d70dece94acbb8b5eae4f5a54124122c9c439a0af36f064",
         "primaryUrl": "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/paw-dino-v1.0/PAW_Patrol_Dino_World_Thai_Steam_v1.0.zip",
         "primaryHost": "GitHub Releases",
-        "installNote": "แตกไฟล์แล้วนำ PDW_Thai_P.pak ไปวางที่ PDW\\Content\\Paks\\~mods\\ (สร้างโฟลเดอร์ ~mods หากยังไม่มี)",
+        "installNote": "แตกไฟล์แล้วลากโฟลเดอร์ PDW ไปวางรวมในโฟลเดอร์หลักของเกมบน Steam (จัดโครงสร้าง ~mods ไว้ครบแล้ว ไม่ต้องสร้างเอง)",
         "backupUrl": "https://drive.google.com/file/d/1P-zpIbXr6fZ_Rx8DYv8UhQ04xsnPpTdx/view?usp=sharing",
         "backupHost": "Google Drive"
       },
@@ -3014,7 +3014,7 @@ export const MODS: ModEntry[] = [
         "sha256": "39f6a60f8aeb670cd2fcf4f92d41d70d38aba1b6f44a679f20323076ac8aafde",
         "primaryUrl": "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/paw-dino-v1.0/PAW_Patrol_Dino_World_Thai_Xbox_v1.0.zip",
         "primaryHost": "GitHub Releases",
-        "installNote": "สำรองไฟล์ PDW-WinGDK.pak เดิมก่อน แล้วนำ PDW-WinGDK.pak จากใน ZIP ไปวางทับที่ PDW\\Content\\Paks\\",
+        "installNote": "แตกไฟล์แล้วลากโฟลเดอร์ PDW ไปวางทับในโฟลเดอร์ Content ของเกมบน Xbox (แนะนำสำรอง PDW-WinGDK.pak เดิมไว้ก่อน)",
         "backupUrl": "https://drive.google.com/file/d/13bmBeintVLg6X0p-1ni7Z6NcMh9cYn15/view?usp=sharing",
         "backupHost": "Google Drive",
         "knownNotice": "ตัวเกมเวอร์ชัน Xbox (WinGDK) ไม่อ่านไฟล์ _P.pak แยก จึงต้องแพ็กเป็นไฟล์ PDW-WinGDK.pak เต็ม"
@@ -3623,7 +3623,7 @@ export const MODS: ModEntry[] = [
       "แพ็กแบบ Patch (_P) ในโฟลเดอร์ ~mods ไม่มีไฟล์ .ini ทับคอนฟิกเกม รองรับทั้ง Steam และ Xbox Game Pass (WinGDK)"
     ],
     "installSteps": [
-      "ดาวน์โหลดและแตกไฟล์ TerribleLizards_Thai_Mod.zip จะได้โฟลเดอร์ terrible_lizards",
+      "ดาวน์โหลดและแตกไฟล์ TerribleLizards_Thai_Mod.zip แล้วเปิดเข้าโฟลเดอร์ TerribleLizards_Thai_P จะพบโฟลเดอร์ terrible_lizards",
       "ลากโฟลเดอร์ terrible_lizards ไปวางรวมในโฟลเดอร์หลักของเกม (Steam หรือ XboxGames\\Terrible Lizards\\Content)",
       "เข้าเกมเล่นเป็นภาษาไทยได้ทันที (สามารถสลับไทย/อังกฤษได้ในหน้าตั้งค่า)"
     ],

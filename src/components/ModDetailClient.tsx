@@ -52,7 +52,7 @@ interface ModDetailClientProps {
 
 /** Highlights file names, folder names, and paths inside install/uninstall text so players spot them instantly */
 const INSTALL_TOKEN_REGEX =
-  /((?:[A-Za-z]:\\)?(?:[A-Za-z0-9_~.-]+\\)+[A-Za-z0-9_~.*-]*|[A-Za-z0-9_.-]+\.(?:zip|7z|exe|dll|ini|pak|utoc|ucas|ttf|otf|csv|json|bin|lnk|fdata|rdb|txt|md)|\.doorstop_version|\b(?:SOS_ThaiMod|SeaOfSolitude_Data|Mod_Files|ThaiMod(?:_EP[1-5]|_ScratchCreek)?|BepInEx|dotnet|archive|fdata_package|media|PIO|Routine|Denshattack_Proto|GoriCuddlyCarnage|terrible_lizards|HITC_Data|Content|Paks)\b|~mods)/g;
+  /((?:[A-Za-z]:\\)?(?:[A-Za-z0-9_~.-]+\\)+[A-Za-z0-9_~.*-]*|[A-Za-z0-9_.-]+\.(?:zip|7z|exe|dll|ini|pak|utoc|ucas|ttf|otf|csv|json|bin|lnk|fdata|rdb|txt|md)|\.doorstop_version|\b(?:SOS_ThaiMod|SeaOfSolitude_Data|Mod_Files|ThaiMod(?:_EP[1-5]|_ScratchCreek)?|BepInEx|dotnet|archive|fdata_package|media|PIO|Routine|Denshattack_Proto|GoriCuddlyCarnage|TerribleLizards_Thai_P|terrible_lizards|HopeInTheCity_ThaiMod|HITC_Data|PDW|Content|Paks)\b|~mods)/g;
 
 function renderHighlightedPaths(text: string): React.ReactNode {
   const parts = text.split(INSTALL_TOKEN_REGEX);

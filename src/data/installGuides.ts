@@ -3,87 +3,76 @@ export interface InstallTreeNode {
   type: "dir" | "file";
   /**
    * "anchor" = existing game file/folder used as landmark (Sky blue)
-   * "mod" = new mod file/folder to drop here (Emerald green = Go/Place here)
-   * "overwrite" = mod folder/file that merges/overwrites existing one (Amber gold = Merge/Replace safely, NOT red!)
-   * "parent" = container folder leading to target
+   * "mod" = mod file/folder the player drags & drops here (Emerald green — always green!)
    */
-  role: "parent" | "anchor" | "mod" | "overwrite";
+  role: "anchor" | "mod";
   badge?: string;
   note?: string;
-  children?: InstallTreeNode[];
 }
 
 export interface InstallGuidePlatform {
   platformLabel: string;
   howToOpen: string;
   rootFolderHint: string;
-  /** Exact items the player drags & drops (e.g. "1 โฟลเดอร์" or "2 ไฟล์ + 1 โฟลเดอร์") */
+  /** Exact count of items to drag (e.g. "1 โฟลเดอร์", "1 โฟลเดอร์ + 2 ไฟล์") */
   dragSummary: string;
-  dragItems: { name: string; type: "dir" | "file"; action: "add" | "overwrite" }[];
+  dragItems: { name: string; type: "dir" | "file" }[];
   tree: InstallTreeNode[];
 }
 
 export interface ModInstallGuide {
-  /** Which folder inside the downloaded ZIP to open first */
+  /** Exact instruction of what to open inside the downloaded ZIP */
   zipSourceHint: string;
   platforms: InstallGuidePlatform[];
 }
 
-function makeFtfGuide(
-  zipFolder: string,
-  exeName: string,
-  dataFolder: string
-): ModInstallGuide {
+function makeFtfGuide(zipFolder: string, exeName: string, dataFolder: string): ModInstallGuide {
   return {
-    zipSourceHint: `แตกไฟล์ ZIP แล้วเปิดเข้าไปในโฟลเดอร์ ${zipFolder}/`,
+    zipSourceHint: `แตกไฟล์ ZIP แล้วเปิดเข้าโฟลเดอร์ ${zipFolder}/`,
     platforms: [
       {
         platformLabel: "Steam (PC)",
         howToOpen: "คลิกขวาที่เกมใน Steam → จัดการ (Manage) → เปิดหาไฟล์ภายในเครื่อง (Browse local files)",
         rootFolderHint: `โฟลเดอร์หลักของเกม (ที่มี ${exeName})`,
-        dragSummary: "2 ไฟล์ + 1 โฟลเดอร์",
+        dragSummary: "1 โฟลเดอร์ + 2 ไฟล์",
         dragItems: [
-          { name: "ThaiMod/", type: "dir", action: "add" },
-          { name: "winhttp.dll", type: "file", action: "add" },
-          { name: "doorstop_config.ini", type: "file", action: "add" },
+          { name: "ThaiMod/", type: "dir" },
+          { name: "winhttp.dll", type: "file" },
+          { name: "doorstop_config.ini", type: "file" },
         ],
         tree: [
           { name: exeName, type: "file", role: "anchor", badge: "จุดสังเกต" },
           { name: dataFolder, type: "dir", role: "anchor", note: "โฟลเดอร์เกมเดิม" },
-          { name: "ThaiMod/", type: "dir", role: "mod", badge: "วางตรงนี้" },
-          { name: "winhttp.dll", type: "file", role: "mod", badge: "วางตรงนี้" },
-          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "วางตรงนี้" },
+          { name: "ThaiMod/", type: "dir", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "winhttp.dll", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
         ],
       },
     ],
   };
 }
 
-function makeUe5FolderDropGuide(
-  modRootFolder: string,
+function makeSingleFolderMergeGuide(
+  modFolder: string,
+  zipSourceHint: string,
   exeHint: string,
-  hasXbox = true
+  hasXbox = true,
+  mergeNote = "ชื่อตรงโฟลเดอร์เกมเดิม — กดวางรวม (Merge)"
 ): ModInstallGuide {
   const treeNodes: InstallTreeNode[] = [
     ...(exeHint ? [{ name: exeHint, type: "file" as const, role: "anchor" as const, badge: "จุดสังเกต" }] : []),
     { name: "Engine/", type: "dir", role: "anchor", badge: exeHint ? undefined : "จุดสังเกต", note: "โฟลเดอร์เกมเดิม" },
-    {
-      name: `${modRootFolder}/`,
-      type: "dir",
-      role: "overwrite",
-      badge: "ลากมาวางรวมตรงนี้",
-      note: "กดยืนยันรวมโฟลเดอร์ (Merge) — ไม่ทับไฟล์หลักเกม",
-    },
+    { name: `${modFolder}/`, type: "dir", role: "mod", badge: "ลากมาวางตรงนี้", note: mergeNote },
   ];
 
-  const dragItems = [{ name: `${modRootFolder}/`, type: "dir" as const, action: "overwrite" as const }];
+  const dragItems = [{ name: `${modFolder}/`, type: "dir" as const }];
 
   const platforms: InstallGuidePlatform[] = [
     {
       platformLabel: "Steam (PC)",
       howToOpen: "คลิกขวาที่เกมใน Steam → จัดการ → เปิดหาไฟล์ภายในเครื่อง",
-      rootFolderHint: `โฟลเดอร์หลักของเกม (ที่มี Engine/ และ ${modRootFolder}/)`,
-      dragSummary: "1 โฟลเดอร์ (จบในครั้งเดียว)",
+      rootFolderHint: `โฟลเดอร์หลักของเกม (ที่มีโฟลเดอร์ ${modFolder}/ อยู่แล้ว)`,
+      dragSummary: "1 โฟลเดอร์",
       dragItems,
       tree: treeNodes,
     },
@@ -93,37 +82,34 @@ function makeUe5FolderDropGuide(
     platforms.push({
       platformLabel: "Xbox / Game Pass (PC)",
       howToOpen: "เปิดแอป Xbox → จุดสามจุด (...) → จัดการ → ไฟล์ → เรียกดู → เข้าโฟลเดอร์ Content",
-      rootFolderHint: `โฟลเดอร์ Content/ (ที่มี Engine/ และ ${modRootFolder}/)`,
-      dragSummary: "1 โฟลเดอร์ (จบในครั้งเดียว)",
+      rootFolderHint: `โฟลเดอร์ Content/ (ที่มีโฟลเดอร์ ${modFolder}/ อยู่แล้ว)`,
+      dragSummary: "1 โฟลเดอร์",
       dragItems,
       tree: treeNodes,
     });
   }
 
-  return {
-    zipSourceHint: `แตกไฟล์ ZIP แล้วลากโฟลเดอร์ ${modRootFolder}/ เพียงโฟลเดอร์เดียว`,
-    platforms,
-  };
+  return { zipSourceHint, platforms };
 }
 
 export const INSTALL_GUIDES: Record<string, ModInstallGuide> = {
   "sea-of-solitude": {
-    zipSourceHint: "แตกไฟล์ ZIP แล้วเปิดเข้าไปในโฟลเดอร์ SOS_ThaiMod/",
+    zipSourceHint: "แตกไฟล์ ZIP แล้วเปิดเข้าโฟลเดอร์ SOS_ThaiMod/",
     platforms: [
       {
         platformLabel: "Steam / EA App (PC)",
         howToOpen: "Steam: คลิกขวาเกม → จัดการ → เปิดหาไฟล์ภายในเครื่อง | EA App: จัดการ → ดูคุณสมบัติ → เปิดโฟลเดอร์",
-        rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มี SeaOfSolitude.exe)",
-        dragSummary: "1 โฟลเดอร์ (วางทับ)",
-        dragItems: [{ name: "SeaOfSolitude_Data/", type: "dir", action: "overwrite" }],
+        rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มี SeaOfSolitude.exe และ SeaOfSolitude_Data/)",
+        dragSummary: "1 โฟลเดอร์",
+        dragItems: [{ name: "SeaOfSolitude_Data/", type: "dir" }],
         tree: [
           { name: "SeaOfSolitude.exe", type: "file", role: "anchor", badge: "จุดสังเกต" },
           {
             name: "SeaOfSolitude_Data/",
             type: "dir",
-            role: "overwrite",
-            badge: "วางทับตรงนี้",
-            note: "กดยืนยันแทนที่ไฟล์ทั้งหมด",
+            role: "mod",
+            badge: "ลากมาวางทับตรงนี้",
+            note: "ชื่อตรงโฟลเดอร์เกมเดิม — กดยืนยันวางทับทั้งหมด",
           },
         ],
       },
@@ -162,214 +148,257 @@ export const INSTALL_GUIDES: Record<string, ModInstallGuide> = {
   ),
 
   "venus-vacation-prism-dead-or-alive-xtreme": {
-    zipSourceHint: "แตกไฟล์ VenusVacationPRISM_ThaiMod_v1.0.zip จะได้ 2 โฟลเดอร์",
+    zipSourceHint: "แตกไฟล์ ZIP จะเห็นโฟลเดอร์ archive/ และ fdata_package/ (ข้ามไฟล์ README)",
     platforms: [
       {
         platformLabel: "Steam (PC)",
         howToOpen: "คลิกขวาที่เกมใน Steam → จัดการ → เปิดหาไฟล์ภายในเครื่อง",
-        rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มี VVPrism.exe)",
-        dragSummary: "2 โฟลเดอร์ (วางทับ)",
+        rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มี archive/ และ fdata_package/)",
+        dragSummary: "2 โฟลเดอร์",
         dragItems: [
-          { name: "archive/", type: "dir", action: "overwrite" },
-          { name: "fdata_package/", type: "dir", action: "overwrite" },
+          { name: "archive/", type: "dir" },
+          { name: "fdata_package/", type: "dir" },
         ],
         tree: [
           { name: "VVPrism.exe", type: "file", role: "anchor", badge: "จุดสังเกต" },
-          { name: "archive/", type: "dir", role: "overwrite", badge: "วางทับตรงนี้", note: "กดยืนยันแทนที่ไฟล์" },
-          { name: "fdata_package/", type: "dir", role: "overwrite", badge: "วางทับตรงนี้", note: "กดยืนยันแทนที่ไฟล์" },
+          { name: "archive/", type: "dir", role: "mod", badge: "ลากมาวางทับตรงนี้", note: "กดยืนยันวางทับ" },
+          { name: "fdata_package/", type: "dir", role: "mod", badge: "ลากมาวางทับตรงนี้", note: "กดยืนยันวางทับ" },
         ],
       },
     ],
   },
 
   outbound: {
-    zipSourceHint: "แตกไฟล์ Outbound_Thai_Mod_v1.0.zip แล้วเลือกไฟล์และโฟลเดอร์ม็อดทั้งหมด",
+    zipSourceHint: "แตกไฟล์ ZIP แล้วเลือก 2 โฟลเดอร์ + 3 ไฟล์นี้ (ข้ามไฟล์ README_TH.txt)",
     platforms: [
       {
         platformLabel: "Steam (PC)",
         howToOpen: "คลิกขวาที่เกมใน Steam → จัดการ → เปิดหาไฟล์ภายในเครื่อง",
         rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มี Outbound.exe)",
-        dragSummary: "3 ไฟล์ + 2 โฟลเดอร์",
+        dragSummary: "2 โฟลเดอร์ + 3 ไฟล์",
         dragItems: [
-          { name: "BepInEx/", type: "dir", action: "add" },
-          { name: "dotnet/", type: "dir", action: "add" },
-          { name: "winhttp.dll", type: "file", action: "add" },
-          { name: "doorstop_config.ini", type: "file", action: "add" },
-          { name: ".doorstop_version", type: "file", action: "add" },
+          { name: "BepInEx/", type: "dir" },
+          { name: "dotnet/", type: "dir" },
+          { name: "winhttp.dll", type: "file" },
+          { name: "doorstop_config.ini", type: "file" },
+          { name: ".doorstop_version", type: "file" },
         ],
         tree: [
           { name: "Outbound.exe", type: "file", role: "anchor", badge: "จุดสังเกต" },
           { name: "Outbound_Data/", type: "dir", role: "anchor", note: "โฟลเดอร์เกมเดิม" },
-          { name: "BepInEx/", type: "dir", role: "mod", badge: "วางตรงนี้" },
-          { name: "dotnet/", type: "dir", role: "mod", badge: "วางตรงนี้" },
-          { name: "winhttp.dll", type: "file", role: "mod", badge: "วางตรงนี้" },
-          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "วางตรงนี้" },
-          { name: ".doorstop_version", type: "file", role: "mod", badge: "วางตรงนี้" },
+          { name: "BepInEx/", type: "dir", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "dotnet/", type: "dir", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "winhttp.dll", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: ".doorstop_version", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
         ],
       },
       {
         platformLabel: "Xbox / Game Pass (PC)",
         howToOpen: "เปิดแอป Xbox → จุดสามจุด (...) → จัดการ → ไฟล์ → เรียกดู → เข้าโฟลเดอร์ Content",
         rootFolderHint: "โฟลเดอร์ Content/ (ที่มี Outbound.exe)",
-        dragSummary: "3 ไฟล์ + 2 โฟลเดอร์",
+        dragSummary: "2 โฟลเดอร์ + 3 ไฟล์",
         dragItems: [
-          { name: "BepInEx/", type: "dir", action: "add" },
-          { name: "dotnet/", type: "dir", action: "add" },
-          { name: "winhttp.dll", type: "file", action: "add" },
-          { name: "doorstop_config.ini", type: "file", action: "add" },
-          { name: ".doorstop_version", type: "file", action: "add" },
+          { name: "BepInEx/", type: "dir" },
+          { name: "dotnet/", type: "dir" },
+          { name: "winhttp.dll", type: "file" },
+          { name: "doorstop_config.ini", type: "file" },
+          { name: ".doorstop_version", type: "file" },
         ],
         tree: [
           { name: "gamelaunchhelper.exe", type: "file", role: "anchor", badge: "จุดสังเกต" },
           { name: "Outbound.exe", type: "file", role: "anchor" },
-          { name: "BepInEx/", type: "dir", role: "mod", badge: "วางตรงนี้" },
-          { name: "dotnet/", type: "dir", role: "mod", badge: "วางตรงนี้" },
-          { name: "winhttp.dll", type: "file", role: "mod", badge: "วางตรงนี้" },
-          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "วางตรงนี้" },
-          { name: ".doorstop_version", type: "file", role: "mod", badge: "วางตรงนี้" },
+          { name: "BepInEx/", type: "dir", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "dotnet/", type: "dir", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "winhttp.dll", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: ".doorstop_version", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
         ],
       },
     ],
   },
 
   "farm-and-feast": {
-    zipSourceHint: "แตกไฟล์ ZIP แล้วเปิดเข้าไปในโฟลเดอร์ Mod_Files/",
+    zipSourceHint: "แตกไฟล์ ZIP แล้วเปิดเข้าโฟลเดอร์ Mod_Files/ นำไฟล์ทั้งหมดข้างในมาวาง",
     platforms: [
       {
         platformLabel: "Steam (PC)",
         howToOpen: "คลิกขวาที่เกม Farm & Feast ใน Steam → จัดการ → เปิดหาไฟล์ภายในเครื่อง",
         rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มี Farm & Feast.exe)",
-        dragSummary: "3 ไฟล์ + 2 โฟลเดอร์",
+        dragSummary: "2 โฟลเดอร์ + 3 ไฟล์",
         dragItems: [
-          { name: "BepInEx/", type: "dir", action: "add" },
-          { name: "dotnet/", type: "dir", action: "add" },
-          { name: "winhttp.dll", type: "file", action: "add" },
-          { name: "doorstop_config.ini", type: "file", action: "add" },
-          { name: ".doorstop_version", type: "file", action: "add" },
+          { name: "BepInEx/", type: "dir" },
+          { name: "dotnet/", type: "dir" },
+          { name: "winhttp.dll", type: "file" },
+          { name: "doorstop_config.ini", type: "file" },
+          { name: ".doorstop_version", type: "file" },
         ],
         tree: [
           { name: "Farm & Feast.exe", type: "file", role: "anchor", badge: "จุดสังเกต" },
           { name: "Farm & Feast_Data/", type: "dir", role: "anchor", note: "โฟลเดอร์เกมเดิม" },
-          { name: "BepInEx/", type: "dir", role: "mod", badge: "วางตรงนี้" },
-          { name: "dotnet/", type: "dir", role: "mod", badge: "วางตรงนี้" },
-          { name: "winhttp.dll", type: "file", role: "mod", badge: "วางตรงนี้" },
-          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "วางตรงนี้" },
-          { name: ".doorstop_version", type: "file", role: "mod", badge: "วางตรงนี้" },
+          { name: "BepInEx/", type: "dir", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "dotnet/", type: "dir", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "winhttp.dll", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: ".doorstop_version", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
         ],
       },
     ],
   },
 
   "control-im-not-coming-back": {
-    zipSourceHint: "แตกไฟล์ Control_ImNotComingBack_ThaiMod_v1.0.zip",
+    zipSourceHint: "แตกไฟล์ ZIP แล้วเลือก 1 โฟลเดอร์ + 2 ไฟล์นี้ (ข้ามไฟล์ README_TH.txt)",
     platforms: [
       {
         platformLabel: "Steam (PC)",
         howToOpen: "คลิกขวาที่เกมใน Steam → จัดการ → เปิดหาไฟล์ภายในเครื่อง",
         rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มีไฟล์ .exe เปิดเกม)",
-        dragSummary: "2 ไฟล์ + 1 โฟลเดอร์",
+        dragSummary: "1 โฟลเดอร์ + 2 ไฟล์",
         dragItems: [
-          { name: "ThaiMod/", type: "dir", action: "add" },
-          { name: "winhttp.dll", type: "file", action: "add" },
-          { name: "doorstop_config.ini", type: "file", action: "add" },
+          { name: "ThaiMod/", type: "dir" },
+          { name: "winhttp.dll", type: "file" },
+          { name: "doorstop_config.ini", type: "file" },
         ],
         tree: [
           { name: "Control, I'm Not Coming Back.exe", type: "file", role: "anchor", badge: "จุดสังเกต" },
-          { name: "ThaiMod/", type: "dir", role: "mod", badge: "วางตรงนี้" },
-          { name: "winhttp.dll", type: "file", role: "mod", badge: "วางตรงนี้" },
-          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "วางตรงนี้" },
+          { name: "ThaiMod/", type: "dir", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "winhttp.dll", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
         ],
       },
     ],
   },
 
-  routine: makeUe5FolderDropGuide("Routine", "Routine.exe", true),
-  denshattack: makeUe5FolderDropGuide("Denshattack_Proto", "Denshattack.exe", true),
-  aphelion: makeUe5FolderDropGuide("PIO", "", true),
-  "terrible-lizards": makeUe5FolderDropGuide("terrible_lizards", "", true),
-  "gori-cuddly-carnage": makeUe5FolderDropGuide("GoriCuddlyCarnage", "Gori_Cuddly_Carnage.exe", false),
-
+  routine: makeSingleFolderMergeGuide(
+    "Routine",
+    "แตกไฟล์ ZIP แล้วลากโฟลเดอร์ Routine/ เพียงโฟลเดอร์เดียว (ข้ามไฟล์ README)",
+    "Routine.exe",
+    true
+  ),
+  denshattack: makeSingleFolderMergeGuide(
+    "Denshattack_Proto",
+    "แตกไฟล์ ZIP แล้วลากโฟลเดอร์ Denshattack_Proto/ เพียงโฟลเดอร์เดียว (ข้ามไฟล์ README)",
+    "Denshattack.exe",
+    true
+  ),
+  aphelion: makeSingleFolderMergeGuide(
+    "PIO",
+    "แตกไฟล์ ZIP แล้วลากโฟลเดอร์ PIO/ เพียงโฟลเดอร์เดียว (ข้ามไฟล์ README)",
+    "",
+    true
+  ),
+  "terrible-lizards": makeSingleFolderMergeGuide(
+    "terrible_lizards",
+    "แตกไฟล์ ZIP → เปิดเข้าโฟลเดอร์ TerribleLizards_Thai_P/ แล้วลากโฟลเดอร์ terrible_lizards/",
+    "",
+    true
+  ),
+  "gori-cuddly-carnage": makeSingleFolderMergeGuide(
+    "GoriCuddlyCarnage",
+    "แตกไฟล์ ZIP แล้วลากโฟลเดอร์ GoriCuddlyCarnage/ เพียงโฟลเดอร์เดียว (ข้ามไฟล์ README)",
+    "Gori_Cuddly_Carnage.exe",
+    false
+  ),
   "paw-patrol-dino-world": {
-    zipSourceHint: "เลือกโหลดไฟล์ให้ตรงแพลตฟอร์ม (Steam หรือ Xbox Game Pass)",
+    zipSourceHint: "เลือกโหลดไฟล์ให้ตรงแพลตฟอร์ม → แตกไฟล์ ZIP แล้วลากโฟลเดอร์ PDW/ เพียงโฟลเดอร์เดียว",
     platforms: [
       {
         platformLabel: "Steam (PC)",
-        howToOpen: "คลิกขวาที่เกมใน Steam → จัดการ → เปิดหาไฟล์ภายในเครื่อง → เข้าไปที่ PDW / Content / Paks",
-        rootFolderHint: "โฟลเดอร์ Paks/ (สร้างโฟลเดอร์ ~mods หากยังไม่มี)",
-        dragSummary: "1 ไฟล์",
-        dragItems: [{ name: "PDW_Thai_P.pak", type: "file", action: "add" }],
+        howToOpen: "คลิกขวาที่เกมใน Steam → จัดการ → เปิดหาไฟล์ภายในเครื่อง",
+        rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มี Engine/ และ PDW/)",
+        dragSummary: "1 โฟลเดอร์",
+        dragItems: [{ name: "PDW/", type: "dir" }],
         tree: [
-          { name: "PDW-Windows.pak", type: "file", role: "anchor", badge: "จุดสังเกต" },
+          { name: "Engine/", type: "dir", role: "anchor", badge: "จุดสังเกต", note: "โฟลเดอร์เกมเดิม" },
           {
-            name: "~mods/",
+            name: "PDW/",
             type: "dir",
             role: "mod",
-            badge: "สร้างโฟลเดอร์นี้",
-            children: [{ name: "PDW_Thai_P.pak", type: "file", role: "mod", badge: "วางไฟล์นี้" }],
+            badge: "ลากมาวางตรงนี้",
+            note: "จัด Path ข้างในไว้ครบแล้ว — กดวางรวม (Merge) จบเลย",
           },
         ],
       },
       {
         platformLabel: "Xbox / Game Pass (PC)",
-        howToOpen: "เปิดแอป Xbox → จุดสามจุด (...) → จัดการ → ไฟล์ → เรียกดู → Content / PDW / Content / Paks",
-        rootFolderHint: "โฟลเดอร์ Paks/ (สำรองไฟล์เดิมเก็บไว้ก่อน)",
-        dragSummary: "1 ไฟล์ (วางทับ)",
-        dragItems: [{ name: "PDW-WinGDK.pak", type: "file", action: "overwrite" }],
+        howToOpen: "เปิดแอป Xbox → จุดสามจุด (...) → จัดการ → ไฟล์ → เรียกดู → เข้าโฟลเดอร์ Content",
+        rootFolderHint: "โฟลเดอร์ Content/ (ที่มี Engine/ และ PDW/)",
+        dragSummary: "1 โฟลเดอร์",
+        dragItems: [{ name: "PDW/", type: "dir" }],
         tree: [
-          { name: "PDW-WinGDK.pak", type: "file", role: "overwrite", badge: "วางทับไฟล์เดิม", note: "สำรองไฟล์เดิมก่อน" },
+          { name: "Engine/", type: "dir", role: "anchor", badge: "จุดสังเกต", note: "โฟลเดอร์เกมเดิม" },
+          {
+            name: "PDW/",
+            type: "dir",
+            role: "mod",
+            badge: "ลากมาวางทับตรงนี้",
+            note: "กดยืนยันวางทับ PDW-WinGDK.pak (แนะนำสำรองไฟล์เดิมก่อน)",
+          },
         ],
       },
     ],
   },
 
   "forza-horizon-6": {
-    zipSourceHint: "แนะนำใช้ตัวติดตั้งอัตโนมัติ (FH6_ThaiMod_Setup.exe) หรือแบบลากวางโฟลเดอร์ media/",
+    zipSourceHint: "แบบตัวติดตั้ง: เปิด FH6_ThaiMod_Setup.exe | แบบลากวาง: แตกไฟล์แล้วลากโฟลเดอร์ media/",
     platforms: [
       {
         platformLabel: "Steam (PC)",
         howToOpen: "คลิกขวา Forza Horizon 6 ใน Steam → จัดการ → เปิดหาไฟล์ภายในเครื่อง",
-        rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มี ForzaHorizon6.exe)",
-        dragSummary: "1 โฟลเดอร์ (วางทับ) หรือรันตัวติดตั้ง",
-        dragItems: [{ name: "media/", type: "dir", action: "overwrite" }],
+        rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มี ForzaHorizon6.exe และ media/)",
+        dragSummary: "1 โฟลเดอร์ (หรือใช้ตัวติดตั้ง)",
+        dragItems: [{ name: "media/", type: "dir" }],
         tree: [
           { name: "ForzaHorizon6.exe", type: "file", role: "anchor", badge: "จุดสังเกต" },
-          { name: "media/", type: "dir", role: "overwrite", badge: "วางทับตรงนี้", note: "หรือรัน FH6_ThaiMod_Setup.exe" },
+          {
+            name: "media/",
+            type: "dir",
+            role: "mod",
+            badge: "ลากมาวางทับตรงนี้",
+            note: "ชื่อตรงโฟลเดอร์เกมเดิม — กดยืนยันวางทับ",
+          },
         ],
       },
       {
         platformLabel: "Xbox / Game Pass (PC)",
         howToOpen: "เปิดแอป Xbox → จุดสามจุด (...) → จัดการ → ไฟล์ → เรียกดู → เข้าโฟลเดอร์ Content",
-        rootFolderHint: "โฟลเดอร์ Content/ (ที่มี ForzaHorizon6.exe)",
-        dragSummary: "1 โฟลเดอร์ (วางทับ) หรือรันตัวติดตั้ง",
-        dragItems: [{ name: "media/", type: "dir", action: "overwrite" }],
+        rootFolderHint: "โฟลเดอร์ Content/ (ที่มี ForzaHorizon6.exe และ media/)",
+        dragSummary: "1 โฟลเดอร์ (หรือใช้ตัวติดตั้ง)",
+        dragItems: [{ name: "media/", type: "dir" }],
         tree: [
           { name: "ForzaHorizon6.exe", type: "file", role: "anchor", badge: "จุดสังเกต" },
-          { name: "media/", type: "dir", role: "overwrite", badge: "วางทับตรงนี้", note: "หรือรัน FH6_ThaiMod_Setup.exe" },
+          {
+            name: "media/",
+            type: "dir",
+            role: "mod",
+            badge: "ลากมาวางทับตรงนี้",
+            note: "ชื่อตรงโฟลเดอร์เกมเดิม — กดยืนยันวางทับ",
+          },
         ],
       },
     ],
   },
 
   "hope-in-the-city": {
-    zipSourceHint: "แตกไฟล์ HopeInTheCity_ThaiMod.zip (ไม่ต้องลากไฟล์ README)",
+    zipSourceHint: "แตกไฟล์ ZIP → เปิดเข้าโฟลเดอร์ HopeInTheCity_ThaiMod/ แล้วลาก 2 โฟลเดอร์ + 2 ไฟล์ (ข้าม README)",
     platforms: [
       {
         platformLabel: "Steam / Xbox Game Pass (PC)",
         howToOpen: "Steam: จัดการ → เปิดหาไฟล์ภายในเครื่อง | Xbox: จัดการ → ไฟล์ → เรียกดู → เข้าโฟลเดอร์ Content",
-        rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มี HITC.exe)",
-        dragSummary: "2 ไฟล์ + 2 โฟลเดอร์",
+        rootFolderHint: "โฟลเดอร์หลักของเกม (ที่มี HITC.exe และ HITC_Data/)",
+        dragSummary: "2 โฟลเดอร์ + 2 ไฟล์",
         dragItems: [
-          { name: "HITC_Data/", type: "dir", action: "overwrite" },
-          { name: "ThaiMod/", type: "dir", action: "add" },
-          { name: "winhttp.dll", type: "file", action: "add" },
-          { name: "doorstop_config.ini", type: "file", action: "add" },
+          { name: "HITC_Data/", type: "dir" },
+          { name: "ThaiMod/", type: "dir" },
+          { name: "winhttp.dll", type: "file" },
+          { name: "doorstop_config.ini", type: "file" },
         ],
         tree: [
           { name: "HITC.exe", type: "file", role: "anchor", badge: "จุดสังเกต" },
-          { name: "HITC_Data/", type: "dir", role: "overwrite", badge: "วางทับตรงนี้" },
-          { name: "ThaiMod/", type: "dir", role: "mod", badge: "วางตรงนี้" },
-          { name: "winhttp.dll", type: "file", role: "mod", badge: "วางตรงนี้" },
-          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "วางตรงนี้" },
+          { name: "HITC_Data/", type: "dir", role: "mod", badge: "ลากมาวางทับตรงนี้", note: "กดยืนยันวางรวม/ทับ" },
+          { name: "ThaiMod/", type: "dir", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "winhttp.dll", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
+          { name: "doorstop_config.ini", type: "file", role: "mod", badge: "ลากมาวางตรงนี้" },
         ],
       },
     ],
