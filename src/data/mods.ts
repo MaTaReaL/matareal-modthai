@@ -47,6 +47,7 @@ export const MODS: ModEntry[] = [
       "ดาวน์โหลดม็อดไทย Sea of Solitude",
       "MaTaReaL ม็อดไทย",
     ],
+    nexusModUrl: "https://www.nexusmods.com/mods/3?game_id=11258&tab=description",
     featured: true,
     media: {
       header: "/mods/sea-of-solitude/header.webp",
