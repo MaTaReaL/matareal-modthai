@@ -55,6 +55,12 @@ export const MODS: ModEntry[] = [
       ogImage: "/mods/sea-of-solitude/og-share.jpg",
       gallery: [
         {
+          src: "/mods/sea-of-solitude/cover.webp",
+          alt: "ปกม็อดภาษาไทย Sea of Solitude (ทะเลแห่งความโดดเดี่ยว)",
+          caption: "ภาพปกม็อดภาษาไทย Sea of Solitude (ทะเลแห่งความโดดเดี่ยว)",
+          tag: "Cover",
+        },
+        {
           src: "/mods/sea-of-solitude/gallery-01.webp",
           alt: "หน้าจอไตเติลและโลโก้ภาษาไทย ทะเลแห่งความโดดเดี่ยว",
           caption: "หน้าจอไตเติลพร้อมโลโก้ภาษาไทย “ทะเลแห่งความโดดเดี่ยว” และเครดิต MaTaReaL",
