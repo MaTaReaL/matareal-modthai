@@ -20,7 +20,6 @@ export function AmbientBackdrop() {
       targetY = e.clientY;
       el.style.opacity = "1";
 
-      // Update any hovered .spot-card cursor coordinates smoothly
       const card = (e.target as HTMLElement | null)?.closest?.(".spot-card") as HTMLElement | null;
       if (card) {
         const rect = card.getBoundingClientRect();
@@ -56,6 +55,29 @@ export function AmbientBackdrop() {
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
     >
+      {/* Responsive Subtle AAA Marvel-Style Ensemble Backdrop (Landscape on Desktop, Portrait on Mobile) */}
+      <div className="backdrop-breathe absolute inset-0">
+        <img
+          src="/brand/bg-landscape.webp"
+          alt=""
+          className="hidden md:block w-full h-full object-cover object-center opacity-[0.62] saturate-[0.82]"
+        />
+        <img
+          src="/brand/bg-portrait.webp"
+          alt=""
+          className="block md:hidden w-full h-full object-cover object-top opacity-[0.58] saturate-[0.82]"
+        />
+      </div>
+
+      {/* Smooth Obsidian-Rose Veil so text and cards always stay razor-sharp & uncluttered */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 85% 65% at 50% 25%, rgba(7,6,9,0.34) 0%, rgba(7,6,9,0.68) 60%, rgba(7,6,9,0.90) 100%)",
+        }}
+      />
+
       {/* Top Animated Sakura-Pink & Crimson Aurora */}
       <div
         className="aurora-orb-1 absolute -top-44 left-[18%] w-[780px] h-[460px] rounded-full blur-[125px]"
@@ -79,12 +101,12 @@ export function AmbientBackdrop() {
         className="aurora-orb-3 absolute -bottom-48 -left-32 w-[620px] h-[520px] rounded-full blur-[135px]"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,77,141,0.2) 0%, rgba(217,30,54,0.1) 50%, transparent 75%)",
+            "radial-gradient(circle, rgba(255,77,141,0.20) 0%, rgba(217,30,54,0.10) 50%, transparent 75%)",
         }}
       />
 
       {/* Subtle Crisp Dot Grid */}
-      <div className="absolute inset-0 bg-subtle-grid opacity-55" />
+      <div className="absolute inset-0 bg-subtle-grid opacity-45" />
 
       {/* Interactive Cursor-Following Pink/Crimson Halo */}
       <div
@@ -92,7 +114,7 @@ export function AmbientBackdrop() {
         className="fixed top-0 left-0 w-[560px] h-[560px] rounded-full opacity-0 transition-opacity duration-500 will-change-transform"
         style={{
           background:
-            "radial-gradient(circle, rgba(255,77,141,0.16) 0%, rgba(217,30,54,0.08) 38%, transparent 70%)",
+            "radial-gradient(circle, rgba(255,77,141,0.18) 0%, rgba(217,30,54,0.08) 38%, transparent 70%)",
           filter: "blur(24px)",
         }}
       />

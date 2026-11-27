@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: `${SITE_CONFIG.siteUrl}/requests`,
   },
+  openGraph: {
+    title: `เสนอทำม็อดภาษาไทย | ${SITE_CONFIG.nameTh}`,
+    description: `บอร์ดเสนอเกมสำหรับทำม็อดแปลภาษาไทยโดย ${SITE_CONFIG.authorName}`,
+    images: [{ url: "/brand/og-site.jpg?v=2", width: 1200, height: 630 }],
+  },
 };
 
 export default async function RequestsPage() {

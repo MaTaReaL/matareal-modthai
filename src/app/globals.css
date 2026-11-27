@@ -88,6 +88,20 @@
   animation: auroraDrift3 26s ease-in-out infinite;
 }
 
+@keyframes backdropBreathe {
+  0%, 100% {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.06) translate3d(0, -8px, 0);
+  }
+}
+
+.backdrop-breathe {
+  animation: backdropBreathe 34s ease-in-out infinite;
+  will-change: transform;
+}
+
 /* Sheen sweep on primary CTA buttons */
 @keyframes sheenSweep {
   0% {
