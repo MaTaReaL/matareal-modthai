@@ -86,8 +86,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: saved.error, existing: saved.existing }, { status: 409 });
   }
 
-  // Notify Discord Webhook when a new game is requested
-  const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+  // Notify dedicated Discord Requests Webhook (fallback to DISCORD_WEBHOOK_URL)
+  const webhookUrl =
+    process.env.DISCORD_REQUESTS_WEBHOOK_URL || process.env.DISCORD_WEBHOOK_URL;
   if (webhookUrl) {
     fetch(webhookUrl, {
       method: "POST",
