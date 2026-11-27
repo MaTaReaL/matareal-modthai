@@ -24,7 +24,7 @@ export const MODS: ModEntry[] = [
     "installSteps": [
       "ดาวน์โหลดและแตกไฟล์ SOS_ThaiMod_v1.0.zip จะพบโฟลเดอร์ชื่อ SOS_ThaiMod",
       "เปิดเข้าไปในโฟลเดอร์ SOS_ThaiMod แล้วคัดลอกโฟลเดอร์ SeaOfSolitude_Data ไปวางทับในโฟลเดอร์หลักของตัวเกม",
-      "กดยืนยันการวางทับไฟล์ทั้งหมด จากนั้นเข้าเกมได้เลย (ใช้สล็อตภาษาอังกฤษเดิมซึ่งจะแสดงเป็น ภาษาไทย ในเมนูการตั้งค่า)"
+      "กดยืนยันการวางทับไฟล์ทั้งหมด จากนั้นเข้าเกมผ่านเมนูตั้งค่าภาษา (เลือกภาษาอังกฤษเดิมซึ่งแสดงผลเป็นภาษาไทย)"
     ],
     "installPathExample": "EA Games\\SeaOfSolitude\\ หรือ Steam\\steamapps\\common\\Sea of Solitude\\",
     "uninstallNote": "ใช้คำสั่งตรวจสอบความสมบูรณ์ของไฟล์เกมบน Steam หรือ ซ่อมแซม (Repair) บน EA App เพื่อคืนค่าต้นฉบับ 100%",
@@ -1732,7 +1732,7 @@ export const MODS: ModEntry[] = [
         "sha256": "b35e7e7aa94baaabd9ce112200c44bc6084b840e619af78c69aadb76ed5076d0",
         "primaryUrl": "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/vvp-v1.0/VenusVacationPRISM_ThaiMod_v1.0.zip",
         "primaryHost": "GitHub Releases",
-        "installNote": "นำโฟลเดอร์ archive และ fdata_package ไปวางทับในโฟลเดอร์หลักของเกมได้เลย กดแทนที่ไฟล์ทั้งหมด",
+        "installNote": "นำโฟลเดอร์ archive และ fdata_package ไปวางทับในโฟลเดอร์หลักของเกม และกดยืนยันการแทนที่ไฟล์ทั้งหมด",
         "backupUrl": "https://drive.google.com/file/d/1cPwqsSi3ZWiqLzAw1sjABQgwx7AoSuxM/view?usp=sharing",
         "backupHost": "Google Drive",
         "knownNotice": "ไม่สามารถลง Nexus Mods ได้เนื่องจากไฟล์เอนจิน Katana (.lnk) ถูกระบบอัตโนมัติกักกัน จึงเปิดให้โหลดโดยตรงผ่านเว็บนี้ (ตัวอักษรขนาดเล็กมากบางจุดอาจมีตกบรรทัดบ้างเล็กน้อย)"
@@ -3000,7 +3000,7 @@ export const MODS: ModEntry[] = [
         "sha256": "f56612ceef57d7f75d70dece94acbb8b5eae4f5a54124122c9c439a0af36f064",
         "primaryUrl": "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/paw-dino-v1.0/PAW_Patrol_Dino_World_Thai_Steam_v1.0.zip",
         "primaryHost": "GitHub Releases",
-        "installNote": "แตกไฟล์แล้วลากโฟลเดอร์ PDW ไปวางรวมในโฟลเดอร์หลักของเกมบน Steam (จัดโครงสร้าง ~mods ไว้ครบแล้ว ไม่ต้องสร้างเอง)",
+        "installNote": "แตกไฟล์แล้วนำโฟลเดอร์ PDW ไปวางรวมในโฟลเดอร์หลักของเกมบน Steam โดยไม่ต้องสร้างโฟลเดอร์ ~mods เพิ่มเติม",
         "backupUrl": "https://drive.google.com/file/d/1P-zpIbXr6fZ_Rx8DYv8UhQ04xsnPpTdx/view?usp=sharing",
         "backupHost": "Google Drive"
       },

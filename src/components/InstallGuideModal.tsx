@@ -6,9 +6,9 @@ import {
   FileCheck2,
   Folder,
   FolderOpen,
+  FolderSearch,
   FolderTree,
   Gamepad2,
-  Info,
   PackageCheck,
   X,
 } from "lucide-react";
@@ -167,12 +167,21 @@ export function InstallGuideModal({
 
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
-              {/* Step 1: Exact items to drag (Always Emerald Green!) */}
-              <div className="rounded-xl p-3.5 bg-emerald-500/[0.07] border border-emerald-400/30 space-y-2">
+              {/* Step 1 (Top): How to locate & open the game directory */}
+              <div className="rounded-xl p-3.5 bg-sky-500/[0.06] border border-sky-400/25 space-y-1.5 text-xs">
+                <div className="flex items-center gap-2 font-semibold text-white">
+                  <FolderSearch className="w-4 h-4 text-sky-400 shrink-0" />
+                  <span>ค้นหาตำแหน่งโฟลเดอร์เกม — {activePlatform.platformLabel}</span>
+                </div>
+                <p className="text-[#d4cedb] leading-relaxed">{activePlatform.howToOpen}</p>
+              </div>
+
+              {/* Step 2: Exact mod files/folders to deploy (Emerald Green) */}
+              <div className="rounded-xl p-3.5 bg-emerald-500/[0.07] border border-emerald-400/30 space-y-2.5">
                 <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                   <span className="inline-flex items-center gap-1.5 font-bold text-white">
                     <PackageCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>สิ่งที่ต้องลากไปวาง (จัดโครงสร้างไว้ครบแล้ว)</span>
+                    <span>ไฟล์สำหรับติดตั้ง</span>
                   </span>
                   <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 whitespace-nowrap">
                     {activePlatform.dragSummary}
@@ -195,16 +204,7 @@ export function InstallGuideModal({
                 </div>
               </div>
 
-              {/* Step 2: How to open game folder */}
-              <div className="rounded-xl p-3.5 bg-white/[0.03] border border-white/[0.08] space-y-1 text-xs">
-                <div className="flex items-center gap-1.5 font-semibold text-white">
-                  <Info className="w-3.5 h-3.5 text-sky-400 shrink-0" />
-                  <span>วิธีเปิดโฟลเดอร์เกม ({activePlatform.platformLabel})</span>
-                </div>
-                <p className="text-[#cbc5d0] leading-relaxed">{activePlatform.howToOpen}</p>
-              </div>
-
-              {/* Step 3: Visual Destination Folder */}
+              {/* Step 3: Destination directory layout */}
               <div className="rounded-xl p-3.5 sm:p-4 bg-black/45 border border-white/10 space-y-2">
                 <div className="flex items-center gap-2 pb-2 border-b border-white/[0.07] text-xs font-semibold text-white">
                   <FolderOpen className="w-4 h-4 text-sky-400 shrink-0" />
@@ -216,15 +216,15 @@ export function InstallGuideModal({
                 </div>
               </div>
 
-              {/* Simple 2-Color Legend */}
+              {/* Clean 2-Color Legend */}
               <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[11px] text-[#9c94a6]">
                 <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
                   <span className="w-2.5 h-2.5 rounded-sm bg-sky-400/80" />
-                  ไฟล์/โฟลเดอร์เดิมของเกม (จุดสังเกต)
+                  ไฟล์และโฟลเดอร์ต้นฉบับของเกม
                 </span>
                 <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
                   <span className="w-2.5 h-2.5 rounded-sm bg-emerald-400" />
-                  ไฟล์/โฟลเดอร์ม็อดที่ต้องลากมาวางตรงนี้
+                  ไฟล์ม็อดสำหรับนำไปวางในตำแหน่งนี้
                 </span>
               </div>
             </div>
