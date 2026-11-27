@@ -109,3 +109,25 @@ export interface BugReportItem {
   status: "รับเรื่องแล้ว" | "กำลังแก้ไข" | "แก้ไขแล้ว";
   createdAt: string;
 }
+
+export type ModRequestStatus =
+  | "รอพิจารณา"
+  | "กำลังทำ"
+  | "ทำเสร็จแล้ว"
+  | "ทำไม่ได้";
+
+export interface ModRequestItem {
+  id: string;
+  gameName: string;
+  steamAppId?: number;
+  steamUrl?: string;
+  headerImage?: string;
+  priceLabel?: string;
+  releaseDate?: string;
+  note?: string;
+  votes: number;
+  status: ModRequestStatus;
+  adminReason?: string;
+  modSlug?: string;
+  createdAt: string;
+}

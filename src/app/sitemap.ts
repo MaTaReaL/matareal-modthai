@@ -19,6 +19,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: `${SITE_CONFIG.siteUrl}/requests`,
+      lastModified: now,
+      changeFrequency: "daily",
+      priority: 0.8,
+    },
     ...modEntries,
   ];
 }

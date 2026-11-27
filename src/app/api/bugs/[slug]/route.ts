@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getModBySlug } from "@/data/mods";
 import { SITE_CONFIG } from "@/data/site";
-import { addBugReport, getBugReports } from "@/lib/store";
+import { addBugReport, deleteBugReport, getBugReports, updateBugStatus } from "@/lib/store";
+import { isCurrentUserAdmin } from "@/lib/admin";
 import type { BugReportItem } from "@/data/types";
 
 export const dynamic = "force-dynamic";
@@ -154,4 +155,37 @@ export async function POST(
   }
 
   return NextResponse.json({ ok: true, report, discordSent });
+}
+
+export async function PATCH(
+  req: NextRequest,
+  context: { params: Promise<{ slug: string }> }
+) {
+  if (!(await isCurrentUserAdmin())) {
+    return NextResponse.json({ error: "เฉพาะแอดมินเท่านั้น" }, { status: 401 });
+  }
+  const { slug } = await context.params;
+  const body = (await req.json()) as { id?: string; status?: BugReportItem["status"] };
+  const valid: BugReportItem["status"][] = ["รับเรื่องแล้ว", "กำลังแก้ไข", "แก้ไขแล้ว"];
+  if (!body.id || !body.status || !valid.includes(body.status)) {
+    return NextResponse.json({ error: "ข้อมูลไม่ถูกต้อง" }, { status: 400 });
+  }
+  const updated = await updateBugStatus(slug, body.id, body.status);
+  if (!updated) return NextResponse.json({ error: "ไม่พบรายการ" }, { status: 404 });
+  return NextResponse.json({ ok: true, report: updated });
+}
+
+export async function DELETE(
+  req: NextRequest,
+  context: { params: Promise<{ slug: string }> }
+) {
+  if (!(await isCurrentUserAdmin())) {
+    return NextResponse.json({ error: "เฉพาะแอดมินเท่านั้น" }, { status: 401 });
+  }
+  const { slug } = await context.params;
+  const id = (req.nextUrl.searchParams.get("id") || "").trim();
+  if (!id) return NextResponse.json({ error: "ไม่พบรหัส" }, { status: 400 });
+  const deleted = await deleteBugReport(slug, id);
+  if (!deleted) return NextResponse.json({ error: "ไม่พบรายการ" }, { status: 404 });
+  return NextResponse.json({ ok: true, id });
 }

@@ -17,6 +17,7 @@ import {
   ImagePlus,
   Images,
   Send,
+  Trash2,
   X,
 } from "lucide-react";
 import type { BugReportItem, ModEntry } from "@/data/types";
@@ -39,6 +40,7 @@ interface ModDetailClientProps {
   initialDownloads: number;
   initialBugs: BugReportItem[];
   steamData: LiveSteamData | null;
+  isAdmin?: boolean;
 }
 
 /** Resize & compress user screenshot client-side so upload + Discord embed + list thumbnail are fast */
@@ -92,6 +94,7 @@ export function ModDetailClient({
   initialDownloads,
   initialBugs,
   steamData,
+  isAdmin = false,
 }: ModDetailClientProps) {
   const [activeTab, setActiveTab] = useState<TabId>("description");
   const [downloads, setDownloads] = useState<number>(initialDownloads);
@@ -636,6 +639,56 @@ export function ModDetailClient({
                               className="max-h-52 w-auto object-contain bg-black"
                             />
                           </button>
+                        )}
+
+                        {isAdmin && (
+                          <div className="pt-2.5 border-t border-amber-300/20 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              {(["รับเรื่องแล้ว", "กำลังแก้ไข", "แก้ไขแล้ว"] as const).map((st) => (
+                                <button
+                                  key={st}
+                                  type="button"
+                                  onClick={async () => {
+                                    const res = await fetch(`/api/bugs/${mod.slug}`, {
+                                      method: "PATCH",
+                                      headers: { "Content-Type": "application/json" },
+                                      body: JSON.stringify({ id: bug.id, status: st }),
+                                    });
+                                    if (res.ok) {
+                                      setBugs((prev) =>
+                                        prev.map((x) => (x.id === bug.id ? { ...x, status: st } : x))
+                                      );
+                                      showToast(`อัปเดตสถานะบัคเป็น "${st}"`);
+                                    }
+                                  }}
+                                  className={`px-2.5 py-1 rounded-md font-semibold transition cursor-pointer ${
+                                    bug.status === st
+                                      ? "bg-emerald-600 text-white"
+                                      : "bg-white/[0.06] hover:bg-white/[0.14] text-white/85"
+                                  }`}
+                                >
+                                  {st}
+                                </button>
+                              ))}
+                            </div>
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                const res = await fetch(
+                                  `/api/bugs/${mod.slug}?id=${encodeURIComponent(bug.id)}`,
+                                  { method: "DELETE" }
+                                );
+                                if (res.ok) {
+                                  setBugs((prev) => prev.filter((x) => x.id !== bug.id));
+                                  showToast("ลบรายการบัคแล้ว");
+                                }
+                              }}
+                              className="p-1.5 rounded-md bg-white/[0.06] hover:bg-rose-600 text-white/80 hover:text-white transition cursor-pointer"
+                              aria-label="ลบบัค"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         )}
                       </div>
                     ))

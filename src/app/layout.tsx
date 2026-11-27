@@ -4,6 +4,7 @@ import { SITE_CONFIG } from "@/data/site";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AmbientBackdrop } from "@/components/AmbientBackdrop";
+import { AdminBar } from "@/components/AdminBar";
 import "./globals.css";
 
 const ibmThai = IBM_Plex_Sans_Thai({
@@ -111,6 +112,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen flex flex-col text-white selection:bg-[#ff4d8d]/35 selection:text-white">
         <AmbientBackdrop />
+        <AdminBar />
         <Navbar />
         <main className="flex-1 relative z-10">{children}</main>
         <Footer />

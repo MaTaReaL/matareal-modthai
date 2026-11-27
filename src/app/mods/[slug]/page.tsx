@@ -4,6 +4,7 @@ import { getAllModSlugs, getModBySlug } from "@/data/mods";
 import { SITE_CONFIG } from "@/data/site";
 import { fetchLiveSteamData } from "@/lib/steam";
 import { getBugReports, getDownloadCount } from "@/lib/store";
+import { isCurrentUserAdmin } from "@/lib/admin";
 import { ModDetailClient } from "@/components/ModDetailClient";
 
 export const dynamic = "force-dynamic";
@@ -83,10 +84,11 @@ export default async function ModDetailPage({
 
   const steamStore = mod.stores.find((s) => s.platform === "steam" && s.steamAppId);
 
-  const [downloads, bugs, steamData] = await Promise.all([
+  const [downloads, bugs, steamData, isAdmin] = await Promise.all([
     getDownloadCount(mod.slug),
     getBugReports(mod.slug),
     fetchLiveSteamData(steamStore?.steamAppId, mod.fallbackSteam),
+    isCurrentUserAdmin(),
   ]);
 
   const pageUrl = `${SITE_CONFIG.siteUrl}/mods/${mod.slug}`;
@@ -171,6 +173,7 @@ export default async function ModDetailPage({
         initialDownloads={downloads}
         initialBugs={bugs}
         steamData={steamData}
+        isAdmin={isAdmin}
       />
     </>
   );

@@ -1,10 +1,11 @@
 import fs from "fs/promises";
 import path from "path";
-import type { BugReportItem } from "@/data/types";
+import type { BugReportItem, ModRequestItem, ModRequestStatus } from "@/data/types";
 
 interface LocalStoreSchema {
   downloads: Record<string, number>;
   bugs: Record<string, BugReportItem[]>;
+  requests: ModRequestItem[];
   visits: number;
 }
 
@@ -17,6 +18,7 @@ export interface SiteStats {
 
 const LOCAL_STORE_PATH = path.join(process.cwd(), ".local-data.json");
 const RATE_LIMIT_MAP = new Map<string, number>();
+const LOGIN_FAIL_MAP = new Map<string, { count: number; resetAt: number }>();
 const LOCAL_ONLINE_MAP = new Map<string, number>();
 
 function getRedisConfig(): { url: string; token: string } | null {
@@ -58,10 +60,11 @@ async function readLocalStore(): Promise<LocalStoreSchema> {
     return {
       downloads: parsed.downloads || {},
       bugs: parsed.bugs || {},
+      requests: parsed.requests || [],
       visits: parsed.visits || 0,
     };
   } catch {
-    return { downloads: {}, bugs: {}, visits: 0 };
+    return { downloads: {}, bugs: {}, requests: [], visits: 0 };
   }
 }
 
@@ -72,6 +75,46 @@ async function writeLocalStore(data: LocalStoreSchema): Promise<void> {
     // Serverless read-only FS fallback when Redis is not configured
   }
 }
+
+/* ==================== ADMIN BRUTE-FORCE GUARD ==================== */
+
+export async function checkAdminLoginAllowed(clientIp: string): Promise<boolean> {
+  const key = `admin_fail:${clientIp}`;
+  if (hasUpstash()) {
+    const count = Number(await upstashCmd<string | number>(["GET", key])) || 0;
+    return count < 5;
+  }
+  const entry = LOGIN_FAIL_MAP.get(key);
+  if (!entry || entry.resetAt < Date.now()) return true;
+  return entry.count < 5;
+}
+
+export async function recordAdminLoginFailure(clientIp: string): Promise<void> {
+  const key = `admin_fail:${clientIp}`;
+  if (hasUpstash()) {
+    const c = Number(await upstashCmd<number>(["INCR", key])) || 1;
+    if (c === 1) await upstashCmd(["EXPIRE", key, 900]); // 15-minute lockout window
+    return;
+  }
+  const now = Date.now();
+  const entry = LOGIN_FAIL_MAP.get(key);
+  if (!entry || entry.resetAt < now) {
+    LOGIN_FAIL_MAP.set(key, { count: 1, resetAt: now + 900_000 });
+  } else {
+    entry.count += 1;
+  }
+}
+
+export async function clearAdminLoginFailures(clientIp: string): Promise<void> {
+  const key = `admin_fail:${clientIp}`;
+  if (hasUpstash()) {
+    await upstashCmd(["DEL", key]);
+    return;
+  }
+  LOGIN_FAIL_MAP.delete(key);
+}
+
+/* ==================== DOWNLOADS & PRESENCE ==================== */
 
 export async function getDownloadCount(slug: string): Promise<number> {
   if (hasUpstash()) {
@@ -111,7 +154,6 @@ export async function getSiteStats(slugs: string[]): Promise<SiteStats> {
     };
   }
 
-  // Local dev fallback
   for (const [sid, ts] of LOCAL_ONLINE_MAP.entries()) {
     if (nowSec - ts > 120) LOCAL_ONLINE_MAP.delete(sid);
   }
@@ -124,11 +166,6 @@ export async function getSiteStats(slugs: string[]): Promise<SiteStats> {
   };
 }
 
-/**
- * Heartbeat + Visit counter backed by Upstash Redis Sorted Set.
- * Online users stay counted for 2 minutes since last heartbeat.
- * Total visits debounced once per 30 minutes per IP so F5 refreshes don't spam.
- */
 export async function recordPresence(
   sessionId: string,
   clientIp: string,
@@ -169,10 +206,6 @@ export async function recordPresence(
   return getSiteStats(allSlugs);
 }
 
-/**
- * Increments real download count with lightweight IP debounce (5 minutes)
- * so spamming F5 or double-clicking doesn't inflate real download stats.
- */
 export async function recordDownload(
   slug: string,
   clientIp: string
@@ -204,9 +237,11 @@ export async function recordDownload(
   return { count: store.downloads[slug], counted: true };
 }
 
+/* ==================== BUG REPORTS ==================== */
+
 export async function getBugReports(slug: string): Promise<BugReportItem[]> {
   if (hasUpstash()) {
-    const rawList = await upstashCmd<string[]>(["LRANGE", `bugs:${slug}`, 0, 49]);
+    const rawList = await upstashCmd<string[]>(["LRANGE", `bugs:${slug}`, 0, 99]);
     if (!Array.isArray(rawList)) return [];
     return rawList
       .map((item) => {
@@ -221,6 +256,19 @@ export async function getBugReports(slug: string): Promise<BugReportItem[]> {
 
   const store = await readLocalStore();
   return store.bugs[slug] || [];
+}
+
+async function saveBugReportsList(slug: string, list: BugReportItem[]): Promise<void> {
+  if (hasUpstash()) {
+    await upstashCmd(["DEL", `bugs:${slug}`]);
+    if (list.length > 0) {
+      await upstashCmd(["RPUSH", `bugs:${slug}`, ...list.map((b) => JSON.stringify(b))]);
+    }
+    return;
+  }
+  const store = await readLocalStore();
+  store.bugs[slug] = list;
+  await writeLocalStore(store);
 }
 
 export async function addBugReport(
@@ -253,4 +301,142 @@ export async function addBugReport(
   store.bugs[slug] = list.slice(0, 100);
   await writeLocalStore(store);
   return { ok: true };
+}
+
+export async function updateBugStatus(
+  slug: string,
+  bugId: string,
+  status: BugReportItem["status"]
+): Promise<BugReportItem | null> {
+  const list = await getBugReports(slug);
+  const idx = list.findIndex((b) => b.id === bugId);
+  if (idx === -1) return null;
+  list[idx] = { ...list[idx], status };
+  await saveBugReportsList(slug, list);
+  return list[idx];
+}
+
+export async function deleteBugReport(slug: string, bugId: string): Promise<boolean> {
+  const list = await getBugReports(slug);
+  const filtered = list.filter((b) => b.id !== bugId);
+  if (filtered.length === list.length) return false;
+  await saveBugReportsList(slug, filtered);
+  return true;
+}
+
+/* ==================== MOD REQUEST BOARD ==================== */
+
+export async function getModRequests(): Promise<ModRequestItem[]> {
+  if (hasUpstash()) {
+    const raw = await upstashCmd<string>(["GET", "site:mod_requests"]);
+    if (!raw) return [];
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? (parsed as ModRequestItem[]) : [];
+    } catch {
+      return [];
+    }
+  }
+  const store = await readLocalStore();
+  return store.requests || [];
+}
+
+async function saveModRequests(list: ModRequestItem[]): Promise<void> {
+  if (hasUpstash()) {
+    await upstashCmd(["SET", "site:mod_requests", JSON.stringify(list.slice(0, 200))]);
+    return;
+  }
+  const store = await readLocalStore();
+  store.requests = list.slice(0, 200);
+  await writeLocalStore(store);
+}
+
+export async function addModRequest(
+  item: ModRequestItem,
+  clientIp: string
+): Promise<{ ok: boolean; error?: string; existing?: ModRequestItem }> {
+  const rlKey = `req_rl:${clientIp}`;
+  if (hasUpstash()) {
+    const lock = await upstashCmd<string | null>(["SET", rlKey, "1", "EX", 45, "NX"]);
+    if (lock !== "OK") {
+      return { ok: false, error: "เสนอเกมถี่เกินไป กรุณารอ 45 วินาทีแล้วลองใหม่ครับ" };
+    }
+  } else {
+    const last = RATE_LIMIT_MAP.get(rlKey) || 0;
+    if (Date.now() - last < 8_000) {
+      return { ok: false, error: "เสนอเกมถี่เกินไป กรุณารอสักครู่ครับ" };
+    }
+    RATE_LIMIT_MAP.set(rlKey, Date.now());
+  }
+
+  const list = await getModRequests();
+  // Prevent duplicate Steam AppID or exact same game name
+  const dup = list.find(
+    (r) =>
+      (item.steamAppId && r.steamAppId === item.steamAppId) ||
+      r.gameName.trim().toLowerCase() === item.gameName.trim().toLowerCase()
+  );
+  if (dup) {
+    return {
+      ok: false,
+      existing: dup,
+      error: `เกม "${dup.gameName}" มีผู้เสนอไว้แล้ว สามารถกดโหวตสนับสนุนรายการเดิมได้เลยครับ`,
+    };
+  }
+
+  list.unshift(item);
+  await saveModRequests(list);
+  return { ok: true };
+}
+
+export async function voteModRequest(
+  requestId: string,
+  clientIp: string
+): Promise<{ ok: boolean; item?: ModRequestItem; error?: string }> {
+  const voteKey = `req_vote:${requestId}:${clientIp}`;
+  if (hasUpstash()) {
+    const lock = await upstashCmd<string | null>(["SET", voteKey, "1", "EX", 86400 * 30, "NX"]);
+    if (lock !== "OK") {
+      return { ok: false, error: "คุณโหวตเกมนี้ไปแล้วครับ" };
+    }
+  } else {
+    if (RATE_LIMIT_MAP.has(voteKey)) {
+      return { ok: false, error: "คุณโหวตเกมนี้ไปแล้วครับ" };
+    }
+    RATE_LIMIT_MAP.set(voteKey, Date.now());
+  }
+
+  const list = await getModRequests();
+  const idx = list.findIndex((r) => r.id === requestId);
+  if (idx === -1) return { ok: false, error: "ไม่พบรายการที่เลือก" };
+
+  list[idx] = { ...list[idx], votes: (list[idx].votes || 1) + 1 };
+  await saveModRequests(list);
+  return { ok: true, item: list[idx] };
+}
+
+export async function updateModRequestAdmin(
+  requestId: string,
+  patch: { status: ModRequestStatus; adminReason?: string; modSlug?: string }
+): Promise<ModRequestItem | null> {
+  const list = await getModRequests();
+  const idx = list.findIndex((r) => r.id === requestId);
+  if (idx === -1) return null;
+
+  list[idx] = {
+    ...list[idx],
+    status: patch.status,
+    adminReason: patch.adminReason !== undefined ? patch.adminReason.trim().slice(0, 300) : list[idx].adminReason,
+    modSlug: patch.modSlug !== undefined ? patch.modSlug.trim().slice(0, 120) : list[idx].modSlug,
+  };
+  await saveModRequests(list);
+  return list[idx];
+}
+
+export async function deleteModRequestAdmin(requestId: string): Promise<boolean> {
+  const list = await getModRequests();
+  const filtered = list.filter((r) => r.id !== requestId);
+  if (filtered.length === list.length) return false;
+  await saveModRequests(filtered);
+  return true;
 }
