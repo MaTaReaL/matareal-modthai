@@ -50,6 +50,27 @@ interface ModDetailClientProps {
   isAdmin?: boolean;
 }
 
+/** Highlights file names, folder names, and paths inside install/uninstall text so players spot them instantly */
+const INSTALL_TOKEN_REGEX =
+  /((?:[A-Za-z]:\\)?(?:[A-Za-z0-9_~.-]+\\)+[A-Za-z0-9_~.*-]*|[A-Za-z0-9_.-]+\.(?:zip|7z|exe|dll|ini|pak|utoc|ucas|ttf|otf|csv|json|bin|lnk|fdata|rdb|txt|md)|\.doorstop_version|\b(?:SOS_ThaiMod|SeaOfSolitude_Data|Mod_Files|ThaiMod(?:_EP[1-5]|_ScratchCreek)?|BepInEx|dotnet|archive|fdata_package|media|PIO|Routine|Denshattack_Proto|GoriCuddlyCarnage|terrible_lizards|HITC_Data|Content|Paks)\b|~mods)/g;
+
+function renderHighlightedPaths(text: string): React.ReactNode {
+  const parts = text.split(INSTALL_TOKEN_REGEX);
+  return parts.map((part, i) => {
+    if (i % 2 === 1) {
+      return (
+        <code
+          key={i}
+          className="inline-block px-1.5 py-0.5 mx-0.5 rounded-md font-mono text-[11px] sm:text-xs font-semibold bg-emerald-500/14 text-emerald-200 border border-emerald-400/30 align-baseline"
+        >
+          {part}
+        </code>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 /** Resize & compress user screenshot client-side so upload + Discord embed + list thumbnail are fast */
 async function prepareBugImage(file: File): Promise<{ uploadFile: File; previewDataUrl: string }> {
   return new Promise((resolve, reject) => {
@@ -441,10 +462,10 @@ export function ModDetailClient({
                     <h2 className="font-display text-sm font-bold text-white">
                       วิธีติดตั้ง
                     </h2>
-                    <ol className="space-y-2 text-sm text-[#cbc5d0] list-decimal pl-5 marker:text-[#ff77a9] marker:font-semibold">
+                    <ol className="space-y-2.5 text-sm text-[#cbc5d0] list-decimal pl-5 marker:text-[#ff77a9] marker:font-semibold">
                       {mod.installSteps.map((step, idx) => (
                         <li key={idx} className="leading-relaxed">
-                          {step}
+                          {renderHighlightedPaths(step)}
                         </li>
                       ))}
                     </ol>
@@ -454,9 +475,9 @@ export function ModDetailClient({
                         <button
                           type="button"
                           onClick={() => setInstallGuideOpen(true)}
-                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-white/[0.05] hover:bg-[#ff4d8d]/18 border border-white/14 hover:border-[#ff4d8d]/50 text-white transition cursor-pointer"
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-emerald-500/12 hover:bg-emerald-500/22 border border-emerald-400/35 hover:border-emerald-400/60 text-emerald-200 hover:text-white transition cursor-pointer"
                         >
-                          <FolderTree className="w-4 h-4 text-[#ff77a9] shrink-0" />
+                          <FolderTree className="w-4 h-4 text-emerald-400 shrink-0" />
                           <span>ดูตัวอย่างตำแหน่งวางไฟล์</span>
                         </button>
                       </div>
@@ -464,7 +485,7 @@ export function ModDetailClient({
 
                     <p className="text-xs text-[#8a8293] leading-relaxed">
                       <strong className="text-[#cbc5d0]">การถอนการติดตั้ง:</strong>{" "}
-                      {mod.uninstallNote}
+                      {renderHighlightedPaths(mod.uninstallNote)}
                     </p>
                   </div>
 
@@ -614,7 +635,7 @@ export function ModDetailClient({
                     </div>
 
                     <div className="rounded-xl p-4 bg-white/[0.03] border border-white/[0.07] space-y-2 text-xs leading-relaxed">
-                      <p className="text-[#d4ced9]">{file.installNote}</p>
+                      <p className="text-[#d4ced9]">{renderHighlightedPaths(file.installNote)}</p>
                       {file.knownNotice && (
                         <p className="text-amber-300/90 flex items-start gap-2">
                           <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />

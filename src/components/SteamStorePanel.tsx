@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ExternalLink, Cpu, Clock } from "lucide-react";
+import { Award, ExternalLink, Cpu, Clock } from "lucide-react";
 import type { StoreLink, StorePlatform } from "@/data/types";
 import type { LiveSteamData } from "@/lib/steam";
 import { MetacriticLogo, OpenCriticLogo, SteamLogo, StoreLogo } from "./BrandIcons";
@@ -104,25 +104,34 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
             </div>
 
             {steamData && (
-              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-[#8a8293]">
-                {steamData.isLive && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/12 text-emerald-300 border border-emerald-400/25">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    Live
-                  </span>
-                )}
-                {steamData.developers[0] && <span>{steamData.developers[0]}</span>}
-                {steamData.releaseDate && (
-                  <>
-                    <span>•</span>
-                    <span>{steamData.releaseDate}</span>
-                  </>
-                )}
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[#8a8293]">
+                  {steamData.isLive && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/12 text-emerald-300 border border-emerald-400/25 whitespace-nowrap shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      Live
+                    </span>
+                  )}
+                  {steamData.developers[0] && (
+                    <span className="whitespace-nowrap">{steamData.developers[0]}</span>
+                  )}
+                  {steamData.releaseDate && (
+                    <span className="whitespace-nowrap text-[#7c7486]">
+                      · {steamData.releaseDate}
+                    </span>
+                  )}
+                </div>
                 {steamData.genres.length > 0 && (
-                  <>
-                    <span>•</span>
-                    <span>{steamData.genres.join(", ")}</span>
-                  </>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {steamData.genres.map((g) => (
+                      <span
+                        key={g}
+                        className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-white/[0.05] border border-white/[0.08] text-[#b4acc0] whitespace-nowrap"
+                      >
+                        {g}
+                      </span>
+                    ))}
+                  </div>
                 )}
               </div>
             )}
@@ -205,19 +214,19 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {/* Block 1: Unified Steam Reviews (ALWAYS pairs All-Time + Recent 30d together) */}
+          {/* Block 1: Unified Steam Reviews (ALWAYS pairs All-Time + Recent 30d together, never wraps mid-word) */}
           <div className="rounded-xl p-3.5 bg-white/[0.03] border border-white/[0.09] space-y-2.5">
-            <div className="flex items-center gap-2 text-xs font-bold text-white">
+            <div className="flex items-center gap-2 text-xs font-bold text-white whitespace-nowrap">
               <SteamLogo className="w-4 h-4 shrink-0" />
               <span>รีวิวผู้เล่นบน Steam</span>
             </div>
 
-            <div className="space-y-1.5 text-xs">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[#9c94a6] whitespace-nowrap">บทวิจารณ์ทั้งหมด</span>
+            <div className="space-y-2 text-[11px] sm:text-xs">
+              <div className="flex items-center justify-between gap-2 min-w-0">
+                <span className="text-[#9c94a6] whitespace-nowrap shrink-0">ทั้งหมด</span>
                 {steamData?.steamReview ? (
                   <span
-                    className={`inline-flex items-center gap-1.5 font-semibold text-right ${
+                    className={`inline-flex items-center gap-1.5 font-semibold whitespace-nowrap shrink-0 ${
                       steamData.steamReview.percentPositive >= 70
                         ? "text-[#66c0f4]"
                         : steamData.steamReview.percentPositive >= 40
@@ -228,20 +237,20 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
                     <span>
                       {steamData.steamReview.percentPositive}% {steamData.steamReview.label}
                     </span>
-                    <span className="text-[11px] text-[#8a8293] font-normal tabular-nums">
+                    <span className="text-[10px] sm:text-[11px] text-[#8a8293] font-normal tabular-nums">
                       ({steamData.steamReview.reviewCount.toLocaleString("en-US")})
                     </span>
                   </span>
                 ) : (
-                  <span className="text-[#7c7486]">ยังไม่มีคะแนน</span>
+                  <span className="text-[#7c7486] whitespace-nowrap">ยังไม่มีคะแนน</span>
                 )}
               </div>
 
-              <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-white/[0.06]">
-                <span className="text-[#9c94a6] whitespace-nowrap">บทวิจารณ์ล่าสุด (30 วัน)</span>
+              <div className="flex items-center justify-between gap-2 pt-2 border-t border-white/[0.06] min-w-0">
+                <span className="text-[#9c94a6] whitespace-nowrap shrink-0">ล่าสุด (30 วัน)</span>
                 {steamData?.steamRecentReview ? (
                   <span
-                    className={`inline-flex items-center gap-1.5 font-semibold text-right ${
+                    className={`inline-flex items-center gap-1.5 font-semibold whitespace-nowrap shrink-0 ${
                       steamData.steamRecentReview.percentPositive >= 70
                         ? "text-[#66c0f4]"
                         : steamData.steamRecentReview.percentPositive >= 40
@@ -252,28 +261,28 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
                     <span>
                       {steamData.steamRecentReview.percentPositive}% {steamData.steamRecentReview.label}
                     </span>
-                    <span className="text-[11px] text-[#8a8293] font-normal tabular-nums">
+                    <span className="text-[10px] sm:text-[11px] text-[#8a8293] font-normal tabular-nums">
                       ({steamData.steamRecentReview.reviewCount.toLocaleString("en-US")})
                     </span>
                   </span>
                 ) : (
-                  <span className="text-[#7c7486]">ยังไม่มีคะแนน</span>
+                  <span className="text-[#7c7486] whitespace-nowrap">ยังไม่มีคะแนน</span>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Block 2: Unified Critic Scores (ALWAYS pairs Metacritic + OpenCritic together) */}
+          {/* Block 2: Unified Critic Scores (Distinct Award header icon — no duplicate Metacritic logo!) */}
           <div className="rounded-xl p-3.5 bg-white/[0.03] border border-white/[0.09] space-y-2.5">
-            <div className="flex items-center gap-2 text-xs font-bold text-white">
-              <MetacriticLogo className="w-4 h-4 shrink-0" />
+            <div className="flex items-center gap-2 text-xs font-bold text-white whitespace-nowrap">
+              <Award className="w-4 h-4 text-amber-400 shrink-0" />
               <span>คะแนนสื่อวิจารณ์</span>
             </div>
 
-            <div className="space-y-1.5 text-xs">
+            <div className="space-y-2 text-[11px] sm:text-xs">
               {/* Metacritic Row */}
-              <div className="flex items-center justify-between gap-2">
-                <span className="inline-flex items-center gap-1.5 text-[#cbc5d0] font-medium">
+              <div className="flex items-center justify-between gap-2 min-w-0">
+                <span className="inline-flex items-center gap-1.5 text-[#cbc5d0] font-medium whitespace-nowrap shrink-0">
                   <MetacriticLogo className="w-3.5 h-3.5 shrink-0" />
                   <span>Metacritic</span>
                 </span>
@@ -282,7 +291,7 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
                     href={steamData.metacritic.url || "https://www.metacritic.com/"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 hover:opacity-85 transition"
+                    className="inline-flex items-center gap-1.5 hover:opacity-85 transition whitespace-nowrap shrink-0"
                   >
                     <span
                       className={`px-2 py-0.5 rounded font-mono text-[11px] font-extrabold ${getMetacriticTone(
@@ -294,13 +303,13 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
                     <ExternalLink className="w-3 h-3 text-[#8a8293]" />
                   </a>
                 ) : (
-                  <span className="text-[#7c7486]">ยังไม่มีคะแนน</span>
+                  <span className="text-[#7c7486] whitespace-nowrap">ยังไม่มีคะแนน</span>
                 )}
               </div>
 
               {/* OpenCritic Row */}
-              <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-white/[0.06]">
-                <span className="inline-flex items-center gap-1.5 text-[#cbc5d0] font-medium">
+              <div className="flex items-center justify-between gap-2 pt-2 border-t border-white/[0.06] min-w-0">
+                <span className="inline-flex items-center gap-1.5 text-[#cbc5d0] font-medium whitespace-nowrap shrink-0">
                   <OpenCriticLogo className="w-3.5 h-3.5 shrink-0" />
                   <span>OpenCritic</span>
                 </span>
@@ -309,7 +318,7 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
                     href={steamData.openCritic.url || "https://opencritic.com/"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 hover:opacity-85 transition"
+                    className="inline-flex items-center gap-1.5 hover:opacity-85 transition whitespace-nowrap shrink-0"
                   >
                     {steamData.openCritic.tier && (
                       <span className="text-[11px] text-[#a69eb0]">
@@ -327,7 +336,7 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
                     <ExternalLink className="w-3 h-3 text-[#8a8293]" />
                   </a>
                 ) : (
-                  <span className="text-[#7c7486]">ยังไม่มีคะแนน</span>
+                  <span className="text-[#7c7486] whitespace-nowrap">ยังไม่มีคะแนน</span>
                 )}
               </div>
             </div>

@@ -900,9 +900,6 @@ export function HomeClient({
             <div className="lg:col-span-4 glass-panel spot-card rounded-2xl p-4 sm:p-5 lg:p-6 flex flex-col md:grid md:grid-cols-12 md:items-center lg:flex lg:flex-col lg:items-stretch lg:justify-between gap-4">
               <div className="relative z-10 md:col-span-7 lg:col-span-12 space-y-3 sm:space-y-4">
                 <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
-                  <span className="px-2 py-0.5 rounded-md bg-emerald-500/18 text-emerald-300 border border-emerald-400/35">
-                    ฟรี
-                  </span>
                   <span className="inline-flex items-center gap-1.5 text-[#9c94a6]">
                     {getPcPlatforms(currentMod).map((p) => (
                       <StoreLogo key={p} platform={p} className="w-3.5 h-3.5" />
