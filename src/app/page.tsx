@@ -1,6 +1,6 @@
 import { MODS } from "@/data/mods";
 import { SITE_CONFIG } from "@/data/site";
-import { fetchLiveSteamData, type LiveSteamData } from "@/lib/steam";
+import { fetchBatchSteamSummary } from "@/lib/steam";
 import { getAllDownloadCounts, getSiteStats } from "@/lib/store";
 import { HomeClient } from "@/components/HomeClient";
 
@@ -9,19 +9,11 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const slugs = MODS.map((m) => m.slug);
 
-  const [counts, initialStats, steamList] = await Promise.all([
+  const [counts, initialStats, steamMap] = await Promise.all([
     getAllDownloadCounts(slugs),
     getSiteStats(slugs),
-    Promise.all(
-      MODS.map(async (m) => {
-        const steamStore = m.stores.find((s) => s.platform === "steam" && s.steamAppId);
-        const data = await fetchLiveSteamData(steamStore?.steamAppId, m.fallbackSteam);
-        return [m.slug, data] as const;
-      })
-    ),
+    fetchBatchSteamSummary(MODS),
   ]);
-
-  const steamMap: Record<string, LiveSteamData | null> = Object.fromEntries(steamList);
 
   // Long-term SEO Knowledge Graph: WebSite + Creator Entity (sameAs) + Mod Hub ItemList
   const structuredData = [

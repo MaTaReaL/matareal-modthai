@@ -41,6 +41,9 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
         m.gameTitle.toLowerCase().includes(q) ||
         m.thaiTitle.toLowerCase().includes(q) ||
         m.shortDescription.toLowerCase().includes(q) ||
+        m.genres.some((g) => g.toLowerCase().includes(q)) ||
+        (m.series?.name.toLowerCase().includes(q) ?? false) ||
+        (m.series?.thaiName?.toLowerCase().includes(q) ?? false) ||
         m.tags.some((t) => t.toLowerCase().includes(q)) ||
         m.specs.aiModel.toLowerCase().includes(q)
     );

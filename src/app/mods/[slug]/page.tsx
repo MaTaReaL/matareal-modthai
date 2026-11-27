@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllModSlugs, getModBySlug } from "@/data/mods";
+import { getAllModSlugs, getModBySlug, getModsBySeries } from "@/data/mods";
 import { SITE_CONFIG } from "@/data/site";
 import { fetchLiveSteamData } from "@/lib/steam";
 import { getBugReports, getDownloadCount } from "@/lib/store";
@@ -26,7 +26,6 @@ export async function generateMetadata({
   const description = `${mod.shortDescription} | โดย ${SITE_CONFIG.authorName} — โหลดตรงเต็มสปีดพร้อมคู่มือติดตั้ง`;
   const canonicalUrl = `${SITE_CONFIG.siteUrl}/mods/${mod.slug}`;
 
-  // Auto-generate core Thai/English search intent keywords for EVERY future game
   const autoKeywords = Array.from(
     new Set([
       `${mod.gameTitle} ม็อดไทย`,
@@ -83,17 +82,22 @@ export default async function ModDetailPage({
   if (!mod) notFound();
 
   const steamStore = mod.stores.find((s) => s.platform === "steam" && s.steamAppId);
+  const seriesMods = mod.series ? getModsBySeries(mod.series.id) : [];
 
   const [downloads, bugs, steamData, isAdmin] = await Promise.all([
     getDownloadCount(mod.slug),
     getBugReports(mod.slug),
-    fetchLiveSteamData(steamStore?.steamAppId, mod.fallbackSteam),
+    fetchLiveSteamData(
+      steamStore?.steamAppId,
+      mod.fallbackSteam,
+      mod.critics,
+      mod.estimatedPriceThb
+    ),
     isCurrentUserAdmin(),
   ]);
 
   const pageUrl = `${SITE_CONFIG.siteUrl}/mods/${mod.slug}`;
 
-  // Rich Structured Data for Google Search (SoftwareApplication + BreadcrumbList + FAQPage)
   const jsonLd = [
     {
       "@context": "https://schema.org",
@@ -170,6 +174,7 @@ export default async function ModDetailPage({
       />
       <ModDetailClient
         mod={mod}
+        seriesMods={seriesMods}
         initialDownloads={downloads}
         initialBugs={bugs}
         steamData={steamData}

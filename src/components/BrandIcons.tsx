@@ -5,6 +5,7 @@ import {
   siPlaystation,
   siEpicgames,
   siGogdotcom,
+  siEa,
   siGithub,
   siDiscord,
   siMetacritic,
@@ -85,9 +86,23 @@ export function PlayStationLogo({ className = "w-4 h-4" }: IconProps) {
   );
 }
 
+/** Official Nintendo Switch Joy-Con Mark */
+export function NintendoLogo({ className = "w-4 h-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="#E60012" className={className} aria-label="Nintendo">
+      <path d="M10.4 2H6.6C4.06 2 2 4.06 2 6.6v10.8C2 19.94 4.06 22 6.6 22h3.8c.33 0 .6-.27.6-.6V2.6c0-.33-.27-.6-.6-.6zM9.2 20.1H6.6c-1.49 0-2.7-1.21-2.7-2.7V6.6c0-1.49 1.21-2.7 2.7-2.7h2.6v16.2zM6.55 6.5a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3zM17.4 2h-3.8c-.33 0-.6.27-.6.6v18.8c0 .33.27.6.6.6h3.8c2.54 0 4.6-2.06 4.6-4.6V6.6C22 4.06 19.94 2 17.4 2zm-.15 13.7a1.85 1.85 0 1 1 0-3.7 1.85 1.85 0 0 1 0 3.7z" />
+    </svg>
+  );
+}
+
 /** Official Epic Games Shield */
 export function EpicLogo({ className = "w-4 h-4" }: IconProps) {
   return <SimpleIconSvg path={siEpicgames.path} color="#FFFFFF" className={className} title="Epic Games" />;
+}
+
+/** Official EA App Mark */
+export function EaLogo({ className = "w-4 h-4" }: IconProps) {
+  return <SimpleIconSvg path={siEa.path} color="#FF4747" className={className} title="EA App" />;
 }
 
 /** Official GOG Mark */
@@ -106,10 +121,8 @@ export function NexusModsLogo({ className = "w-4 h-4" }: IconProps) {
           <stop offset="100%" stopColor="#D67422" />
         </radialGradient>
       </defs>
-      {/* Subtle dark outline backing + iconic orange sphere */}
       <circle cx="32" cy="32" r="29" fill="#0B0B0D" />
       <circle cx="32" cy="32" r="24" fill="url(#nexusSphere)" />
-      {/* 4 symmetric inward-pointing curved white arrows (90-degree rotation) */}
       {[0, 90, 180, 270].map((deg) => (
         <g key={deg} transform={`rotate(${deg} 32 32)`}>
           <path
@@ -151,6 +164,20 @@ export function DiscordLogo({ className = "w-4 h-4" }: IconProps) {
 export function MetacriticLogo({ className = "w-4 h-4" }: IconProps) {
   return (
     <SimpleIconSvg path={siMetacritic.path} color="#FFCC34" className={className} title="Metacritic" />
+  );
+}
+
+/** OpenCritic Starburst Face Emblem */
+export function OpenCriticLogo({ className = "w-4 h-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-label="OpenCritic">
+      <circle cx="12" cy="12" r="10.5" fill="#FC430A" />
+      <path
+        fill="#FFFFFF"
+        d="M12 5.2c-3.75 0-6.8 3.05-6.8 6.8s3.05 6.8 6.8 6.8 6.8-3.05 6.8-6.8-3.05-6.8-6.8-6.8zm0 11.1c-2.37 0-4.3-1.93-4.3-4.3S9.63 7.7 12 7.7s4.3 1.93 4.3 4.3-1.93 4.3-4.3 4.3z"
+      />
+      <circle cx="12" cy="12" r="2.1" fill="#FFD166" />
+    </svg>
   );
 }
 
@@ -226,6 +253,28 @@ export function KatanaEngineLogo({ className = "w-4 h-4" }: IconProps) {
   );
 }
 
+/** ForzaTech Engine Mark */
+export function ForzaTechLogo({ className = "w-4 h-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-label="ForzaTech">
+      <path
+        fill="#F43F5E"
+        d="M4 5h16l-2.2 4H9.4l-1.1 2.2H16l-2 3.8H6.4L4.2 19H1.5L4 5zm13.2 9.5L22 19h-4.4l-2.8-4.5h2.4z"
+      />
+    </svg>
+  );
+}
+
+/** id Tech Engine Mark */
+export function IdTechLogo({ className = "w-4 h-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-label="id Tech">
+      <rect x="2" y="2" width="20" height="20" rx="4" fill="#DC2626" />
+      <path fill="#FFFFFF" d="M6.5 9.2h2.6v8.3H6.5V9.2zm0-3h2.6v2H6.5v-2zm4.8 3h3.6c2.5 0 4.1 1.6 4.1 4.15S17.4 17.5 14.9 17.5h-3.6V9.2zm2.6 2.1v4.1h1c1.1 0 1.6-.7 1.6-2.05s-.5-2.05-1.6-2.05h-1z" />
+    </svg>
+  );
+}
+
 /** Auto-selects real brand logo for a store platform */
 export function StoreLogo({
   platform,
@@ -241,8 +290,12 @@ export function StoreLogo({
       return <XboxLogo className={className} />;
     case "playstation":
       return <PlayStationLogo className={className} />;
+    case "nintendo":
+      return <NintendoLogo className={className} />;
     case "epic":
       return <EpicLogo className={className} />;
+    case "ea":
+      return <EaLogo className={className} />;
     case "gog":
       return <GogLogo className={className} />;
   }
@@ -279,18 +332,6 @@ export function AiModelLogos({
   return <span className="inline-flex items-center gap-1 shrink-0">{logos}</span>;
 }
 
-/** ForzaTech Engine Mark */
-export function ForzaTechLogo({ className = "w-4 h-4" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-label="ForzaTech">
-      <path
-        fill="#F43F5E"
-        d="M4 5h16l-2.2 4H9.4l-1.1 2.2H16l-2 3.8H6.4L4.2 19H1.5L4 5zm13.2 9.5L22 19h-4.4l-2.8-4.5h2.4z"
-      />
-    </svg>
-  );
-}
-
 /** Auto-detects official game engine logo */
 export function EngineLogo({
   engine,
@@ -305,6 +346,7 @@ export function EngineLogo({
   if (lower.includes("godot")) return <GodotLogo className={className} />;
   if (lower.includes("katana")) return <KatanaEngineLogo className={className} />;
   if (lower.includes("forzatech") || lower.includes("forza")) return <ForzaTechLogo className={className} />;
+  if (lower.includes("id tech")) return <IdTechLogo className={className} />;
   return null;
 }
 

@@ -1,4 +1,14 @@
-export type StorePlatform = "steam" | "xbox" | "playstation" | "epic" | "gog";
+export type StorePlatform =
+  | "steam"
+  | "xbox"
+  | "epic"
+  | "ea"
+  | "gog"
+  | "playstation"
+  | "nintendo";
+
+/** PC platforms that support modding and appear in catalog platform filters */
+export type FilterablePlatform = "steam" | "xbox" | "epic";
 
 export interface StoreLink {
   platform: StorePlatform;
@@ -76,6 +86,33 @@ export interface FallbackSteamInfo {
   recommendedSpecs: PcSpecRow[];
 }
 
+export interface ModSeriesInfo {
+  /** Unique series ID, e.g. "fears-to-fathom", "forza-horizon", "doom" */
+  id: string;
+  /** Series display name */
+  name: string;
+  /** Optional Thai subtitle for series */
+  thaiName?: string;
+  /** Sort order within the series (1, 2, 3...) */
+  order: number;
+  /** Compact episode/part badge, e.g. "EP1", "EP2", "S2 EP1", "ภาค 6" */
+  badgeLabel?: string;
+  /** Short description for series collection banner */
+  description?: string;
+}
+
+export interface CriticMetadata {
+  /** Metacritic slug for live score refresh, e.g. "forza-horizon-6" */
+  metacriticSlug?: string;
+  /** Verified fallback Metacritic score (0-100) */
+  metacriticScore?: number;
+  metacriticUrl?: string;
+  /** OpenCritic Top Critic Average (0-100) */
+  openCriticScore?: number;
+  openCriticTier?: "Mighty" | "Strong" | "Fair" | "Weak";
+  openCriticUrl?: string;
+}
+
 export interface ModEntry {
   slug: string;
   gameTitle: string;
@@ -87,6 +124,18 @@ export interface ModEntry {
   installPathExample: string;
   uninstallNote: string;
   credits: { role: string; name: string }[];
+  /** Primary Thai genres for catalog filtering */
+  genres: string[];
+  /** Optional series/franchise grouping so players find related games easily */
+  series?: ModSeriesInfo;
+  /** Critic scores (Metacritic + OpenCritic) with live refresh support */
+  critics?: CriticMetadata;
+  /** ISO date YYYY-MM-DD for consistent chronological sorting */
+  releasedOrder?: string;
+  /** Historical Nexus Mods download count used alongside live web downloads for popularity sort */
+  nexusDownloads?: number;
+  /** Fallback official THB price if Steam API is temporarily unreachable (0 = Free) */
+  estimatedPriceThb?: number;
   tags: string[];
   seoKeywords: string[];
   media: ModMedia;

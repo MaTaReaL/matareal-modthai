@@ -36,6 +36,11 @@
   h1, h2, h3, h4, .font-display {
     font-family: var(--font-anuphan), var(--font-jakarta), sans-serif;
   }
+
+  select, option {
+    background-color: #111116 !important;
+    color: #f5f5f7 !important;
+  }
 }
 
 .no-scrollbar {

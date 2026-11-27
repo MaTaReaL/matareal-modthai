@@ -14,14 +14,17 @@ import {
   ExternalLink,
   FileArchive,
   FileText,
+  FolderTree,
   ImagePlus,
   Images,
+  Layers,
   Send,
   Trash2,
   X,
 } from "lucide-react";
-import type { BugReportItem, ModEntry } from "@/data/types";
+import type { BugReportItem, ModEntry, ModFileEntry } from "@/data/types";
 import type { LiveSteamData } from "@/lib/steam";
+import { ARCHIVE_TREES } from "@/data/archiveTrees";
 import { SITE_CONFIG } from "@/data/site";
 import {
   AiModelLogos,
@@ -30,6 +33,7 @@ import {
   HostLogo,
   NexusModsLogo,
 } from "./BrandIcons";
+import { ArchivePreviewModal } from "./ArchivePreviewModal";
 import { MediaStage } from "./MediaStage";
 import { SteamStorePanel } from "./SteamStorePanel";
 
@@ -37,6 +41,7 @@ type TabId = "description" | "files" | "images" | "bugs";
 
 interface ModDetailClientProps {
   mod: ModEntry;
+  seriesMods?: ModEntry[];
   initialDownloads: number;
   initialBugs: BugReportItem[];
   steamData: LiveSteamData | null;
@@ -91,6 +96,7 @@ async function prepareBugImage(file: File): Promise<{ uploadFile: File; previewD
 
 export function ModDetailClient({
   mod,
+  seriesMods = [],
   initialDownloads,
   initialBugs,
   steamData,
@@ -101,6 +107,7 @@ export function ModDetailClient({
   const [downloading, setDownloading] = useState(false);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [previewFile, setPreviewFile] = useState<ModFileEntry | null>(null);
 
   // Ultra-simple Bug Report state (Image + Optional Text)
   const [bugs, setBugs] = useState<BugReportItem[]>(initialBugs);
@@ -249,11 +256,32 @@ export function ModDetailClient({
           />
         </div>
 
-        {/* Clean Formal Title + Tab Bar */}
+        {/* Clean Formal Title + Series/Genre Chips + Tab Bar */}
         <div className="px-4 sm:px-6 py-3.5 sm:py-4 bg-[#0d0a11] border-t border-white/[0.08] space-y-3 sm:space-y-3.5">
-          <h1 className="font-display text-lg sm:text-2xl font-bold tracking-tight text-white leading-snug">
-            {mod.thaiTitle}
-          </h1>
+          <div className="space-y-1.5">
+            {(mod.series || mod.genres.length > 0) && (
+              <div className="flex flex-wrap items-center gap-1.5">
+                {mod.series && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#ff4d8d]/18 text-[#ff9ec2] border border-[#ff4d8d]/40">
+                    <Layers className="w-3 h-3" />
+                    ซีรีส์: {mod.series.name}
+                    {mod.series.badgeLabel ? ` · ${mod.series.badgeLabel}` : ""}
+                  </span>
+                )}
+                {mod.genres.map((g) => (
+                  <span
+                    key={g}
+                    className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-white/[0.05] border border-white/[0.09] text-[#b4acc0]"
+                  >
+                    {g}
+                  </span>
+                ))}
+              </div>
+            )}
+            <h1 className="font-display text-lg sm:text-2xl font-bold tracking-tight text-white leading-snug">
+              {mod.thaiTitle}
+            </h1>
+          </div>
 
           <div
             role="tablist"
@@ -454,6 +482,64 @@ export function ModDetailClient({
 
                 {/* Live Steam Data + Multi-Platform Stores + PC Specs */}
                 <SteamStorePanel stores={mod.stores} steamData={steamData} />
+
+                {/* Related Games in the Same Series / Set */}
+                {mod.series && seriesMods.length > 1 && (
+                  <section className="glass-panel rounded-2xl p-4 sm:p-5 space-y-3.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Layers className="w-4 h-4 text-[#ff77a9]" />
+                        <h2 className="font-display text-sm sm:text-base font-bold text-white">
+                          เกมในซีรีส์เดียวกัน: {mod.series.name}
+                        </h2>
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#ff4d8d]/18 text-[#ff9ec2] border border-[#ff4d8d]/35">
+                          {seriesMods.length} เกม
+                        </span>
+                      </div>
+                      {mod.series.thaiName && (
+                        <span className="text-xs text-[#8a8293]">{mod.series.thaiName}</span>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+                      {seriesMods.map((item) => {
+                        const isCurrent = item.slug === mod.slug;
+                        return (
+                          <Link
+                            key={item.slug}
+                            href={`/mods/${item.slug}`}
+                            className={`rounded-xl p-2.5 border flex items-center gap-3 transition ${
+                              isCurrent
+                                ? "bg-[#ff4d8d]/18 border-[#ff4d8d]/55 pointer-events-none"
+                                : "bg-white/[0.03] hover:bg-white/[0.08] border-white/[0.08] hover:border-[#ff4d8d]/40"
+                            }`}
+                          >
+                            <div className="relative w-16 aspect-video rounded-lg overflow-hidden bg-black shrink-0 border border-white/10">
+                              <Image
+                                src={item.media.cover}
+                                alt={item.gameTitle}
+                                fill
+                                sizes="64px"
+                                className="object-cover"
+                              />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              {item.series?.badgeLabel && (
+                                <div className="text-[10px] font-bold text-[#ff9ec2]">
+                                  {item.series.badgeLabel}
+                                  {isCurrent ? " • กำลังดูอยู่" : ""}
+                                </div>
+                              )}
+                              <div className="text-xs font-semibold text-white truncate">
+                                {item.gameTitle.replace(`${mod.series?.name} - `, "")}
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </section>
+                )}
               </motion.div>
             )}
 
@@ -466,8 +552,10 @@ export function ModDetailClient({
                 transition={{ duration: 0.22 }}
                 className="space-y-4"
               >
-                {mod.files.map((file) => (
-                  <div key={file.id} className="glass-panel rounded-2xl p-6 space-y-4">
+                {mod.files.map((file) => {
+                  const archiveEntries = ARCHIVE_TREES[file.id] || [];
+                  return (
+                  <div key={file.id} className="glass-panel rounded-2xl p-5 sm:p-6 space-y-4">
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div className="space-y-1">
                         <div className="flex flex-wrap items-center gap-2">
@@ -484,6 +572,12 @@ export function ModDetailClient({
                           <span>{file.size}</span>
                           <span>•</span>
                           <span>{file.uploadedAt}</span>
+                          {archiveEntries.length > 0 && (
+                            <>
+                              <span>•</span>
+                              <span>{archiveEntries.length} ไฟล์ข้างใน</span>
+                            </>
+                          )}
                         </div>
                       </div>
 
@@ -506,6 +600,16 @@ export function ModDetailClient({
                           >
                             <HostLogo host={file.backupHost || "Google Drive"} className="w-4 h-4 shrink-0" />
                             <span>{file.backupHost || "Google Drive"}</span>
+                          </button>
+                        )}
+                        {archiveEntries.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setPreviewFile(file)}
+                            className="px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-white/[0.04] hover:bg-[#ff4d8d]/18 border border-white/12 hover:border-[#ff4d8d]/45 text-[#e4deeb] hover:text-white inline-flex items-center gap-1.5 transition cursor-pointer"
+                          >
+                            <FolderTree className="w-3.5 h-3.5 text-[#ff77a9] shrink-0" />
+                            <span>ดูไฟล์ข้างใน</span>
                           </button>
                         )}
                       </div>
@@ -534,7 +638,8 @@ export function ModDetailClient({
                       </button>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </motion.div>
             )}
 
@@ -903,6 +1008,16 @@ export function ModDetailClient({
           </div>
         </aside>
       </div>
+
+      {/* Archive File Contents Inspector Modal (Nexus-style Preview) */}
+      <ArchivePreviewModal
+        open={Boolean(previewFile)}
+        onClose={() => setPreviewFile(null)}
+        fileName={previewFile?.fileName || ""}
+        version={previewFile?.version || ""}
+        compressedSize={previewFile?.size || ""}
+        entries={previewFile ? ARCHIVE_TREES[previewFile.id] || [] : []}
+      />
 
       {/* Bug Image Zoom Modal */}
       <AnimatePresence>

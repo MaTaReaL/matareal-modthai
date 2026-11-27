@@ -6,20 +6,22 @@ import { motion } from "framer-motion";
 import { ExternalLink, Cpu, Clock } from "lucide-react";
 import type { StoreLink, StorePlatform } from "@/data/types";
 import type { LiveSteamData } from "@/lib/steam";
-import { MetacriticLogo, SteamLogo, StoreLogo } from "./BrandIcons";
+import { MetacriticLogo, OpenCriticLogo, SteamLogo, StoreLogo } from "./BrandIcons";
 
 interface SteamStorePanelProps {
   stores: StoreLink[];
   steamData: LiveSteamData | null;
 }
 
-/** Strict store priority: Steam (1) -> Xbox (2) -> PlayStation (3) -> Epic (4) -> GOG (5, subtle) */
+/** Strict store priority: PC stores first (Steam -> Xbox -> Epic -> EA -> GOG), then Console info-only (PlayStation -> Nintendo) */
 const PLATFORM_PRIORITY: Record<StorePlatform, number> = {
   steam: 1,
   xbox: 2,
-  playstation: 3,
-  epic: 4,
+  epic: 3,
+  ea: 4,
   gog: 5,
+  playstation: 6,
+  nintendo: 7,
 };
 
 const PLATFORM_STYLE: Record<StorePlatform, string> = {
@@ -27,12 +29,16 @@ const PLATFORM_STYLE: Record<StorePlatform, string> = {
     "bg-[#1b2838]/65 hover:bg-[#1b2838] border-[#66c0f4]/40 hover:border-[#66c0f4]/80 text-white",
   xbox:
     "bg-[#107c10]/15 hover:bg-[#107c10]/30 border-[#107c10]/45 hover:border-[#4ade80]/70 text-white",
-  playstation:
-    "bg-[#00439c]/20 hover:bg-[#00439c]/40 border-[#0070d1]/45 hover:border-[#60a5fa]/70 text-white",
   epic:
-    "bg-white/[0.05] hover:bg-white/[0.12] border-white/15 hover:border-white/40 text-white",
+    "bg-white/[0.06] hover:bg-white/[0.14] border-white/18 hover:border-white/45 text-white",
+  ea:
+    "bg-[#ff4747]/12 hover:bg-[#ff4747]/24 border-[#ff4747]/35 hover:border-[#ff4747]/65 text-white",
   gog:
     "bg-white/[0.02] hover:bg-white/[0.06] border-white/[0.08] text-[#a69eb0] hover:text-white",
+  playstation:
+    "bg-[#00439c]/18 hover:bg-[#00439c]/35 border-[#0070d1]/40 hover:border-[#60a5fa]/65 text-white/90",
+  nintendo:
+    "bg-[#e60012]/14 hover:bg-[#e60012]/28 border-[#e60012]/35 hover:border-[#ff4d5a]/65 text-white/90",
 };
 
 function getReviewTone(percent: number): string {
@@ -45,6 +51,13 @@ function getMetacriticTone(score: number): string {
   if (score >= 75) return "bg-emerald-500 text-black";
   if (score >= 50) return "bg-amber-400 text-black";
   return "bg-rose-500 text-white";
+}
+
+function getOpenCriticTone(score: number, tier?: string): string {
+  if (tier === "Mighty" || score >= 84) return "bg-[#FC430A] text-white";
+  if (tier === "Strong" || score >= 75) return "bg-amber-400 text-black";
+  if (tier === "Fair" || score >= 65) return "bg-sky-400 text-black";
+  return "bg-zinc-500 text-white";
 }
 
 export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
@@ -69,7 +82,6 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
       {/* Top Row: Official Store Cover Capsule + Game Details + Live Price */}
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 sm:pb-5 border-b border-white/[0.08]">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
-          {/* Official Store Cover Art from Steam */}
           {steamData?.headerImage && (
             <a
               href={primaryStore?.url || `https://store.steampowered.com/app/${steamData.appId}/`}
@@ -153,28 +165,42 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
         )}
       </div>
 
-      {/* Store Buttons (Sorted: Steam -> Xbox -> PlayStation -> Epic -> GOG) + Real-Time Reviews */}
-      <div className="relative z-10 flex flex-wrap items-center justify-between gap-3">
+      {/* Store Buttons (PC stores + Console info-only stores like PS / Nintendo) */}
+      <div className="relative z-10 space-y-3">
         <div className="flex flex-wrap items-center gap-2">
-          {sortedStores.map((store) => (
-            <a
-              key={`${store.platform}-${store.url}`}
-              href={store.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-semibold transition ${
-                PLATFORM_STYLE[store.platform]
-              }`}
-            >
-              <StoreLogo platform={store.platform} className="w-4 h-4 shrink-0" />
-              <span>{store.label}</span>
-              <ExternalLink className="w-3 h-3 opacity-70" />
-            </a>
-          ))}
+          {sortedStores.map((store) => {
+            const isConsoleOnly =
+              store.platform === "playstation" || store.platform === "nintendo";
+            return (
+              <a
+                key={`${store.platform}-${store.url}`}
+                href={store.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={
+                  isConsoleOnly
+                    ? `${store.label} (วางจำหน่ายบนคอนโซลด้วย — ม็อดไทยใช้ได้เฉพาะ PC)`
+                    : store.label
+                }
+                className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-semibold transition ${
+                  PLATFORM_STYLE[store.platform]
+                }`}
+              >
+                <StoreLogo platform={store.platform} className="w-4 h-4 shrink-0" />
+                <span>{store.label}</span>
+                {isConsoleOnly && (
+                  <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-black/35 text-white/70">
+                    คอนโซล
+                  </span>
+                )}
+                <ExternalLink className="w-3 h-3 opacity-70" />
+              </a>
+            );
+          })}
         </div>
 
-        {/* Live Steam Review & Metacritic with Official Logos */}
-        <div className="flex flex-wrap items-center gap-2">
+        {/* Real-Time Steam Reviews (Clearly labeled All-Time vs Recent 30d) + Metacritic + OpenCritic */}
+        <div className="flex flex-wrap items-center gap-2 pt-1">
           {steamData?.steamReview && (
             <div
               className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold ${getReviewTone(
@@ -182,6 +208,9 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
               )}`}
             >
               <SteamLogo className="w-3.5 h-3.5 shrink-0" />
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/30 text-white/85 font-bold">
+                ทั้งหมด
+              </span>
               <span>
                 {steamData.steamReview.percentPositive}% ({steamData.steamReview.label})
               </span>
@@ -191,12 +220,31 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
             </div>
           )}
 
-          {steamData?.metacritic ? (
+          {steamData?.steamRecentReview && (
+            <div
+              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold ${getReviewTone(
+                steamData.steamRecentReview.percentPositive
+              )}`}
+            >
+              <SteamLogo className="w-3.5 h-3.5 shrink-0" />
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/30 text-white/85 font-bold">
+                30 วันล่าสุด
+              </span>
+              <span>
+                {steamData.steamRecentReview.percentPositive}% ({steamData.steamRecentReview.label})
+              </span>
+              <span className="text-[11px] opacity-75 font-normal">
+                · {steamData.steamRecentReview.reviewCount.toLocaleString("en-US")} รีวิว
+              </span>
+            </div>
+          )}
+
+          {steamData?.metacritic && (
             <a
               href={steamData.metacritic.url || "https://www.metacritic.com/"}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/12 text-xs font-semibold text-white transition"
+              className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.09] border border-white/12 text-xs font-semibold text-white transition"
             >
               <MetacriticLogo className="w-3.5 h-3.5 shrink-0" />
               <span
@@ -207,11 +255,42 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
                 {steamData.metacritic.score}
               </span>
               <span>Metacritic</span>
+              <ExternalLink className="w-3 h-3 opacity-55" />
             </a>
-          ) : (
+          )}
+
+          {steamData?.openCritic && (
+            <a
+              href={steamData.openCritic.url || "https://opencritic.com/"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.09] border border-white/12 text-xs font-semibold text-white transition"
+            >
+              <OpenCriticLogo className="w-3.5 h-3.5 shrink-0" />
+              <span
+                className={`px-1.5 py-0.5 rounded font-mono text-[11px] font-extrabold ${getOpenCriticTone(
+                  steamData.openCritic.score,
+                  steamData.openCritic.tier
+                )}`}
+              >
+                {steamData.openCritic.score}
+              </span>
+              <span>
+                OpenCritic
+                {steamData.openCritic.tier ? (
+                  <span className="ml-1 text-[10px] font-normal text-[#a69eb0]">
+                    ({steamData.openCritic.tier})
+                  </span>
+                ) : null}
+              </span>
+              <ExternalLink className="w-3 h-3 opacity-55" />
+            </a>
+          )}
+
+          {!steamData?.metacritic && !steamData?.openCritic && (
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-[11px] text-[#8a8293]">
-              <MetacriticLogo className="w-3.5 h-3.5 opacity-60 shrink-0" />
-              <span>Metacritic: ยังไม่มีคะแนน</span>
+              <MetacriticLogo className="w-3.5 h-3.5 opacity-55 shrink-0" />
+              <span>ยังไม่มีคะแนนสื่อวิจารณ์ (Metacritic / OpenCritic)</span>
             </div>
           )}
         </div>
