@@ -32,6 +32,7 @@ export const viewport: Viewport = {
   themeColor: "#070609",
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 };
 
 export const metadata: Metadata = {
@@ -73,7 +74,7 @@ export const metadata: Metadata = {
     description: SITE_CONFIG.descriptionTh,
     images: [
       {
-        url: "/brand/og-site.jpg?v=2",
+        url: "/brand/og-site.jpg?v=3",
         width: 1200,
         height: 630,
         alt: "MaTaReaL ม็อดไทย — คลังม็อดภาษาไทย แจกฟรี 100%",
@@ -84,7 +85,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE_CONFIG.nameTh} (${SITE_CONFIG.nameEn})`,
     description: SITE_CONFIG.descriptionTh,
-    images: ["/brand/og-site.jpg?v=2"],
+    images: ["/brand/og-site.jpg?v=3"],
   },
   verification: process.env.GOOGLE_SITE_VERIFICATION
     ? { google: process.env.GOOGLE_SITE_VERIFICATION }

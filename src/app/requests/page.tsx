@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `เสนอทำม็อดภาษาไทย | ${SITE_CONFIG.nameTh}`,
     description: `บอร์ดเสนอเกมสำหรับทำม็อดแปลภาษาไทยโดย ${SITE_CONFIG.authorName}`,
-    images: [{ url: "/brand/og-site.jpg?v=2", width: 1200, height: 630 }],
+    images: [{ url: "/brand/og-site.jpg?v=3", width: 1200, height: 630 }],
   },
 };
 

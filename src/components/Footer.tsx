@@ -6,8 +6,8 @@ import { FacebookLogo, NexusModsLogo } from "./BrandIcons";
 
 export function Footer() {
   return (
-    <footer className="relative z-10 border-t border-white/[0.08] bg-[#070609]/92 backdrop-blur-xl mt-16">
-      <div className="max-w-[1260px] mx-auto px-4 sm:px-6 py-8 space-y-5">
+    <footer className="relative z-10 border-t border-white/[0.08] bg-[#070609]/95 mt-12 sm:mt-16">
+      <div className="max-w-[1260px] mx-auto px-4 sm:px-6 py-7 sm:py-8 space-y-5">
         {/* Official Anti-Piracy & Distribution Credit Notice */}
         <div className="rounded-2xl p-4 sm:p-5 bg-white/[0.025] border border-white/[0.08] flex items-start gap-3 text-xs leading-relaxed text-[#bdb5c5]">
           <ShieldAlert className="w-4 h-4 text-[#ff4d8d] shrink-0 mt-0.5" />

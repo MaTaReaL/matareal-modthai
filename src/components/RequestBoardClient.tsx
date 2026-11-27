@@ -406,8 +406,8 @@ export function RequestBoardClient({
       </form>
 
       {/* Filter Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="inline-flex flex-wrap items-center gap-1.5">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar sm:flex-wrap pb-1 sm:pb-0 w-full">
           {(["ทั้งหมด", "รอพิจารณา", "กำลังทำ", "ทำเสร็จแล้ว", "ทำไม่ได้"] as const).map(
             (st) => {
               const count =
@@ -420,7 +420,7 @@ export function RequestBoardClient({
                   key={st}
                   type="button"
                   onClick={() => setFilter(st)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${
+                  className={`shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${
                     active
                       ? "bg-[#ff4d8d]/22 border-[#ff4d8d]/50 text-white"
                       : "bg-white/[0.03] border-white/[0.08] text-[#9c94a6] hover:text-white"
@@ -527,7 +527,7 @@ export function RequestBoardClient({
                     type="button"
                     disabled={busyId === req.id}
                     onClick={() => handleVote(req.id)}
-                    className="shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#ff4d8d]/20 border border-white/12 hover:border-[#ff4d8d]/50 text-xs font-bold text-white transition cursor-pointer disabled:opacity-50"
+                    className="w-full md:w-auto shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#ff4d8d]/20 border border-white/12 hover:border-[#ff4d8d]/50 text-xs font-bold text-white transition cursor-pointer disabled:opacity-50"
                   >
                     <ThumbsUp className="w-4 h-4 text-[#ff77a9]" />
                     <span className="tabular-nums">{req.votes || 1}</span>

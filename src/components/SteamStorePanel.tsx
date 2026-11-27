@@ -65,9 +65,9 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
       : steamData?.recommendedSpecs || [];
 
   return (
-    <section className="glass-panel spot-card rounded-2xl p-5 sm:p-6 space-y-5">
+    <section className="glass-panel spot-card rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-5">
       {/* Top Row: Official Store Cover Capsule + Game Details + Live Price */}
-      <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/[0.08]">
+      <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 sm:pb-5 border-b border-white/[0.08]">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
           {/* Official Store Cover Art from Steam */}
           {steamData?.headerImage && (
@@ -125,7 +125,7 @@ export function SteamStorePanel({ stores, steamData }: SteamStorePanelProps) {
 
         {/* Live Steam Price + Sale End Date */}
         {steamData?.price && (
-          <div className="flex flex-col sm:items-end gap-1 shrink-0">
+          <div className="flex flex-col items-start md:items-end gap-1 shrink-0">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10">
               {steamData.price.discountPercent > 0 && (
                 <span className="px-1.5 py-0.5 rounded text-[11px] font-bold bg-emerald-500 text-black">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Maximize2, X } from "lucide-react";
@@ -14,6 +14,7 @@ interface MediaStageProps {
 export function MediaStage({ images, initialIndex = 0 }: MediaStageProps) {
   const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const touchStartX = useRef<number | null>(null);
 
   const safeIndex = Math.min(activeIndex, Math.max(0, images.length - 1));
   const current = images[safeIndex];
@@ -46,16 +47,29 @@ export function MediaStage({ images, initialIndex = 0 }: MediaStageProps) {
 
   return (
     <>
-      <div className="glass-panel rounded-2xl p-2.5 sm:p-3 space-y-2.5">
-        {/* Main 16:9 Interactive Stage */}
-        <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-black group">
+      <div className="glass-panel rounded-2xl p-2 sm:p-3 space-y-2 sm:space-y-2.5">
+        {/* Main 16:9 Interactive Stage (Touch swipe enabled) */}
+        <div
+          onTouchStart={(e) => {
+            touchStartX.current = e.touches[0]?.clientX ?? null;
+          }}
+          onTouchEnd={(e) => {
+            const start = touchStartX.current;
+            const end = e.changedTouches[0]?.clientX ?? null;
+            touchStartX.current = null;
+            if (start !== null && end !== null && Math.abs(end - start) > 40 && images.length > 1) {
+              step(end < start ? 1 : -1);
+            }
+          }}
+          className="relative aspect-video w-full rounded-xl overflow-hidden bg-black group"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={current.src}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.22 }}
+              transition={{ duration: 0.18 }}
               className="relative w-full h-full cursor-pointer"
               onClick={() => setLightboxOpen(true)}
             >
@@ -67,7 +81,7 @@ export function MediaStage({ images, initialIndex = 0 }: MediaStageProps) {
                 className="object-cover"
                 priority={safeIndex === 0}
               />
-              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/75 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent" />
             </motion.div>
           </AnimatePresence>
 
@@ -77,17 +91,17 @@ export function MediaStage({ images, initialIndex = 0 }: MediaStageProps) {
                 type="button"
                 onClick={() => step(-1)}
                 aria-label="ภาพก่อนหน้า"
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/55 hover:bg-[#ff4d8d] text-white backdrop-blur-md border border-white/15 flex items-center justify-center opacity-85 sm:opacity-0 sm:group-hover:opacity-100 transition cursor-pointer"
+                className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/65 hover:bg-[#ff4d8d] text-white border border-white/15 flex items-center justify-center opacity-85 lg:opacity-0 lg:group-hover:opacity-100 transition cursor-pointer"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
               <button
                 type="button"
                 onClick={() => step(1)}
                 aria-label="ภาพถัดไป"
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/55 hover:bg-[#ff4d8d] text-white backdrop-blur-md border border-white/15 flex items-center justify-center opacity-85 sm:opacity-0 sm:group-hover:opacity-100 transition cursor-pointer"
+                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/65 hover:bg-[#ff4d8d] text-white border border-white/15 flex items-center justify-center opacity-85 lg:opacity-0 lg:group-hover:opacity-100 transition cursor-pointer"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </>
           )}
@@ -96,7 +110,7 @@ export function MediaStage({ images, initialIndex = 0 }: MediaStageProps) {
             type="button"
             onClick={() => setLightboxOpen(true)}
             aria-label="ขยายเต็มจอ"
-            className="absolute top-3 right-3 w-8 h-8 rounded-lg bg-black/60 hover:bg-[#ff4d8d] text-white border border-white/15 backdrop-blur-md flex items-center justify-center transition cursor-pointer"
+            className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 w-8 h-8 rounded-lg bg-black/65 hover:bg-[#ff4d8d] text-white border border-white/15 flex items-center justify-center transition cursor-pointer"
           >
             <Maximize2 className="w-3.5 h-3.5" />
           </button>
@@ -146,7 +160,7 @@ export function MediaStage({ images, initialIndex = 0 }: MediaStageProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
             onClick={() => setLightboxOpen(false)}
-            className="fixed inset-0 z-50 bg-black/92 backdrop-blur-xl flex flex-col items-center justify-center p-4 sm:p-8"
+            className="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center p-3 sm:p-8"
           >
             <button
               type="button"

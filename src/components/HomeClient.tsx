@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
@@ -97,6 +97,7 @@ export function HomeClient({
   const [activeIdx, setActiveIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const [stats, setStats] = useState<SiteStats>(initialStats);
+  const touchStartX = useRef<number | null>(null);
 
   // Real-time visitor presence & site visits heartbeat (every 45s)
   useEffect(() => {
@@ -157,22 +158,17 @@ export function HomeClient({
   const currentDownloads = currentMod ? downloadCounts[currentMod.slug] || 0 : 0;
 
   return (
-    <div className="max-w-[1260px] mx-auto px-4 sm:px-6 pt-7 pb-14 space-y-10">
+    <div className="max-w-[1260px] mx-auto px-3.5 sm:px-6 pt-5 sm:pt-7 pb-12 sm:pb-14 space-y-7 sm:space-y-10">
       {/* CLEAN FORMAL HEADER WITH THAI FLAG + CLEAR "ฟรี" SIGNAL */}
-      <motion.section
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="space-y-5 pb-6 border-b border-white/[0.08]"
-      >
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">
+      <section className="space-y-4 sm:space-y-5 pb-5 sm:pb-6 border-b border-white/[0.08]">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3.5 sm:gap-4">
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+              <h1 className="font-display text-xl sm:text-3xl font-bold tracking-tight text-white">
                 {SITE_CONFIG.nameTh}
               </h1>
-              <ThaiFlagIcon className="w-7 h-5" />
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-emerald-500/18 text-emerald-300 border border-emerald-400/40">
+              <ThaiFlagIcon className="w-6 h-4 sm:w-7 sm:h-5 shrink-0" />
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-extrabold bg-emerald-500/18 text-emerald-300 border border-emerald-400/40">
                 แจกฟรี 100%
               </span>
             </div>
@@ -183,7 +179,7 @@ export function HomeClient({
 
           <Link
             href="/requests"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-[#ff4d8d]/15 hover:bg-[#ff4d8d]/28 border border-[#ff4d8d]/40 text-white transition"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 rounded-xl text-xs font-semibold bg-[#ff4d8d]/15 hover:bg-[#ff4d8d]/28 border border-[#ff4d8d]/40 text-white transition shrink-0"
           >
             <MessageSquarePlus className="w-3.5 h-3.5 text-[#ff77a9]" />
             <span>เสนอทำม็อดภาษาไทย</span>
@@ -191,77 +187,89 @@ export function HomeClient({
           </Link>
         </div>
 
-        {/* REAL-TIME SITE STATS STRIP */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="glass-panel spot-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
-            <div className="relative z-10">
-              <div className="text-[11px] text-[#8a8293] flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+        {/* REAL-TIME SITE STATS STRIP (2x2 on Phone, 4-col row on iPad & Desktop) */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
+          <div className="glass-panel spot-card rounded-xl p-3 sm:px-4 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
+            <div className="relative z-10 min-w-0">
+              <div className="text-[11px] text-[#8a8293] flex items-center gap-1.5 truncate">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
                 กำลังออนไลน์
               </div>
-              <div className="font-display text-xl font-bold text-white tabular-nums mt-0.5">
+              <div className="font-display text-lg sm:text-xl font-bold text-white tabular-nums mt-0.5">
                 {stats.onlineNow.toLocaleString("en-US")}{" "}
-                <span className="text-xs font-normal text-[#8a8293]">คน</span>
+                <span className="text-[11px] sm:text-xs font-normal text-[#8a8293]">คน</span>
               </div>
             </div>
-            <Users className="relative z-10 w-5 h-5 text-emerald-400/80 shrink-0" />
+            <Users className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 text-emerald-400/80 shrink-0" />
           </div>
 
-          <div className="glass-panel spot-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
-            <div className="relative z-10">
-              <div className="text-[11px] text-[#8a8293]">ผู้เข้าชมทั้งหมด</div>
-              <div className="font-display text-xl font-bold text-white tabular-nums mt-0.5">
+          <div className="glass-panel spot-card rounded-xl p-3 sm:px-4 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
+            <div className="relative z-10 min-w-0">
+              <div className="text-[11px] text-[#8a8293] truncate">ผู้เข้าชมทั้งหมด</div>
+              <div className="font-display text-lg sm:text-xl font-bold text-white tabular-nums mt-0.5">
                 {stats.totalVisits.toLocaleString("en-US")}{" "}
-                <span className="text-xs font-normal text-[#8a8293]">ครั้ง</span>
+                <span className="text-[11px] sm:text-xs font-normal text-[#8a8293]">ครั้ง</span>
               </div>
             </div>
-            <Eye className="relative z-10 w-5 h-5 text-[#ff77a9]/85 shrink-0" />
+            <Eye className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 text-[#ff77a9]/85 shrink-0" />
           </div>
 
-          <div className="glass-panel spot-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
-            <div className="relative z-10">
-              <div className="text-[11px] text-[#8a8293]">ยอดดาวน์โหลดรวม</div>
-              <div className="font-display text-xl font-bold text-white tabular-nums mt-0.5">
+          <div className="glass-panel spot-card rounded-xl p-3 sm:px-4 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
+            <div className="relative z-10 min-w-0">
+              <div className="text-[11px] text-[#8a8293] truncate">ยอดดาวน์โหลดรวม</div>
+              <div className="font-display text-lg sm:text-xl font-bold text-white tabular-nums mt-0.5">
                 {stats.totalDownloads.toLocaleString("en-US")}{" "}
-                <span className="text-xs font-normal text-[#8a8293]">ครั้ง</span>
+                <span className="text-[11px] sm:text-xs font-normal text-[#8a8293]">ครั้ง</span>
               </div>
             </div>
-            <Download className="relative z-10 w-5 h-5 text-[#ff4d8d] shrink-0" />
+            <Download className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 text-[#ff4d8d] shrink-0" />
           </div>
 
-          <div className="glass-panel spot-card rounded-xl px-4 py-3 flex items-center justify-between gap-3">
-            <div className="relative z-10">
-              <div className="text-[11px] text-[#8a8293]">ม็อดภาษาไทยทั้งหมด</div>
-              <div className="font-display text-xl font-bold text-white tabular-nums mt-0.5">
+          <div className="glass-panel spot-card rounded-xl p-3 sm:px-4 sm:py-3 flex items-center justify-between gap-2 sm:gap-3">
+            <div className="relative z-10 min-w-0">
+              <div className="text-[11px] text-[#8a8293] truncate">ม็อดภาษาไทย</div>
+              <div className="font-display text-lg sm:text-xl font-bold text-white tabular-nums mt-0.5">
                 {stats.totalMods.toLocaleString("en-US")}{" "}
-                <span className="text-xs font-normal text-[#8a8293]">เกม</span>
+                <span className="text-[11px] sm:text-xs font-normal text-[#8a8293]">เกม</span>
               </div>
             </div>
-            <Gamepad2 className="relative z-10 w-5 h-5 text-[#ff77a9]/85 shrink-0" />
+            <Gamepad2 className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 text-[#ff77a9]/85 shrink-0" />
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      {/* STEAM-STYLE AUTO-SLIDING HERO CAROUSEL */}
+      {/* STEAM-STYLE AUTO-SLIDING HERO CAROUSEL (Swipe-enabled for Phone & iPad) */}
       {currentSlide && currentMod && (
-        <motion.section
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+        <section
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           className="space-y-3"
         >
-          <div className="grid lg:grid-cols-12 gap-4 items-stretch">
+          <div className="grid lg:grid-cols-12 gap-3.5 sm:gap-4 items-stretch">
             {/* LEFT: Pure Edge-to-Edge 16:9 Cover Card */}
-            <div className="lg:col-span-8 relative aspect-video w-full rounded-2xl overflow-hidden border border-white/12 bg-black shadow-[0_24px_64px_-22px_rgba(255,77,141,0.32)] group">
+            <div
+              onTouchStart={(e) => {
+                touchStartX.current = e.touches[0]?.clientX ?? null;
+                setPaused(true);
+              }}
+              onTouchEnd={(e) => {
+                const start = touchStartX.current;
+                const end = e.changedTouches[0]?.clientX ?? null;
+                touchStartX.current = null;
+                if (start !== null && end !== null && Math.abs(end - start) > 40 && slides.length > 1) {
+                  stepSlide(end < start ? 1 : -1);
+                }
+                setPaused(false);
+              }}
+              className="lg:col-span-8 relative aspect-video w-full rounded-2xl overflow-hidden border border-white/12 bg-black shadow-[0_18px_48px_-20px_rgba(255,77,141,0.32)] group"
+            >
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentMod.slug}
-                  initial={{ opacity: 0, scale: 1.02 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.99 }}
-                  transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.28 }}
                   className="relative w-full h-full"
                 >
                   <Link href={`/mods/${currentMod.slug}`} className="block relative w-full h-full">
@@ -271,14 +279,14 @@ export function HomeClient({
                       fill
                       priority
                       sizes="(max-width: 1024px) 100vw, 840px"
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
+                      className="object-cover transition-transform duration-700 ease-out lg:group-hover:scale-[1.025]"
                     />
                   </Link>
                 </motion.div>
               </AnimatePresence>
 
               {/* Category Badge positioned at top-right */}
-              <div className="pointer-events-none absolute top-3.5 right-3.5 z-10 flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 backdrop-blur-md border border-white/15 text-white shadow">
+              <div className="pointer-events-none absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-10 flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold bg-black/80 border border-white/15 text-white shadow">
                 {currentSlide.badgeType === "sale" && <Tag className="w-3 h-3 text-emerald-400" />}
                 {currentSlide.badgeType === "popular" && <Trophy className="w-3 h-3 text-amber-300" />}
                 {currentSlide.badgeType === "trending" && <Flame className="w-3 h-3 text-[#ff4d8d]" />}
@@ -292,17 +300,17 @@ export function HomeClient({
                     type="button"
                     onClick={() => stepSlide(-1)}
                     aria-label="สไลด์ก่อนหน้า"
-                    className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/60 hover:bg-[#ff4d8d] text-white border border-white/15 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer"
+                    className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-[#ff4d8d] text-white border border-white/15 flex items-center justify-center opacity-85 lg:opacity-0 lg:group-hover:opacity-100 transition cursor-pointer"
                   >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                   <button
                     type="button"
                     onClick={() => stepSlide(1)}
                     aria-label="สไลด์ถัดไป"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/60 hover:bg-[#ff4d8d] text-white border border-white/15 backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition cursor-pointer"
+                    className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/65 hover:bg-[#ff4d8d] text-white border border-white/15 flex items-center justify-center opacity-85 lg:opacity-0 lg:group-hover:opacity-100 transition cursor-pointer"
                   >
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </>
               )}
@@ -319,110 +327,103 @@ export function HomeClient({
               )}
             </div>
 
-            {/* RIGHT: Harmonized Glass Spotlight Info Panel */}
-            <div className="lg:col-span-4 glass-panel spot-card rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-4">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentMod.slug}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.3 }}
-                  className="relative z-10 space-y-4"
-                >
-                  <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
-                    <span className="px-2 py-0.5 rounded-md bg-emerald-500/18 text-emerald-300 border border-emerald-400/35">
-                      ฟรี
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 text-[#9c94a6]">
-                      {currentMod.stores.slice(0, 2).map((s) => (
-                        <StoreLogo key={s.platform} platform={s.platform} className="w-3.5 h-3.5" />
-                      ))}
-                      {currentMod.specs.supportedGamePlatform}
-                    </span>
-                  </div>
+            {/* RIGHT: Harmonized Glass Spotlight Info Panel (Smart 2-col split on iPad Portrait, vertical stack on Phone & Desktop) */}
+            <div className="lg:col-span-4 glass-panel spot-card rounded-2xl p-4 sm:p-5 lg:p-6 flex flex-col md:grid md:grid-cols-12 md:items-center lg:flex lg:flex-col lg:items-stretch lg:justify-between gap-4">
+              <div className="relative z-10 md:col-span-7 lg:col-span-12 space-y-3 sm:space-y-4">
+                <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold">
+                  <span className="px-2 py-0.5 rounded-md bg-emerald-500/18 text-emerald-300 border border-emerald-400/35">
+                    ฟรี
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-[#9c94a6]">
+                    {currentMod.stores.slice(0, 2).map((s) => (
+                      <StoreLogo key={s.platform} platform={s.platform} className="w-3.5 h-3.5" />
+                    ))}
+                    {currentMod.specs.supportedGamePlatform}
+                  </span>
+                </div>
 
-                  <h2 className="font-display text-xl sm:text-[22px] font-bold text-white leading-snug">
-                    {currentMod.gameTitle}
-                  </h2>
+                <h2 className="font-display text-lg sm:text-xl lg:text-[22px] font-bold text-white leading-snug">
+                  {currentMod.gameTitle}
+                </h2>
 
-                  {/* Live Steam Price + Review Strip */}
-                  {(currentSteam?.price || currentSteam?.steamReview) && (
-                    <div className="rounded-xl p-3 bg-white/[0.035] border border-white/[0.08] space-y-2">
-                      {currentSteam.price && (
-                        <div className="flex items-center justify-between gap-2 text-xs">
-                          <span className="text-[#8a8293] inline-flex items-center gap-1.5">
-                            <SteamLogo className="w-3.5 h-3.5 shrink-0" />
-                            Steam
-                          </span>
-                          <div className="flex items-center gap-2">
-                            {currentSteam.price.discountPercent > 0 && (
-                              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-black">
-                                -{currentSteam.price.discountPercent}%
-                              </span>
-                            )}
-                            {currentSteam.price.discountPercent > 0 && (
-                              <span className="text-[11px] line-through text-[#8a8293]">
-                                {currentSteam.price.initialFormatted}
-                              </span>
-                            )}
-                            <span className="font-bold text-white">
-                              {currentSteam.price.finalFormatted}
+                {/* Live Steam Price + Review Strip */}
+                {(currentSteam?.price || currentSteam?.steamReview) && (
+                  <div className="rounded-xl p-3 bg-white/[0.035] border border-white/[0.08] space-y-2">
+                    {currentSteam.price && (
+                      <div className="flex items-center justify-between gap-2 text-xs">
+                        <span className="text-[#8a8293] inline-flex items-center gap-1.5">
+                          <SteamLogo className="w-3.5 h-3.5 shrink-0" />
+                          Steam
+                        </span>
+                        <div className="flex items-center gap-2">
+                          {currentSteam.price.discountPercent > 0 && (
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-black">
+                              -{currentSteam.price.discountPercent}%
                             </span>
-                          </div>
-                        </div>
-                      )}
-
-                      {currentSteam.price?.discountPercent ? (
-                        currentSteam.price.discountEndLabel && (
-                          <div className="flex items-center justify-end gap-1 text-[11px] text-emerald-300">
-                            <Clock className="w-3 h-3" />
-                            ถึง {currentSteam.price.discountEndLabel}
-                          </div>
-                        )
-                      ) : null}
-
-                      {currentSteam.steamReview && (
-                        <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between gap-2 text-xs">
-                          <span className="text-[#8a8293] inline-flex items-center gap-1">
-                            <ThumbsUp className="w-3 h-3 text-[#66c0f4]" />
-                            รีวิว
-                          </span>
-                          <span className="font-semibold text-[#66c0f4]">
-                            {currentSteam.steamReview.percentPositive}% {currentSteam.steamReview.label}
+                          )}
+                          {currentSteam.price.discountPercent > 0 && (
+                            <span className="text-[11px] line-through text-[#8a8293]">
+                              {currentSteam.price.initialFormatted}
+                            </span>
+                          )}
+                          <span className="font-bold text-white">
+                            {currentSteam.price.finalFormatted}
                           </span>
                         </div>
-                      )}
-                    </div>
-                  )}
+                      </div>
+                    )}
 
-                  {/* Neutral Compact Metadata */}
-                  <dl className="grid grid-cols-3 gap-2 text-center text-xs">
-                    <div className="rounded-xl py-2 px-2 bg-white/[0.03] border border-white/[0.06]">
-                      <dt className="text-[10px] text-[#8a8293]">เวอร์ชัน</dt>
-                      <dd className="font-bold text-white mt-0.5">{currentMod.specs.version}</dd>
-                    </div>
-                    <div className="rounded-xl py-2 px-2 bg-white/[0.03] border border-white/[0.06]">
-                      <dt className="text-[10px] text-[#8a8293]">ไฟล์</dt>
-                      <dd className="font-bold text-white mt-0.5">{currentMod.files.length} แบบ</dd>
-                    </div>
-                    <div className="rounded-xl py-2 px-2 bg-white/[0.03] border border-white/[0.06]">
-                      <dt className="text-[10px] text-[#8a8293]">ดาวน์โหลด</dt>
-                      <dd className="font-bold text-white mt-0.5 tabular-nums">
-                        {currentDownloads.toLocaleString("en-US")}
-                      </dd>
-                    </div>
-                  </dl>
-                </motion.div>
-              </AnimatePresence>
+                    {currentSteam.price?.discountPercent ? (
+                      currentSteam.price.discountEndLabel && (
+                        <div className="flex items-center justify-end gap-1 text-[11px] text-emerald-300">
+                          <Clock className="w-3 h-3" />
+                          ถึง {currentSteam.price.discountEndLabel}
+                        </div>
+                      )
+                    ) : null}
 
-              <Link
-                href={`/mods/${currentMod.slug}`}
-                className="relative z-10 btn-pink-primary w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2"
-              >
-                ดูรายละเอียด & ดาวน์โหลดฟรี
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+                    {currentSteam.steamReview && (
+                      <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between gap-2 text-xs">
+                        <span className="text-[#8a8293] inline-flex items-center gap-1">
+                          <ThumbsUp className="w-3 h-3 text-[#66c0f4]" />
+                          รีวิว
+                        </span>
+                        <span className="font-semibold text-[#66c0f4] text-right">
+                          {currentSteam.steamReview.percentPositive}% {currentSteam.steamReview.label}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div className="relative z-10 md:col-span-5 lg:col-span-12 space-y-3 sm:space-y-4">
+                {/* Neutral Compact Metadata */}
+                <dl className="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div className="rounded-xl py-2 px-1.5 bg-white/[0.03] border border-white/[0.06]">
+                    <dt className="text-[10px] text-[#8a8293]">เวอร์ชัน</dt>
+                    <dd className="font-bold text-white mt-0.5">{currentMod.specs.version}</dd>
+                  </div>
+                  <div className="rounded-xl py-2 px-1.5 bg-white/[0.03] border border-white/[0.06]">
+                    <dt className="text-[10px] text-[#8a8293]">ไฟล์</dt>
+                    <dd className="font-bold text-white mt-0.5">{currentMod.files.length} แบบ</dd>
+                  </div>
+                  <div className="rounded-xl py-2 px-1.5 bg-white/[0.03] border border-white/[0.06]">
+                    <dt className="text-[10px] text-[#8a8293]">ดาวน์โหลด</dt>
+                    <dd className="font-bold text-white mt-0.5 tabular-nums">
+                      {currentDownloads.toLocaleString("en-US")}
+                    </dd>
+                  </div>
+                </dl>
+
+                <Link
+                  href={`/mods/${currentMod.slug}`}
+                  className="btn-pink-primary w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2"
+                >
+                  ดูรายละเอียด & ดาวน์โหลดฟรี
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -446,19 +447,19 @@ export function HomeClient({
               })}
             </div>
           )}
-        </motion.section>
+        </section>
       )}
 
       {/* MOD LIBRARY GRID */}
       <section className="space-y-4">
         <div className="flex items-center gap-2.5">
           <ThaiFlagIcon className="w-5 h-3.5" />
-          <h2 className="font-display text-lg font-bold text-white">
+          <h2 className="font-display text-base sm:text-lg font-bold text-white">
             รายการม็อดภาษาไทย ({mods.length})
           </h2>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {mods.map((mod) => {
             const count = downloadCounts[mod.slug] || 0;
             const st = steamMap[mod.slug];
@@ -466,7 +467,7 @@ export function HomeClient({
               <Link
                 key={mod.slug}
                 href={`/mods/${mod.slug}`}
-                className="glass-panel spot-card rounded-2xl overflow-hidden group hover:-translate-y-1 flex flex-col"
+                className="glass-panel spot-card rounded-2xl overflow-hidden group lg:hover:-translate-y-1 flex flex-col"
               >
                 {/* Exact 16:9 Cover */}
                 <div className="relative aspect-video w-full overflow-hidden bg-black">
@@ -474,11 +475,11 @@ export function HomeClient({
                     src={mod.media.cover}
                     alt={mod.thaiTitle}
                     fill
-                    sizes="(max-width: 768px) 100vw, 400px"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+                    className="object-cover transition-transform duration-500 lg:group-hover:scale-[1.03]"
                   />
                   <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
-                    <span className="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-black/75 text-emerald-300 border border-emerald-400/40 backdrop-blur">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-black/80 text-emerald-300 border border-emerald-400/40">
                       ฟรี
                     </span>
                     {st?.price && st.price.discountPercent > 0 && (
