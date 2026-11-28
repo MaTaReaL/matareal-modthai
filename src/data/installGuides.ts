@@ -458,4 +458,44 @@ export const INSTALL_GUIDES: Record<string, ModInstallGuide> = {
       },
     ],
   },
+
+  "doom-the-dark-ages-revelations": {
+    zipSourceHint: "แตกไฟล์ ZIP → เลือกโฟลเดอร์ base/ (ข้าม README_TH.txt)",
+    platforms: [
+      {
+        platformLabel: "Steam (PC)",
+        howToOpen: "คลิกขวาที่เกมใน Steam → จัดการ (Manage) → เปิดหาไฟล์ภายในเครื่อง (Browse local files)",
+        rootFolderHint: "โฟลเดอร์หลักของเกม — ตำแหน่งเดียวกับ DOOMTheDarkAges.exe",
+        dragSummary: "1 โฟลเดอร์",
+        dragItems: [{ name: "base/", type: "dir" }],
+        tree: [
+          { name: "DOOMTheDarkAges.exe", type: "file", role: "anchor", badge: "จุดสังเกต" },
+          {
+            name: "base/",
+            type: "dir",
+            role: "mod",
+            badge: "วางทับ / รวมที่นี่",
+            note: "วางรวมกับโฟลเดอร์เดิมและยืนยันการแทนที่ไฟล์",
+          },
+        ],
+      },
+      {
+        platformLabel: "Xbox / Game Pass (PC)",
+        howToOpen: "เปิดแอป Xbox → จุดสามจุด (...) → จัดการ → ไฟล์ → เรียกดู → เข้าโฟลเดอร์ DOOM- The Ages\\Content",
+        rootFolderHint: "โฟลเดอร์ Content/ — ตำแหน่งเดียวกับ DOOMTheDarkAges.exe",
+        dragSummary: "1 โฟลเดอร์",
+        dragItems: [{ name: "base/", type: "dir" }],
+        tree: [
+          { name: "DOOMTheDarkAges.exe", type: "file", role: "anchor", badge: "จุดสังเกต" },
+          {
+            name: "base/",
+            type: "dir",
+            role: "mod",
+            badge: "วางทับ / รวมที่นี่",
+            note: "วางรวมกับโฟลเดอร์เดิมและยืนยันการแทนที่ไฟล์",
+          },
+        ],
+      },
+    ],
+  },
 };

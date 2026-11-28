@@ -9,6 +9,228 @@ import type { ModEntry } from "./types";
  */
 export const MODS: ModEntry[] = [
   {
+    "slug": "doom-the-dark-ages-revelations",
+    "gameTitle": "DOOM: The Dark Ages — DLC: Revelations",
+    "thaiTitle": "DOOM: The Dark Ages — DLC: Revelations ม็อดภาษาไทย (DLC_Only)",
+    "shortDescription": "DOOM: The Dark Ages - DLC: Revelations ม็อดภาษาไทย 100% แปลครบเนื้อหา DLC อาวุธ Codex ตั้งค่า และซับไตเติล (8,804 บรรทัด, Drag & Drop) | AI Model : Gemini 4 Neon / Hydrogen + OpenThai 2.0 | รองรับ : Steam / Xbox Game Pass (PC)",
+    "overview": "ม็อดแปลภาษาไทยฉบับสมบูรณ์สำหรับเนื้อหาเสริม DLC: Revelations ของเกม DOOM: The Dark Ages (เฉพาะเนื้อหา DLC และ UI หน้า DLC — ไม่จำเป็นต้องลงม็อดตัวเกมหลัก) แปลครบ 100% ทั้ง 8,804 บรรทัดด้วยสำนวนดาร์กแฟนตาซียุคกลางย้อนยุค (ข้า/เจ้า/ท่าน/ฝ่าบาท) ครอบคลุมเนื้อเรื่อง ซับไตเติลพร้อมแท็กชื่อผู้พูดสีทองชัดเจน บันทึกตำรา (Codex) ชื่อด่านและภารกิจทั้งหมด อาวุธใหม่รวมถึงหอกโซ่ (Chain Spear) รูนโล่ อัญมณี โบราณวัตถุ เมนูตั้งค่าทุกหมวด ปุ่มควบคุม และ UI ทั้งหมดที่ใช้งานใน DLC พร้อมระบบฟอนต์เวกเตอร์ Slug GPU Font คู่ (Chakra Petch + IBM Plex Sans Thai) จัดวางสระและวรรณยุกต์ไทย PUA 4 ชั้นคมชัดไม่ซ้อนทับ ทำงานแบบ Pure Drag & Drop ไม่ต้องลง Mod Loader และไม่แก้ไขไฟล์ DOOMTheDarkAges.exe",
+    "features": [
+      "แปลครบเนื้อหา DLC: Revelations เมนูตั้งค่า คลังแสง Codex และ UI ที่ใช้ร่วมกันใน DLC ทั้งหมด 8,804 บรรทัด (ซับไตเติลสไตล์โบราณย้อนยุค ข้า/เจ้า พร้อมแท็กชื่อ [ผู้พูด] แยกสีชัดเจน)",
+      "ใช้งานเดี่ยวได้ทันที (DLC_Only Standalone) ไม่ต้องติดตั้งม็อดภาษาไทยตัวเกมหลัก ไม่แก้เนื้อหาแคมเปญหลัก คงชื่อเฉพาะ Ripatorium 3.0 และเนื้อหาใน Slaughter Mode เป็นภาษาอังกฤษ",
+      "ติดตั้งแบบ Pure Drag & Drop แค่แตกไฟล์แล้วลากโฟลเดอร์ base วางทับ ไม่ต้องใช้ AtlanModLoader ไม่ต้องรันโปรแกรมติดตั้ง และไม่แตะ DOOMTheDarkAges.exe",
+      "ระบบฟอนต์เวกเตอร์ Slug GPU Font คู่คุณภาพสูง: Chakra Petch (หัวข้อและ HUD) + IBM Plex Sans Thai (บันทึกตำราและซับไตเติลขยายอ่านง่าย) พร้อมแก้สระ แอ/แ และสระวรรณยุกต์ 4 ชั้นสมบูรณ์",
+      "เพิ่มเครดิตภาษาไทย โดย MaTaReaL ในหน้า Credits ของ DLC อย่างกลมกลืน"
+    ],
+    "installSteps": [
+      "ดาวน์โหลดและแตกไฟล์ DOOM_TheDarkAges_Revelations_ThaiMod_v1.0.zip ออกมาก่อน จะได้โฟลเดอร์ชื่อ base",
+      "เปิดโฟลเดอร์หลักของตัวเกม (Steam: จัดการ → เปิดหาไฟล์ในเครื่อง | Xbox Game Pass: จัดการ → ไฟล์ → เรียกดู → เข้าโฟลเดอร์ DOOM- The Ages\\Content)",
+      "ลากโฟลเดอร์ base ที่แตกออกมาไปวางทับลงในหน้าโฟลเดอร์หลักของเกมได้ทันที (ยืนยันการรวม/แทนที่ไฟล์) แล้วเข้าเกมโดยตั้งค่าภาษาเป็น English"
+    ],
+    "installPathExample": "SteamLibrary\\steamapps\\common\\DOOMTheDarkAges\\ | XboxGames\\DOOM- The Ages\\Content\\",
+    "uninstallNote": "เข้าไปที่โฟลเดอร์ base ในโฟลเดอร์เกมแล้วลบโฟลเดอร์ modarchives ทิ้ง จากนั้นสั่งตรวจสอบและซ่อมแซมไฟล์เกมผ่าน Steam หรือแอป Xbox เพื่อคืนไฟล์ packagemapspec.json และ meta.resources ต้นฉบับกลับมาทั้งหมด",
+    "credits": [
+      {
+        "role": "Thai Localization & Font Engineering",
+        "name": "MaTaReaL"
+      },
+      {
+        "role": "AI Translation Model",
+        "name": "Gemini 4 Neon / Hydrogen + OpenThai 2.0"
+      },
+      {
+        "role": "Thai Font",
+        "name": "Chakra Petch โดย Cadson Demak และ IBM Plex Sans Thai โดย IBM Corp. (SIL OFL 1.1)"
+      }
+    ],
+    "genres": [
+      "แอ็กชัน",
+      "ไซไฟ"
+    ],
+    "critics": {
+      "metacriticSlug": "doom-the-dark-ages",
+      "metacriticScore": 84,
+      "metacriticUrl": "https://www.metacritic.com/game/doom-the-dark-ages/",
+      "openCriticScore": 86,
+      "openCriticTier": "Mighty",
+      "openCriticUrl": "https://opencritic.com/game/18023/doom-the-dark-ages"
+    },
+    "releasedOrder": "2026-11-28",
+    "nexusDownloads": 1,
+    "estimatedPriceThb": 660,
+    "tags": [
+      "แปลภาษาไทย 100% (DLC_Only)",
+      "Pure Drag & Drop",
+      "Slug GPU Font",
+      "id Tech 8",
+      "Steam / Xbox Game Pass"
+    ],
+    "seoKeywords": [
+      "DOOM The Dark Ages Revelations ม็อดไทย",
+      "DOOM The Dark Ages DLC ม็อดภาษาไทย",
+      "DOOM Revelations แปลไทย",
+      "DOOM The Dark Ages Thai Mod",
+      "ม็อดภาษาไทย DOOM Revelations",
+      "ดาวน์โหลดม็อดไทย DOOM The Dark Ages",
+      "MaTaReaL ม็อดไทย"
+    ],
+    "nexusModUrl": "https://www.nexusmods.com/doomthedarkages/mods/268?tab=description",
+    "featured": true,
+    "media": {
+      "header": "/mods/doom-the-dark-ages-revelations/header.webp",
+      "cover": "/mods/doom-the-dark-ages-revelations/cover.webp",
+      "ogImage": "/mods/doom-the-dark-ages-revelations/og-share.jpg",
+      "gallery": [
+        {
+          "src": "/mods/doom-the-dark-ages-revelations/cover.webp",
+          "alt": "ปกม็อดภาษาไทย DOOM: The Dark Ages — DLC: Revelations (DLC_Only)",
+          "caption": "ภาพปกม็อดภาษาไทย DOOM: The Dark Ages — DLC: Revelations (DLC_Only)",
+          "tag": "Cover"
+        },
+        {
+          "src": "/mods/doom-the-dark-ages-revelations/gallery-01.webp",
+          "alt": "หน้าเมนูตั้งค่าความยากและระบบช่วยต่อสู้ภาษาไทย",
+          "caption": "เมนูตั้งค่าความยากและระบบช่วยต่อสู้ แปลไทยครบทุกตัวเลือกและคำอธิบาย",
+          "tag": "Settings"
+        },
+        {
+          "src": "/mods/doom-the-dark-ages-revelations/gallery-02.webp",
+          "alt": "ซับไตเติลคาน เมเคอร์ พร้อมแท็กชื่อผู้พูดสีทอง",
+          "caption": "ซับไตเติลสำนวนโบราณ (ข้า/เจ้า) พร้อมแท็กชื่อผู้พูดสีทองอ่านแยกง่ายชัดเจน",
+          "tag": "Subtitles"
+        },
+        {
+          "src": "/mods/doom-the-dark-ages-revelations/gallery-03.webp",
+          "alt": "คัทซีนราชาโนวิกและสเลเยอร์ภาษาไทย",
+          "caption": "คัทซีนเนื้อเรื่องพร้อมซับไตเติลฟอนต์ IBM Plex Sans Thai ขนาดใหญ่อ่านสบายตา",
+          "tag": "Cutscene"
+        },
+        {
+          "src": "/mods/doom-the-dark-ages-revelations/gallery-04.webp",
+          "alt": "ซับไตเติลผู้บัญชาการธิราบนยานของสเลเยอร์",
+          "caption": "ชื่อสถานที่ ด่าน และบทสนทนาของตัวละครหลักใน DLC ครบถ้วน",
+          "tag": "Story"
+        },
+        {
+          "src": "/mods/doom-the-dark-ages-revelations/gallery-05.webp",
+          "alt": "หน้าเลือกช่องบันทึก DLC: Revelations",
+          "caption": "หน้าเลือกแคมเปญ DLC: Revelations พร้อมเมนูระบบและคำใบ้ภาษาไทย",
+          "tag": "DLC Menu"
+        },
+        {
+          "src": "/mods/doom-the-dark-ages-revelations/gallery-06.webp",
+          "alt": "เกมเพลย์ในด่านลานทดสอบ (Proving Grounds)",
+          "caption": "เกมเพลย์จริงในด่านลานทดสอบ (Proving Grounds) พร้อมภารกิจและ HUD ภาษาไทย",
+          "tag": "Gameplay"
+        }
+      ]
+    },
+    "specs": {
+      "version": "v1.0",
+      "aiModel": "Gemini 4 Neon / Hydrogen + OpenThai 2.0",
+      "fontUsed": "Chakra Petch + IBM Plex Sans Thai (Slug GPU Font + PUA 4 ชั้น)",
+      "translatedLines": "8,804 บรรทัด (DLC_Only 100%)",
+      "coveragePercent": 100,
+      "engine": "id Tech 8",
+      "fileSize": "5.28 MB",
+      "releasedAt": "28 พ.ย. 2026",
+      "updatedAt": "28 พ.ย. 2026",
+      "supportedGamePlatform": "Steam / Xbox Game Pass (PC)"
+    },
+    "stores": [
+      {
+        "platform": "steam",
+        "label": "Steam (PC)",
+        "url": "https://store.steampowered.com/app/3469450/DOOM_The_Dark_Ages__Revelations/",
+        "steamAppId": 3469450
+      },
+      {
+        "platform": "xbox",
+        "label": "Xbox / Game Pass (PC)",
+        "url": "https://www.xbox.com/en-US/games/doom-the-dark-ages"
+      },
+      {
+        "platform": "playstation",
+        "label": "PlayStation Store (PS5)",
+        "url": "https://store.playstation.com/en-th/concept/10011504"
+      }
+    ],
+    "files": [
+      {
+        "id": "doom-revelations-v1-0",
+        "fileName": "DOOM_TheDarkAges_Revelations_ThaiMod_v1.0.zip",
+        "label": "ม็อดภาษาไทย 100% — เฉพาะ DLC: Revelations (Drag & Drop)",
+        "version": "v1.0",
+        "size": "5.28 MB",
+        "uploadedAt": "28 พ.ย. 2026",
+        "sha256": "8aa35efd67a5d50aa0f7ba394367f184991b71d06a5b58801b9e8a54ac0186e1",
+        "primaryUrl": "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/doom-dark-ages-revelations-v1.0/DOOM_TheDarkAges_Revelations_ThaiMod_v1.0.zip",
+        "primaryHost": "GitHub Releases",
+        "installNote": "แตกไฟล์ ZIP แล้วลากโฟลเดอร์ base ไปวางทับในโฟลเดอร์หลักของเกมได้ทันที (ตั้งค่าภาษาในเกมเป็น English)",
+        "backupUrl": "https://drive.google.com/file/d/1ZxmFzU2hx3z8m9sBVplnjqORS0sskztH/view?usp=sharing",
+        "backupHost": "Google Drive"
+      }
+    ],
+    "fallbackSteam": {
+      "name": "DOOM: The Dark Ages | Revelations",
+      "releaseDate": "7 ก.ค. 2026",
+      "developers": [
+        "id Software"
+      ],
+      "publishers": [
+        "Bethesda Softworks"
+      ],
+      "genres": [
+        "แอ็กชัน",
+        "ไซไฟ"
+      ],
+      "shortDescription": "นรกถึงคราวเยือกแข็งใน DOOM: The Dark Ages | Revelations เมื่อ Slayer ถูกโยนเข้าสู่นรกอันโหดร้ายที่เขาจะรอดพ้นได้ก็ต่อเมื่อแข็งแกร่งขึ้นเท่านั้น ทั้งด่านใหม่ ปีศาจใหม่ และหอกโซ่สุดโหด",
+      "minimumSpecs": [
+        {
+          "label": "ระบบปฏิบัติการ",
+          "value": "Windows 10 / 11 (64-bit)"
+        },
+        {
+          "label": "โปรเซสเซอร์",
+          "value": "AMD Zen 2 หรือ Intel Gen 10 (8 คอร์ @3.2GHz ขึ้นไป)"
+        },
+        {
+          "label": "หน่วยความจำ",
+          "value": "แรม 16 GB"
+        },
+        {
+          "label": "กราฟิกส์",
+          "value": "GPU รองรับ Hardware Raytracing VRAM 8GB (RTX 2060 SUPER / RX 6600)"
+        },
+        {
+          "label": "พื้นที่จัดเก็บข้อมูล",
+          "value": "NVMe SSD พื้นที่ว่าง 100 GB"
+        }
+      ],
+      "recommendedSpecs": [
+        {
+          "label": "ระบบปฏิบัติการ",
+          "value": "Windows 10 / 11 (64-bit)"
+        },
+        {
+          "label": "โปรเซสเซอร์",
+          "value": "AMD Zen 3 หรือ Intel Gen 12 (8 คอร์ @3.2GHz ขึ้นไป)"
+        },
+        {
+          "label": "หน่วยความจำ",
+          "value": "แรม 32 GB"
+        },
+        {
+          "label": "กราฟิกส์",
+          "value": "GPU รองรับ Hardware Raytracing VRAM 10GB (RTX 3080 / RX 6800)"
+        },
+        {
+          "label": "พื้นที่จัดเก็บข้อมูล",
+          "value": "NVMe SSD พื้นที่ว่าง 100 GB"
+        }
+      ]
+    }
+  },
+  {
     "slug": "super-meat-boy-3d",
     "gameTitle": "Super Meat Boy 3D",
     "thaiTitle": "Super Meat Boy 3D ม็อดภาษาไทย (สุดยอดก้อนเนื้อคุง 3 มิติ)",
