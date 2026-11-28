@@ -9,6 +9,207 @@ import type { ModEntry } from "./types";
  */
 export const MODS: ModEntry[] = [
   {
+    "slug": "super-meat-boy-3d",
+    "gameTitle": "Super Meat Boy 3D",
+    "thaiTitle": "Super Meat Boy 3D ม็อดภาษาไทย (สุดยอดก้อนเนื้อคุง 3 มิติ)",
+    "shortDescription": "Super Meat Boy 3D (สุดยอดก้อนเนื้อคุง 3 มิติ) - ม็อดภาษาไทย 100% แปลครบ 531 ข้อความ สายปั่นฮาๆ พร้อมโลโก้ 3 มิติไทยและฟอนต์ Google Sans แก้สระลอย 100% | AI Model : Gemini 4 Hydrogen | รองรับ : Steam / Xbox Game Pass (PC)",
+    "overview": "ม็อดแปลภาษาไทยฉบับสมบูรณ์สำหรับ Super Meat Boy 3D (สุดยอดก้อนเนื้อคุง 3 มิติ) แปลครบ 100% ทั้ง 531 ข้อความ ครอบคลุมเมนูหลัก การตั้งค่า ชื่อโลก ชื่อด่าน คำใบ้หน้าโหลด ประวัติตัวละคร เงื่อนไขปลดล็อก ความสำเร็จ และปุ่มควบคุมทั้งหมดในสำนวนสายปั่นกวนฮาเข้ากับแนวเกม พร้อมปั้นโมเดลโลโก้ภาษาไทย 3 มิติแท้จริง \"สุดยอด ก้อนเนื้อคุง 3 มิติ\" และโลโก้ 2D UI แทนที่ของเดิม ใช้ฟอนต์ Google Sans ปรับจูนแก้สระลอยและการตัดคำสำหรับ Unreal Engine 5.6 ทำงานแบบไฟล์แพตช์ (_P) ใน ~mods ปลอดภัย 100% (หมายเหตุ: วิดีโอคัทซีนในตัวเกมไม่มีระบบซับไตเติล)",
+    "features": [
+      "แปลข้อความในเกมครบ 100% (531 ข้อความ — SMB 346 + UIPlugin 185) ทั้งเมนู ตั้งค่า ชื่อด่าน คำใบ้หน้าโหลด และข้อมูลตัวละครสายปั่นฮาๆ",
+      "โลโก้ภาษาไทย 3 มิติแท้จริงในเกม \"สุดยอด ก้อนเนื้อคุง 3 มิติ\" แทนที่โมเดลและพื้นผิว 3D หน้าเมนูหลัก พร้อมโลโก้ 2D UI",
+      "ฟอนต์ Google Sans (Regular & Bold) ปรับจูนตัวคั่นคำ แก้ปัญหาสระลอย วรรณยุกต์ซ้อน และการตัดคำใน Unreal Engine 5.6 สมบูรณ์",
+      "เพิ่มตราประทับ MaTaReaL แบบเรียบเนียนในหน้าเมนูหลักและหน้าเครดิตท้ายเกม",
+      "แพ็กแบบ Unreal Engine 5.6 IoStore (.pak / .utoc / .ucas) ใน ~mods ไม่แก้ไขไฟล์เกมหลัก รองรับทั้ง Steam และ Xbox Game Pass (PC)"
+    ],
+    "installSteps": [
+      "ดาวน์โหลดและแตกไฟล์ SMB3D_ThaiMod_v1.0.zip จะพบโฟลเดอร์ชื่อ SMB3D_ThaiMod",
+      "เปิดเข้าไปในโฟลเดอร์ SMB3D_ThaiMod แล้วคัดลอกโฟลเดอร์ SMB ไปวางรวมในโฟลเดอร์หลักของตัวเกม (หรือโฟลเดอร์ Content สำหรับ Xbox Game Pass)",
+      "เข้าเกมเล่นเป็นภาษาไทยได้ทันที (รองรับภาษาไทยอัตโนมัติตาม Windows หรือเลือกใน ตั้งค่า -> ภาษา)"
+    ],
+    "installPathExample": "Steam\\steamapps\\common\\Super Meat Boy 3D\\ หรือ C:\\XboxGames\\Super Meat Boy 3D\\Content\\",
+    "uninstallNote": "เข้าไปที่โฟลเดอร์ SMB\\Content\\Paks\\~mods แล้วลบเฉพาะไฟล์ SMB_ThaiMod_P.pak, SMB_ThaiMod_P.utoc และ SMB_ThaiMod_P.ucas (ห้ามลบโฟลเดอร์ ~mods ทั้งโฟลเดอร์หากมีม็อดอื่น)",
+    "credits": [
+      {
+        "role": "Thai Localization & 3D Logo",
+        "name": "MaTaReaL"
+      },
+      {
+        "role": "AI Translation Model",
+        "name": "Gemini 4 Hydrogen"
+      },
+      {
+        "role": "Thai Font",
+        "name": "Google Sans โดย The Google Sans Project Authors (SIL OFL 1.1)"
+      }
+    ],
+    "genres": [
+      "แอ็กชัน",
+      "อินดี้"
+    ],
+    "critics": {
+      "metacriticSlug": "super-meat-boy-3d",
+      "metacriticScore": 71,
+      "metacriticUrl": "https://www.metacritic.com/game/super-meat-boy-3d/"
+    },
+    "releasedOrder": "2026-11-28",
+    "nexusDownloads": 1,
+    "estimatedPriceThb": 495,
+    "tags": [
+      "แปลภาษาไทย 100%",
+      "โลโก้ 3 มิติไทย",
+      "ฟอนต์ Google Sans",
+      "Unreal Engine 5",
+      "Steam / Xbox Game Pass"
+    ],
+    "seoKeywords": [
+      "Super Meat Boy 3D ม็อดไทย",
+      "Super Meat Boy 3D ม็อดภาษาไทย",
+      "สุดยอดก้อนเนื้อคุง 3 มิติ ม็อดไทย",
+      "Super Meat Boy 3D แปลไทย",
+      "Super Meat Boy 3D Thai Mod",
+      "ดาวน์โหลดม็อดไทย Super Meat Boy 3D",
+      "MaTaReaL ม็อดไทย"
+    ],
+    "nexusModUrl": "https://www.nexusmods.com/supermeatboy3d/mods/6?tab=description",
+    "featured": true,
+    "media": {
+      "header": "/mods/super-meat-boy-3d/header.webp",
+      "cover": "/mods/super-meat-boy-3d/cover.webp",
+      "ogImage": "/mods/super-meat-boy-3d/og-share.jpg",
+      "gallery": [
+        {
+          "src": "/mods/super-meat-boy-3d/cover.webp",
+          "alt": "ปกม็อดภาษาไทย Super Meat Boy 3D (สุดยอดก้อนเนื้อคุง 3 มิติ)",
+          "caption": "ภาพปกม็อดภาษาไทย Super Meat Boy 3D (สุดยอดก้อนเนื้อคุง 3 มิติ)",
+          "tag": "Cover"
+        },
+        {
+          "src": "/mods/super-meat-boy-3d/gallery-01.webp",
+          "alt": "หน้าเมนูหลักและโลโก้ 3 มิติ สุดยอด ก้อนเนื้อคุง 3 มิติ",
+          "caption": "หน้าเมนูหลักพร้อมโลโก้ 3 มิติ \"สุดยอด ก้อนเนื้อคุง 3 มิติ\" และเมนูภาษาไทย",
+          "tag": "Main Menu"
+        },
+        {
+          "src": "/mods/super-meat-boy-3d/gallery-02.webp",
+          "alt": "หน้าตั้งค่าภาษาไทยด้วยฟอนต์ Google Sans",
+          "caption": "หน้าตั้งค่าภาษาไทยด้วยฟอนต์ Google Sans คมชัดอ่านง่าย",
+          "tag": "Settings"
+        },
+        {
+          "src": "/mods/super-meat-boy-3d/gallery-03.webp",
+          "alt": "แผนที่โลก 1 ป่าดงดิบ พร้อมชื่อด่านภาษาไทยสายปั่น",
+          "caption": "แผนที่โลก 1 ป่าดงดิบ และชื่อด่านแปลไทยสไตล์สายปั่นฮาๆ",
+          "tag": "Gameplay"
+        }
+      ]
+    },
+    "specs": {
+      "version": "v1.0",
+      "aiModel": "Gemini 4 Hydrogen",
+      "fontUsed": "Google Sans (Regular & Bold — MSDF + แก้สระลอย)",
+      "translatedLines": "531 ข้อความ (100%)",
+      "coveragePercent": 100,
+      "engine": "Unreal Engine 5.6",
+      "fileSize": "4.28 MB",
+      "releasedAt": "28 พ.ย. 2026",
+      "updatedAt": "28 พ.ย. 2026",
+      "supportedGamePlatform": "Steam / Xbox Game Pass (PC)"
+    },
+    "stores": [
+      {
+        "platform": "steam",
+        "label": "Steam (PC)",
+        "url": "https://store.steampowered.com/app/3288210/Super_Meat_Boy_3D/",
+        "steamAppId": 3288210
+      }
+    ],
+    "files": [
+      {
+        "id": "smb3d-thaimod-v1-0",
+        "fileName": "SMB3D_ThaiMod_v1.0.zip",
+        "label": "ม็อดแปลภาษาไทย 100% (Steam / Xbox Game Pass PC)",
+        "version": "v1.0",
+        "size": "4.28 MB",
+        "uploadedAt": "28 พ.ย. 2026",
+        "sha256": "b92ba545e6bfc6c31348ba16c9fbfc526f7b51967db4d334daca2ccb0fdd9e4c",
+        "primaryUrl": "https://github.com/MaTaReaL/matareal-modthai-releases/releases/download/smb3d-v1.0/SMB3D_ThaiMod_v1.0.zip",
+        "primaryHost": "GitHub Releases",
+        "installNote": "แตกไฟล์แล้วเปิดเข้าโฟลเดอร์ SMB3D_ThaiMod นำโฟลเดอร์ SMB ไปวางรวมในโฟลเดอร์หลักของตัวเกม",
+        "backupUrl": "https://drive.google.com/file/d/1F0BXLDeGnEEgr7IKXejZNgsz4r-okOtr/view?usp=sharing",
+        "backupHost": "Google Drive"
+      }
+    ],
+    "fallbackSteam": {
+      "name": "Super Meat Boy 3D",
+      "releaseDate": "31 มี.ค. 2026",
+      "developers": [
+        "Sluggerfly",
+        "Team Meat"
+      ],
+      "publishers": [
+        "Headup",
+        "GCORES PUBLISHING"
+      ],
+      "genres": [
+        "แอ็กชัน",
+        "อินดี้"
+      ],
+      "shortDescription": "เกมตะลุยด่านความเร็วสูงระดับตำนานแห่งความหัวร้อน กลับมาทวงบัลลังก์อีกครั้งในรูปแบบ 3 มิติเต็มรูปแบบ",
+      "minimumSpecs": [
+        {
+          "label": "ระบบปฏิบัติการ",
+          "value": "Windows 10 (64-bit)"
+        },
+        {
+          "label": "โปรเซสเซอร์",
+          "value": "AMD Ryzen 3 3100 / Ryzen 5 2400G หรือ Intel Core i3-10100 / i5-9400"
+        },
+        {
+          "label": "หน่วยความจำ",
+          "value": "แรม 8 GB"
+        },
+        {
+          "label": "กราฟิกส์",
+          "value": "NVIDIA GTX 1050 Ti / 1650 หรือ Intel Arc Graphics"
+        },
+        {
+          "label": "DirectX",
+          "value": "เวอร์ชัน 12"
+        },
+        {
+          "label": "พื้นที่จัดเก็บข้อมูล",
+          "value": "พื้นที่ว่าง 10 GB"
+        }
+      ],
+      "recommendedSpecs": [
+        {
+          "label": "ระบบปฏิบัติการ",
+          "value": "Windows 10 (64-bit)"
+        },
+        {
+          "label": "โปรเซสเซอร์",
+          "value": "Intel Core i5-13400 หรือ AMD Ryzen 5 7600"
+        },
+        {
+          "label": "หน่วยความจำ",
+          "value": "แรม 16 GB"
+        },
+        {
+          "label": "กราฟิกส์",
+          "value": "NVIDIA GeForce RTX 2070 หรือ Intel Arc A580"
+        },
+        {
+          "label": "DirectX",
+          "value": "เวอร์ชัน 12"
+        },
+        {
+          "label": "พื้นที่จัดเก็บข้อมูล",
+          "value": "พื้นที่ว่าง 10 GB"
+        }
+      ]
+    }
+  },
+  {
     "slug": "sea-of-solitude",
     "gameTitle": "Sea of Solitude",
     "thaiTitle": "Sea of Solitude ม็อดภาษาไทย (ทะเลแห่งความโดดเดี่ยว)",

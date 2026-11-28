@@ -429,4 +429,11 @@ export const INSTALL_GUIDES: Record<string, ModInstallGuide> = {
       },
     ],
   },
+
+  "super-meat-boy-3d": makeSingleFolderMergeGuide(
+    "SMB",
+    "แตกไฟล์ ZIP → เปิดโฟลเดอร์ SMB3D_ThaiMod/ (ข้าม README.txt และ OFL_FONT_LICENSE.txt)",
+    "",
+    true
+  ),
 };
