@@ -430,10 +430,32 @@ export const INSTALL_GUIDES: Record<string, ModInstallGuide> = {
     ],
   },
 
-  "super-meat-boy-3d": makeSingleFolderMergeGuide(
-    "SMB",
-    "แตกไฟล์ ZIP → เปิดโฟลเดอร์ SMB3D_ThaiMod/ (ข้าม README.txt และ OFL_FONT_LICENSE.txt)",
-    "",
-    true
-  ),
+  "super-meat-boy-3d": {
+    zipSourceHint: "แตกไฟล์ ZIP → เปิดโฟลเดอร์ SMB3D_ThaiMod/ (ข้าม README.txt และ OFL_FONT_LICENSE.txt)",
+    platforms: [
+      {
+        platformLabel: "Steam / Epic Games (PC)",
+        howToOpen:
+          "Steam: คลิกขวาเกม → จัดการ → เปิดหาไฟล์ภายในเครื่อง | Epic: จุดสามจุด (...) → จัดการ → เปิดตำแหน่งการติดตั้ง",
+        rootFolderHint: "โฟลเดอร์หลักของเกม — มีโฟลเดอร์ Engine/ และ SMB/ อยู่ภายใน",
+        dragSummary: "1 โฟลเดอร์",
+        dragItems: [{ name: "SMB/", type: "dir" }],
+        tree: [
+          { name: "Engine/", type: "dir", role: "anchor", badge: "จุดสังเกต", note: "โฟลเดอร์ต้นฉบับของเกม" },
+          { name: "SMB/", type: "dir", role: "mod", badge: "ติดตั้งที่นี่", note: "วางรวมกับโฟลเดอร์เดิมของเกม (Merge)" },
+        ],
+      },
+      {
+        platformLabel: "Xbox / Game Pass (PC)",
+        howToOpen: "เปิดแอป Xbox → จุดสามจุด (...) → จัดการ → ไฟล์ → เรียกดู → เข้าโฟลเดอร์ Content",
+        rootFolderHint: "โฟลเดอร์ Content/ — มีโฟลเดอร์ Engine/ และ SMB/ อยู่ภายใน",
+        dragSummary: "1 โฟลเดอร์",
+        dragItems: [{ name: "SMB/", type: "dir" }],
+        tree: [
+          { name: "Engine/", type: "dir", role: "anchor", badge: "จุดสังเกต", note: "โฟลเดอร์ต้นฉบับของเกม" },
+          { name: "SMB/", type: "dir", role: "mod", badge: "ติดตั้งที่นี่", note: "วางรวมกับโฟลเดอร์เดิมของเกม (Merge)" },
+        ],
+      },
+    ],
+  },
 };

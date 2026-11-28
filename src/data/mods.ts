@@ -12,21 +12,21 @@ export const MODS: ModEntry[] = [
     "slug": "super-meat-boy-3d",
     "gameTitle": "Super Meat Boy 3D",
     "thaiTitle": "Super Meat Boy 3D ม็อดภาษาไทย (สุดยอดก้อนเนื้อคุง 3 มิติ)",
-    "shortDescription": "Super Meat Boy 3D (สุดยอดก้อนเนื้อคุง 3 มิติ) - ม็อดภาษาไทย 100% แปลครบ 531 ข้อความ สายปั่นฮาๆ พร้อมโลโก้ 3 มิติไทยและฟอนต์ Google Sans แก้สระลอย 100% | AI Model : Gemini 4 Hydrogen | รองรับ : Steam / Xbox Game Pass (PC)",
+    "shortDescription": "Super Meat Boy 3D (สุดยอดก้อนเนื้อคุง 3 มิติ) - ม็อดภาษาไทย 100% แปลครบ 531 ข้อความ สายปั่นฮาๆ พร้อมโลโก้ 3 มิติไทยและฟอนต์ Google Sans แก้สระลอย 100% | AI Model : Gemini 4 Hydrogen | รองรับ : Steam / Xbox Game Pass / Epic Games (PC)",
     "overview": "ม็อดแปลภาษาไทยฉบับสมบูรณ์สำหรับ Super Meat Boy 3D (สุดยอดก้อนเนื้อคุง 3 มิติ) แปลครบ 100% ทั้ง 531 ข้อความ ครอบคลุมเมนูหลัก การตั้งค่า ชื่อโลก ชื่อด่าน คำใบ้หน้าโหลด ประวัติตัวละคร เงื่อนไขปลดล็อก ความสำเร็จ และปุ่มควบคุมทั้งหมดในสำนวนสายปั่นกวนฮาเข้ากับแนวเกม พร้อมปั้นโมเดลโลโก้ภาษาไทย 3 มิติแท้จริง \"สุดยอด ก้อนเนื้อคุง 3 มิติ\" และโลโก้ 2D UI แทนที่ของเดิม ใช้ฟอนต์ Google Sans ปรับจูนแก้สระลอยและการตัดคำสำหรับ Unreal Engine 5.6 ทำงานแบบไฟล์แพตช์ (_P) ใน ~mods ปลอดภัย 100% (หมายเหตุ: วิดีโอคัทซีนในตัวเกมไม่มีระบบซับไตเติล)",
     "features": [
       "แปลข้อความในเกมครบ 100% (531 ข้อความ — SMB 346 + UIPlugin 185) ทั้งเมนู ตั้งค่า ชื่อด่าน คำใบ้หน้าโหลด และข้อมูลตัวละครสายปั่นฮาๆ",
       "โลโก้ภาษาไทย 3 มิติแท้จริงในเกม \"สุดยอด ก้อนเนื้อคุง 3 มิติ\" แทนที่โมเดลและพื้นผิว 3D หน้าเมนูหลัก พร้อมโลโก้ 2D UI",
       "ฟอนต์ Google Sans (Regular & Bold) ปรับจูนตัวคั่นคำ แก้ปัญหาสระลอย วรรณยุกต์ซ้อน และการตัดคำใน Unreal Engine 5.6 สมบูรณ์",
       "เพิ่มตราประทับ MaTaReaL แบบเรียบเนียนในหน้าเมนูหลักและหน้าเครดิตท้ายเกม",
-      "แพ็กแบบ Unreal Engine 5.6 IoStore (.pak / .utoc / .ucas) ใน ~mods ไม่แก้ไขไฟล์เกมหลัก รองรับทั้ง Steam และ Xbox Game Pass (PC)"
+      "แพ็กแบบ Unreal Engine 5.6 IoStore (.pak / .utoc / .ucas) ใน ~mods ไม่แก้ไขไฟล์เกมหลัก รองรับทั้ง Steam, Xbox Game Pass และ Epic Games Store (PC)"
     ],
     "installSteps": [
       "ดาวน์โหลดและแตกไฟล์ SMB3D_ThaiMod_v1.0.zip จะพบโฟลเดอร์ชื่อ SMB3D_ThaiMod",
-      "เปิดเข้าไปในโฟลเดอร์ SMB3D_ThaiMod แล้วคัดลอกโฟลเดอร์ SMB ไปวางรวมในโฟลเดอร์หลักของตัวเกม (หรือโฟลเดอร์ Content สำหรับ Xbox Game Pass)",
+      "เปิดเข้าไปในโฟลเดอร์ SMB3D_ThaiMod แล้วคัดลอกโฟลเดอร์ SMB ไปวางรวมในโฟลเดอร์หลักของตัวเกม (Steam / Epic) หรือโฟลเดอร์ Content สำหรับ Xbox Game Pass",
       "เข้าเกมเล่นเป็นภาษาไทยได้ทันที (รองรับภาษาไทยอัตโนมัติตาม Windows หรือเลือกใน ตั้งค่า -> ภาษา)"
     ],
-    "installPathExample": "Steam\\steamapps\\common\\Super Meat Boy 3D\\ หรือ C:\\XboxGames\\Super Meat Boy 3D\\Content\\",
+    "installPathExample": "Steam\\steamapps\\common\\Super Meat Boy 3D\\ | C:\\XboxGames\\Super Meat Boy 3D\\Content\\ | Epic Games\\SuperMeatBoy3D\\",
     "uninstallNote": "เข้าไปที่โฟลเดอร์ SMB\\Content\\Paks\\~mods แล้วลบเฉพาะไฟล์ SMB_ThaiMod_P.pak, SMB_ThaiMod_P.utoc และ SMB_ThaiMod_P.ucas (ห้ามลบโฟลเดอร์ ~mods ทั้งโฟลเดอร์หากมีม็อดอื่น)",
     "credits": [
       {
@@ -59,7 +59,7 @@ export const MODS: ModEntry[] = [
       "โลโก้ 3 มิติไทย",
       "ฟอนต์ Google Sans",
       "Unreal Engine 5",
-      "Steam / Xbox Game Pass"
+      "Steam / Xbox / Epic"
     ],
     "seoKeywords": [
       "Super Meat Boy 3D ม็อดไทย",
@@ -113,7 +113,7 @@ export const MODS: ModEntry[] = [
       "fileSize": "4.28 MB",
       "releasedAt": "28 พ.ย. 2026",
       "updatedAt": "28 พ.ย. 2026",
-      "supportedGamePlatform": "Steam / Xbox Game Pass (PC)"
+      "supportedGamePlatform": "Steam / Xbox Game Pass / Epic Games (PC)"
     },
     "stores": [
       {
@@ -121,13 +121,33 @@ export const MODS: ModEntry[] = [
         "label": "Steam (PC)",
         "url": "https://store.steampowered.com/app/3288210/Super_Meat_Boy_3D/",
         "steamAppId": 3288210
+      },
+      {
+        "platform": "xbox",
+        "label": "Xbox / Game Pass (PC)",
+        "url": "https://www.xbox.com/th-th/games/store/super-meat-boy-3d/9nj67tqq51z0"
+      },
+      {
+        "platform": "epic",
+        "label": "Epic Games Store",
+        "url": "https://store.epicgames.com/p/super-meat-boy-3d-1iblh"
+      },
+      {
+        "platform": "playstation",
+        "label": "PlayStation Store (PS5)",
+        "url": "https://store.playstation.com/en-th/concept/10015730/"
+      },
+      {
+        "platform": "nintendo",
+        "label": "Nintendo Switch 2",
+        "url": "https://www.nintendo.com/us/store/products/super-meat-boy-3d-switch-2/"
       }
     ],
     "files": [
       {
         "id": "smb3d-thaimod-v1-0",
         "fileName": "SMB3D_ThaiMod_v1.0.zip",
-        "label": "ม็อดแปลภาษาไทย 100% (Steam / Xbox Game Pass PC)",
+        "label": "ม็อดแปลภาษาไทย 100% (Steam / Xbox Game Pass / Epic)",
         "version": "v1.0",
         "size": "4.28 MB",
         "uploadedAt": "28 พ.ย. 2026",
