@@ -411,10 +411,14 @@ export function ModDetailClient({
         </div>
       )}
 
-      {/* MAIN 2-COLUMN BODY */}
+      {/* MAIN 2-COLUMN BODY (Full 12-col width when viewing Showcase Gallery) */}
       <div className="grid lg:grid-cols-12 gap-5 sm:gap-6 items-start">
-        {/* LEFT COLUMN (8 cols) */}
-        <div className="lg:col-span-8 space-y-5 sm:space-y-6 min-w-0">
+        {/* LEFT / FULL COLUMN */}
+        <div
+          className={`${
+            activeTab === "images" ? "lg:col-span-12" : "lg:col-span-8"
+          } space-y-5 sm:space-y-6 min-w-0`}
+        >
           <AnimatePresence mode="wait">
             {activeTab === "description" && (
               <motion.div
@@ -807,7 +811,7 @@ export function ModDetailClient({
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.22 }}
               >
-                <MediaStage images={mod.media.gallery} />
+                <MediaStage images={mod.media.gallery} variant="showcase" />
               </motion.div>
             )}
 
@@ -1019,12 +1023,13 @@ export function ModDetailClient({
           </AnimatePresence>
         </div>
 
-        {/* RIGHT STICKY SIDEBAR (4 cols): On Mobile (< lg), show ONLY on Description tab and hide duplicate download buttons */}
-        <aside
-          className={`lg:col-span-4 lg:sticky lg:top-20 ${
-            activeTab === "description" ? "" : "hidden lg:block"
-          }`}
-        >
+        {/* RIGHT STICKY SIDEBAR (4 cols): Hidden on Images tab so gallery spans full 1260px showcase width */}
+        {activeTab !== "images" && (
+          <aside
+            className={`lg:col-span-4 lg:sticky lg:top-20 ${
+              activeTab === "description" ? "" : "hidden lg:block"
+            }`}
+          >
           <div className="glass-panel spot-card rounded-2xl p-5 space-y-5">
             {/* Desktop-only Download Counter + Primary Download Buttons (avoids repeating download CTA on Mobile!) */}
             <div className="hidden lg:block space-y-5">
@@ -1204,6 +1209,7 @@ export function ModDetailClient({
             </div>
           </div>
         </aside>
+        )}
       </div>
 
       {/* Visual Install Guide Modal */}
